@@ -1,0 +1,46 @@
+Id,Name,Shape Library,Page ID,Contained By,Group,Line Source,Line Destination,Source Arrow,Destination Arrow,Text Area 1
+1,Page,,,,,,,,,State Machine Diagram Example
+2,Start,UML,1,,,,,,,
+3,Text,Standard,1,,39,,,,,user-registration-state-diagram
+4,Text,Standard,1,,39,,,,,"Janka Oravcová  |  November 19, 2019"
+5,Rounded Rectangle Container,Flowchart Shapes,1,,40,,,,,
+6,Text,Standard,1,5,40,,,,,"State Machine Diagram Tutorials (Hold Shift + ⌘ or Ctrl, then click)"
+7,Button,UI Mockups,1,5,40,,,,,Read our state machine diagram page
+8,Button,UI Mockups,1,5,40,,,,,Watch Lucidchart basic tutorials
+9,Text,Standard,1,5,40,,,,,"A state machine diagram is a type of behavioral diagram in the Unified Modeling Language (UML) that shows transitions between various objects. 
+
+Use this state diagram to show objects' possible states and the events that trigger the changing of states. Substates are also identified as are activity labels and behaviors that are performed while the element is either entering, in, or leaving the state.
+
+To customize this template, click on any shape and type the information you would like to include. Add, remove, and arrange shapes as necessary."
+10,Button,UI Mockups,1,5,40,,,,,"Create your own  (Hold Shift + ⌘ or Ctrl, then click)"
+11,Text,Standard,1,5,40,,,,,Description
+12,User Image,User Images,1,5,40,,,,,
+13,Text,Standard,1,,,,,,,"Odoslanie vyplneného registračného
+formuláru"
+14,Text,Standard,1,,,,,,,Spracovanie vyplneného formulára validátorom 
+15,State Name,UML,1,,,,,,,Registračný formulár odoslaný
+16,State Name,UML,1,,,,,,,Formulár spracovaný
+17,State Name,UML,1,,,,,,,Formulár neschválený
+18,State Name,UML,1,,,,,,,Formulár schválený
+19,Text,Standard,1,,,,,,,Neschválenie formuláru
+20,Text,Standard,1,,,,,,,Schválenie formuláru
+21,State Name,UML,1,,,,,,,Centrálny admin notifikovaný o novej registrácii
+22,Text,Standard,1,,,,,,,Odoslanie notifikácie so žiadosťou o registráciu centrálnemu adminovi
+23,End,UML,1,,,,,,,
+24,State Name,UML,1,,,,,,,Registrácia používateľa schválená
+25,State Name,UML,1,,,,,,,Registrácia používateľa neschválená
+26,Text,Standard,1,,,,,,,Centrálny admin prijme žiadosť o registráciu
+27,Text,Standard,1,,,,,,,Centrálny admin zamietne žiadosť o registráciu
+28,Line,,1,,39,3,3,None,None,
+29,Line,,1,,,2,15,None,None,
+30,Line,,1,,,15,16,None,Arrow,
+31,Line,,1,,,16,17,None,Arrow,
+32,Line,,1,,,16,18,None,Arrow,
+33,Line,,1,,,18,21,None,Arrow,
+34,Line,,1,,,17,23,None,Arrow,
+35,Line,,1,,,21,24,None,Arrow,
+36,Line,,1,,,21,25,None,Arrow,
+37,Line,,1,,,24,23,None,Arrow,
+38,Line,,1,,,25,23,None,Arrow,
+39,Group 1,,1,,,,,,,
+40,Group 2,,1,,,,,,,
