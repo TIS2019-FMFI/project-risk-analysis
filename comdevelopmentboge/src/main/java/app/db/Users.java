@@ -2,19 +2,24 @@ package app.db;
 
 
 public class Users {
+    public enum USERTYPE {
+        ADMIN,PROJECT_ADMIN,USER,FEM
+    }
     private Integer id;
+    private String name;
     private String surname;
     private String email;
     private String password;
-    private String userType;
+    private USERTYPE userType;
     private Boolean deleted;
     private Boolean approved;
 
 
-    public Users(){};
+    public Users(){}
 
-    public Users(Integer id, String surname, String email, String password, String userType, Boolean deleted, Boolean approved) {
+    public Users(Integer id,String name, String surname, String email, String password, USERTYPE userType, Boolean deleted, Boolean approved) {
         this.id = id;
+        this.name = name;
         this.surname = surname;
         this.email = email;
         this.password = password;
@@ -29,6 +34,14 @@ public class Users {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getSurname() {
@@ -56,10 +69,10 @@ public class Users {
     }
 
     public String getUserType() {
-        return userType;
+        return userType.toString();
     }
 
-    public void setUserType(String userType) {
+    public void setUserType(USERTYPE userType) {
         this.userType = userType;
     }
 
@@ -78,4 +91,17 @@ public class Users {
     public void setApproved(Boolean approved) {
         this.approved = approved;
     }
+
+    public String getFullName() {
+        return name + " " + surname;
+    }
+
+    public Integer insert() {
+        //TODO insert user and return ID
+        //ak tam ale bude uzivatel s danym menom tak musi vyhodit chybu
+        return 0;
+    }
+
+
+
 }

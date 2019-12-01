@@ -50,9 +50,9 @@ public class LoginController {
         passwordField.setVisible(true);
     }
 
-    //TO DO - nacitanie registracie
+    //TODO - nacitanie registracie
     public void openRegistration(MouseEvent event) throws  IOException {
-        //RegistrationController.getRegistrationController().initialize();
+        RegistrationController.getRegistrationController().initialize();
     }
 
     public void openMainPage(MouseEvent event) throws IOException {
