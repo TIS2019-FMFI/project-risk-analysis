@@ -68,9 +68,6 @@ public class LoginController {
         if (alert.getResult() == ButtonType.OK) {
            alert.close();
         }
-
-        //do not commit
-        TabController.getInstance().init();
     }
 
 }
