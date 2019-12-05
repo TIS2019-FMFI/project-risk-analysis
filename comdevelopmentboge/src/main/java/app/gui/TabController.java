@@ -53,9 +53,7 @@ public class TabController {
 
     public void selectProjectTab() throws IOException {
         if(isProjectTabSelected()) {
-            mainBox.getChildren().remove(0);
-            mainBox.getChildren().add(0, FXMLLoader.load(TabController.class.getResource("bar/project-list-menu-bar.fxml")));
-
+            setMenuBar("bar/project-list-menu-bar.fxml");
         }
     }
 
@@ -73,9 +71,13 @@ public class TabController {
 
     public void selectMainPageTab() throws IOException {
         if(isMainPageTabSelected()) {
-            mainBox.getChildren().remove(0);
-            mainBox.getChildren().add(0, FXMLLoader.load(TabController.class.getResource("bar/main-page-menu-bar.fxml")));
+            setMenuBar("bar/main-page-menu-bar.fxml");
         }
+    }
+
+    public void setMenuBar(String fxml) throws IOException {
+        mainBox.getChildren().remove(0);
+        mainBox.getChildren().add(0, FXMLLoader.load(TabController.class.getResource(fxml)));
     }
 
 

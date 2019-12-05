@@ -1,4 +1,4 @@
-package app;
+package app.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +13,7 @@ import java.io.IOException;
 public class TabsController {
 
 
-    @FXML private TabPane tabPane;
+    private TabPane tabPane;
     private Tab main = new Tab();
     private Tab projects = new Tab();
     private Tab FEM = new Tab();

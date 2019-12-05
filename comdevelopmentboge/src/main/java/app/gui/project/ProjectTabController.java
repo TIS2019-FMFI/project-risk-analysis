@@ -2,6 +2,7 @@ package app.gui.project;
 
 import app.App;
 import app.gui.TabController;
+import app.service.ProjectService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -15,27 +16,27 @@ import javafx.util.Callback;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class ProjectTabController extends TabController{
 
     Logger logger = Logger.getLogger(ProjectTabController.class.toString());
 
-    private static ProjectTabController instance;
-    public static ProjectTabController getInstance(){
-        if(instance == null){
-            instance = new ProjectTabController();
-        }
-        return instance;
-    }
-
     @FXML
     private ScrollPane projectListBoard;
 
     @FXML
-    public void initialize()  {
+    public void initialize() throws ClassNotFoundException {
         ObservableList<ListItem> data = FXCollections.observableArrayList();
-        data.addAll(new ListItem("Projekt1"), new ListItem("Projekt2"));
+
+        ArrayList<String> projectNames = ProjectService.getProjectService().getAllProjectNames();
+        for(String name : projectNames) {
+            ListItem listItem = new ListItem(name);
+            data.add(listItem);
+        }
+
+
 
         final ListView<ListItem> listView = new ListView<>(data);
         listView.setCellFactory(new Callback<ListView<ListItem>, ListCell<ListItem>>() {
@@ -71,6 +72,7 @@ public class ProjectTabController extends TabController{
 
     private void showProjectDetails(ListItem item) throws IOException {
         projectListBoard.setContent(FXMLLoader.load(ProjectController.class.getResource("project-details-board.fxml")));
+        TabController.getInstance().setMenuBar("bar/project-details-menu-bar.fxml");
     }
 
     private static class ListItem {

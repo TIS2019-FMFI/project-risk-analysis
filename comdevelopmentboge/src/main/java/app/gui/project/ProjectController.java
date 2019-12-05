@@ -1,18 +1,19 @@
 package app.gui.project;
 
 import app.App;
-import javafx.beans.Observable;
+import app.gui.graph.GraphRenderer;
+import app.gui.graph.GraphRenderer1;
+import app.service.ProjectService;
 import javafx.beans.binding.Bindings;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import app.db.*;
 
-import java.util.List;
+import java.io.IOException;
 
 public class ProjectController {
 
@@ -23,40 +24,38 @@ public class ProjectController {
     private GridPane projectGraphGrid;
 
     @FXML
-    public void initialize() {
+    public void initialize() throws ClassNotFoundException, IOException {
 
         projectDetailsTable.setEditable(true);
 
-        TableColumn<Project, String> projectNumber = new TableColumn<>("Project Nr.");
-        projectNumber.setCellValueFactory(new PropertyValueFactory<Project, String>("projectNumber"));
+        TableColumn<Projects, String> projectNumber = new TableColumn<>("Project Nr.");
+        projectNumber.setCellValueFactory(new PropertyValueFactory<Projects, String>("projectNumber"));
 
-        TableColumn<Project, String> customer = new TableColumn<>("Customer");
-        customer.setCellValueFactory(new PropertyValueFactory<Project, String>("customer"));
+        TableColumn<Projects, String> customer = new TableColumn<>("Customer");
+        customer.setCellValueFactory(new PropertyValueFactory<Projects, String>("customer"));
 
-        TableColumn<Project, String> projectName = new TableColumn<>("ProjectName");
-        projectName.setCellValueFactory(new PropertyValueFactory<Project, String>("projectName"));
+        TableColumn<Projects, String> projectName = new TableColumn<>("ProjectName");
+        projectName.setCellValueFactory(new PropertyValueFactory<Projects, String>("projectName"));
 
-        TableColumn<Project, String> partNumber = new TableColumn<>("Part Number");
-        partNumber.setCellValueFactory(new PropertyValueFactory<Project, String>("partNumber"));
+        TableColumn<Projects, String> partNumber = new TableColumn<>("Part Number");
+        partNumber.setCellValueFactory(new PropertyValueFactory<Projects, String>("partNumber"));
 
-        TableColumn<Project, String> ros = new TableColumn<>("Ros");
-        ros.setCellValueFactory(new PropertyValueFactory<Project, String>("ros"));
+        TableColumn<Projects, String> ros = new TableColumn<>("Ros");
+        ros.setCellValueFactory(new PropertyValueFactory<Projects, String>("ros"));
 
-        TableColumn<Project, String> roce = new TableColumn<>("Roce");
-        roce.setCellValueFactory(new PropertyValueFactory<Project, String>("roce"));
+        TableColumn<Projects, String> roce = new TableColumn<>("Roce");
+        roce.setCellValueFactory(new PropertyValueFactory<Projects, String>("roce"));
 
-        TableColumn<Project, Integer> volumes = new TableColumn<>("Volumes");
-        volumes.setCellValueFactory(new PropertyValueFactory<Project, Integer>("volumes"));
+        TableColumn<Projects, Integer> volumes = new TableColumn<>("Volumes");
+        volumes.setCellValueFactory(new PropertyValueFactory<Projects, Integer>("volumes"));
 
-        TableColumn<Project, Integer> ddCost = new TableColumn<>("Offered/Planned \n D&D costs");
-        ddCost.setCellValueFactory(new PropertyValueFactory<Project, Integer>("ddCost"));
+        TableColumn<Projects, Integer> ddCost = new TableColumn<>("Offered/Planned \n D&D costs");
+        ddCost.setCellValueFactory(new PropertyValueFactory<Projects, Integer>("ddCost"));
 
-        TableColumn<Project, Integer> prototypeCost = new TableColumn<>("Offered/Planned \n prototype costs");
-        prototypeCost.setCellValueFactory(new PropertyValueFactory<Project, Integer>("prototypeCost"));
-        Project project = new Project();
-        project.setProjectNumber("CH-255454");
-        project.setCustomer("Audi");
-        project.setProjectName("Project1");
+        TableColumn<Projects, Integer> prototypeCost = new TableColumn<>("Offered/Planned \n prototype costs");
+        prototypeCost.setCellValueFactory(new PropertyValueFactory<Projects, Integer>("prototypeCost"));
+
+        Projects project = ProjectService.getProjectService().findProjectById(0);
 
         // projectDetailsTable.getItems().clear();
         projectDetailsTable.getItems().add(project);

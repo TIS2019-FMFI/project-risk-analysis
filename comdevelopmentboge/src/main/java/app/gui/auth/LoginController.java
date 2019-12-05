@@ -1,6 +1,8 @@
 package app.gui.auth;
 
+import app.gui.TabController;
 import app.gui.home.HomeController;
+import app.gui.project.ProjectTabController;
 import app.gui.registration.RegistrationController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -60,12 +62,15 @@ public class LoginController {
     }
 
 
-    public void login(MouseEvent event) {
+    public void login(MouseEvent event) throws IOException {
         Alert alert = new Alert(Alert.AlertType.ERROR, "Nesprávny tvar emailu", ButtonType.OK);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.OK) {
            alert.close();
         }
+
+        //do not commit
+        TabController.getInstance().init();
     }
 
 }
