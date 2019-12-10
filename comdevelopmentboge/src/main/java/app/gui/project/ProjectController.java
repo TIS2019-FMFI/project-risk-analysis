@@ -1,10 +1,9 @@
 package app.gui.project;
 
 import app.App;
-import app.gui.graph.GraphRenderer;
-import app.gui.graph.GraphRenderer1;
-import app.service.ProjectService;
+import app.gui.graph.ChartRenderer;
 import javafx.beans.binding.Bindings;
+import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -12,10 +11,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import app.db.*;
+import org.jfree.chart.ChartPanel;
 
+import javax.swing.*;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public class ProjectController {
+
+    Logger logger = Logger.getLogger(ProjectController.class.toString());
 
     @FXML
     private TableView projectDetailsTable;
@@ -25,7 +29,13 @@ public class ProjectController {
 
     @FXML
     public void initialize() throws ClassNotFoundException, IOException {
+        logger.info("project page initialization");
 
+        createProjectTable();
+        createCharts();
+    }
+
+    private void createProjectTable() {
         projectDetailsTable.setEditable(true);
 
         TableColumn<Projects, String> projectNumber = new TableColumn<>("Project Nr.");
@@ -55,10 +65,10 @@ public class ProjectController {
         TableColumn<Projects, Integer> prototypeCost = new TableColumn<>("Offered/Planned \n prototype costs");
         prototypeCost.setCellValueFactory(new PropertyValueFactory<Projects, Integer>("prototypeCost"));
 
-        Projects project = ProjectService.getProjectService().findProjectById(0);
-
-        // projectDetailsTable.getItems().clear();
-        projectDetailsTable.getItems().add(project);
+//        Projects project = ProjectService.getProjectService().findProjectById(0);
+//
+//         projectDetailsTable.getItems().clear();
+//        projectDetailsTable.getItems().add(project);
 
 
         projectDetailsTable.getColumns().clear();
@@ -72,10 +82,39 @@ public class ProjectController {
         projectDetailsTable.maxHeightProperty().bind(projectDetailsTable.prefHeightProperty());
 
         projectDetailsTable.prefWidthProperty().bind(App.getScene().widthProperty());
-
-        BorderPane pane = new BorderPane();
-       // pane.setCenter(GraphRenderer.getGraph());
-        projectGraphGrid.add(pane, 0, 0);
     }
 
+    private void createCharts() throws IOException {
+        BorderPane rdCostsPane = new BorderPane();
+        BorderPane projectCostsPane = new BorderPane();
+        BorderPane prototypeCostsPane= new BorderPane();
+
+        SwingNode rdCostsNode = new SwingNode();
+        SwingNode projectCostsNode = new SwingNode();
+        SwingNode prototypeCostsNode = new SwingNode();
+
+        ChartPanel rdCostsChart = ChartRenderer.createRDCostsChart("CH-060968");
+        ChartPanel projectCostsChart = ChartRenderer.createProjectCostsChart("CH-060968");
+        ChartPanel prototypeCostsChart = ChartRenderer.createProjectPrototypeChart("CH-060020");
+
+        createSwingContent(rdCostsNode, rdCostsChart);
+        createSwingContent(projectCostsNode, projectCostsChart);
+        createSwingContent(prototypeCostsNode, prototypeCostsChart);
+
+        rdCostsPane.setCenter(rdCostsNode);
+        projectCostsPane.setCenter(projectCostsNode);
+        prototypeCostsPane.setCenter(prototypeCostsNode);
+
+        projectGraphGrid.add(rdCostsPane, 0, 0);
+        projectGraphGrid.add(projectCostsPane, 1,0);
+        projectGraphGrid.add(prototypeCostsPane, 0,1);
+    }
+
+    private void createSwingContent(final SwingNode swingNode, final ChartPanel panel) throws IOException {
+
+        SwingUtilities.invokeLater(() -> {
+            swingNode.setContent(panel);
+
+        });
+    }
 }
