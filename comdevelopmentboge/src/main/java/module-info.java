@@ -6,6 +6,8 @@ module app {
     requires java.desktop;
     requires java.xml.crypto;
     requires java.sql;
+    requires poi;
+    requires poi.ooxml;
 
 
     opens app to javafx.fxml;
