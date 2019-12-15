@@ -22,7 +22,7 @@ public class TabController {
 
     public void init() throws IOException {
         mainBox = new VBox();
-        mainBox.getChildren().add(loadFXML("bar/menu-bar"));
+        mainBox.getChildren().add(loadFXML("bar/main-page-menu-bar"));
         mainTabPane = (TabPane) loadFXML("tab-pane");
         mainBox.getChildren().add(mainTabPane);
 
@@ -45,7 +45,6 @@ public class TabController {
                     if (tab.isSelected()) {
                         try {
                             selectProjectTab();
-                            tab.setContent(loadFXML("project/project-list-board"));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -66,7 +65,18 @@ public class TabController {
     }
 
     public void selectProjectTab() throws IOException {
-       setMenuBar("bar/project-list-menu-bar.fxml");
+        setMenuBar("bar/project-list-menu-bar.fxml");
+
+        ObservableList<Tab> tabs = mainTabPane.getTabs();
+        for (Tab tab : tabs) {
+            if (tab.getId().equals("projectTab")) {
+                try {
+                    tab.setContent(loadFXML("project/project-list-board"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public void selectMainPageTab() throws IOException {

@@ -1,20 +1,30 @@
 package app.gui.project;
 
 import app.App;
+import app.gui.TabController;
 import app.gui.graph.ChartRenderer;
+import app.service.SAPService;
 import javafx.beans.binding.Bindings;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import app.db.*;
+import org.apache.poi.ss.usermodel.Table;
 import org.jfree.chart.ChartPanel;
 
 import javax.swing.*;
+import javax.swing.text.html.ImageView;
+import java.awt.*;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.*;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class ProjectController {
@@ -25,14 +35,72 @@ public class ProjectController {
     private TableView projectDetailsTable;
 
     @FXML
-    private GridPane projectGraphGrid;
+    private TableView sapDetailsTable;
 
     @FXML
-    public void initialize() throws ClassNotFoundException, IOException {
+    private GridPane projectGraphGrid;
+
+
+    @FXML
+    public void initialize() throws ClassNotFoundException, IOException, ParseException {
         logger.info("project page initialization");
 
         createProjectTable();
+        createSapTable();
         createCharts();
+    }
+
+    private void createSapTable() throws ParseException {
+        TableColumn<SAP, String> PSPElement = new TableColumn<>("PSPElement");
+        PSPElement.setCellValueFactory(new PropertyValueFactory<SAP, String>("PSPElement"));
+
+        TableColumn<SAP, String> Objektbezeichnung = new TableColumn<>("Objektbezeichnung");
+        Objektbezeichnung.setCellValueFactory(new PropertyValueFactory<>("Objektbezeichnung"));
+
+        TableColumn<SAP, String> Kostenart = new TableColumn<>("Kostenart");
+        Kostenart.setCellValueFactory(new PropertyValueFactory<>("Kostenart"));
+
+        TableColumn<SAP, String> KostenartenBez = new TableColumn<>("KostenartenBez");
+        KostenartenBez.setCellValueFactory(new PropertyValueFactory<>("KostenartenBez"));
+
+        TableColumn<SAP, String> Partnerojekt = new TableColumn<>("Partnerojekt");
+        Partnerojekt.setCellValueFactory(new PropertyValueFactory<>("Partnerojekt"));
+
+        TableColumn<SAP, String> Periode = new TableColumn<>("Periode");
+        Periode.setCellValueFactory(new PropertyValueFactory<>("Periode"));
+
+        TableColumn<SAP, String> Jahr = new TableColumn<>("Jahr");
+        Jahr.setCellValueFactory(new PropertyValueFactory<>("Jahr"));
+
+        TableColumn<SAP, Date> BuchDatum = new TableColumn<>("BuchDatum");
+        BuchDatum.setCellValueFactory(new PropertyValueFactory<>("BuchDatum"));
+
+        TableColumn<SAP, BigDecimal> Wert = new TableColumn<>("Wert");
+        Wert.setCellValueFactory(new PropertyValueFactory<>("Wert"));
+
+        TableColumn<SAP, Double> Menge = new TableColumn<>("Menge");
+        Menge.setCellValueFactory(new PropertyValueFactory<>("Menge"));
+
+        TableColumn<SAP, String> GME = new TableColumn<>("GME");
+        GME.setCellValueFactory(new PropertyValueFactory<>("GME"));
+
+        List<SAP> data = SAPService.getSapService().getAllSAPData();
+
+        sapDetailsTable.getItems().clear();
+        sapDetailsTable.getItems().addAll(data);
+
+        sapDetailsTable.getColumns().clear();
+        sapDetailsTable.getColumns().addAll(PSPElement,Objektbezeichnung,Kostenart, KostenartenBez,Partnerojekt
+        ,Periode, Jahr, BuchDatum, Wert, Menge, GME );
+
+        sapDetailsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        sapDetailsTable.setFixedCellSize(50);
+        sapDetailsTable.prefHeightProperty().bind(sapDetailsTable.fixedCellSizeProperty().multiply(Bindings.size(projectDetailsTable.getItems()).add(1.01)));
+        sapDetailsTable.minHeightProperty().bind(sapDetailsTable.prefHeightProperty());
+        sapDetailsTable.maxHeightProperty().bind(sapDetailsTable.prefHeightProperty());
+
+        sapDetailsTable.prefWidthProperty().bind(App.getScene().widthProperty());
     }
 
     private void createProjectTable() {
@@ -123,4 +191,5 @@ public class ProjectController {
 
         });
     }
+
 }
