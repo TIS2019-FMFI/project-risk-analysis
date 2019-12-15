@@ -19,6 +19,7 @@ module app {
     opens app.gui.project to  javafx.fxml,javafx.base;
     opens app.gui.home to javafx.fxml;
     opens app.gui.administration to javafx.fxml;
+    opens app.db to javafx.base;
 
     exports app.gui to javafx.fxml;
     exports app.gui.auth to javafx.fxml;
