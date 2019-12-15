@@ -3,20 +3,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<AnchorPane fx:id="main_page_admin_menu_bar" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #ff0000;" AnchorPane.bottomAnchor="750" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="mainPageMenuBar" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #ff0000;" AnchorPane.bottomAnchor="750" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Button layoutX="11.0" layoutY="12.0" maxHeight="40.0" mnemonicParsing="false" style="-fx-background-color: #ffffff; -fx-background-radius: 20;" text="Importovať dáta" textFill="RED" />
         <Button layoutX="123.0" layoutY="12.0" mnemonicParsing="false" style="-fx-background-color: #ffffff; -fx-background-radius: 20;" text="Exportovať logy" textFill="RED" />
         <Button layoutX="233.0" layoutY="12.0" mnemonicParsing="false" style="-fx-background-color: #ffffff; -fx-background-radius: 20;" text="Exportovať report" textFill="RED" />
-        <ImageView fx:id="user" fitHeight="52.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="0.0" StackPane.alignment="CENTER_RIGHT">
-            <image>
-                <Image url="@/app/images/user.png" />
-            </image>
-        </ImageView>
-        <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="900.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="50.0">
-            <image>
-                <Image url="@/app/images/users.png" />
-            </image>
-        </ImageView>
+        <fx:include source="/app/gui/administration/users-button-view.fxml"/>
+        <fx:include source="/app/gui/profile/profile-button-view.fxml"/>
     </children>
 </AnchorPane>
