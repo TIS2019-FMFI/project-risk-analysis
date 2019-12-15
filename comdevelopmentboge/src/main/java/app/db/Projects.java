@@ -1,30 +1,20 @@
 package app.db;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Projects {
     private Integer id;
-    private Integer projectNumber;
-    private String pojectName;
-    private Integer partNumber;
+    private String projectNumber;
+    private String projectName;
+    private String customer;
+    private String partNumber;
     private String ros;
     private String roce;
-    private Integer volumes;
-    private Integer ddCost;
-    private Integer prototypeCost;
+    private BigDecimal volumes;
+    private BigDecimal ddCost;
+    private BigDecimal prototypeCost;
     private Date lastUpdated;
-
-    public Projects(Integer id, Integer projectNumber, String pojectName, Integer partNumber, String ros, String roce, Integer volumes, Integer ddCost, Integer prototypeCost, Date lastUpdated) {
-        this.id = id;
-        this.projectNumber = projectNumber;
-        this.pojectName = pojectName;
-        this.partNumber = partNumber;
-        this.ros = ros;
-        this.roce = roce;
-        this.volumes = volumes;
-        this.ddCost = ddCost;
-        this.prototypeCost = prototypeCost;
-        this.lastUpdated = lastUpdated;
-    }
 
     public Integer getId() {
         return id;
@@ -34,27 +24,27 @@ public class Projects {
         this.id = id;
     }
 
-    public Integer getProjectNumber() {
+    public String getProjectNumber() {
         return projectNumber;
     }
 
-    public void setProjectNumber(Integer projectNumber) {
+    public void setProjectNumber(String projectNumber) {
         this.projectNumber = projectNumber;
     }
 
-    public String getPojectName() {
-        return pojectName;
+    public String getProjectName() {
+        return projectName;
     }
 
-    public void setPojectName(String pojectName) {
-        this.pojectName = pojectName;
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
-    public Integer getPartNumber() {
+    public String getPartNumber() {
         return partNumber;
     }
 
-    public void setPartNumber(Integer partNumber) {
+    public void setPartNumber(String partNumber) {
         this.partNumber = partNumber;
     }
 
@@ -74,28 +64,36 @@ public class Projects {
         this.roce = roce;
     }
 
-    public Integer getVolumes() {
+    public BigDecimal getVolumes() {
         return volumes;
     }
 
-    public void setVolumes(Integer volumes) {
+    public void setVolumes(BigDecimal volumes) {
         this.volumes = volumes;
     }
 
-    public Integer getDdCost() {
+    public BigDecimal getDdCost() {
         return ddCost;
     }
 
-    public void setDdCost(Integer ddCost) {
+    public void setDdCost(BigDecimal ddCost) {
         this.ddCost = ddCost;
     }
 
-    public Integer getPrototypeCost() {
+    public BigDecimal getPrototypeCost() {
         return prototypeCost;
     }
 
-    public void setPrototypeCost(Integer prototypeCost) {
+    public void setPrototypeCost(BigDecimal prototypeCost) {
         this.prototypeCost = prototypeCost;
+    }
+
+    public String getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(String customer) {
+        this.customer = customer;
     }
 
     public Date getLastUpdated() {
