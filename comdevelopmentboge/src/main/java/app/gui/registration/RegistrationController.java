@@ -41,13 +41,6 @@ public class RegistrationController {
 
     public void init() throws IOException {
         setScene();
-        /*eye.setImage(eyeOff);
-        passwordVisible.setVisible(false);
-        passwordField.setVisible(true);
-
-        eye.setOnMouseClicked(this::showPassword);
-        confirm.setOnMouseClicked(this::confirmRegistration);
-        cancel.setOnMouseClicked(this::cancelRegistration);*/
 
     }
 
@@ -84,9 +77,10 @@ public class RegistrationController {
     }
 
     @FXML
-    private void confirmRegistration(MouseEvent event) {
+    private void confirmRegistration(MouseEvent event) throws IOException {
         try {
             Registration.register(name.getText(),surname.getText(),email.getText(),getPasswordText());
+            App.setRoot(loadFXML("registration-waiting"));
             //TODO otvori sa stranka pre cakanie na potvrdenie
         } catch (MyException e) {
             showAlert(e.getMessage());
