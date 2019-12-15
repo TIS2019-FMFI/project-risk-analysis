@@ -1,6 +1,7 @@
 package app.gui.registration;
 
 import app.App;
+import app.exception.MyException;
 import app.exception.RegistrationException;
 import app.gui.TabController;
 import app.transactions.Registration;
@@ -40,22 +41,22 @@ public class RegistrationController {
 
     public void init() throws IOException {
         setScene();
-        eye.setImage(eyeOff);
+        /*eye.setImage(eyeOff);
         passwordVisible.setVisible(false);
         passwordField.setVisible(true);
 
         eye.setOnMouseClicked(this::showPassword);
         confirm.setOnMouseClicked(this::confirmRegistration);
-        cancel.setOnMouseClicked(this::cancelRegistration);
+        cancel.setOnMouseClicked(this::cancelRegistration);*/
 
     }
 
-    private static void setScene() throws IOException {
+    private void setScene() throws IOException {
         Parent parent = loadFXML("registration");
         App.setRoot(parent);
     }
 
-    private static Parent loadFXML(String fxml) throws IOException {
+    private Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(RegistrationController.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
@@ -87,9 +88,10 @@ public class RegistrationController {
         try {
             Registration.register(name.getText(),surname.getText(),email.getText(),getPasswordText());
             //TODO otvori sa stranka pre cakanie na potvrdenie
-        } catch (RegistrationException e) {
+        } catch (MyException e) {
             showAlert(e.getMessage());
         } catch (SQLException e) {
+            e.printStackTrace();
             showAlert("Nepodarilo sa spojenie s databázou. Vyskúšajte ešte raz");
         }
     }

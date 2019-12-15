@@ -3,13 +3,14 @@ package app.transactions;
 import app.config.DbContext;
 import app.db.RegistrationRequest;
 import app.db.Users;
+import app.exception.DatabaseException;
 import app.exception.RegistrationException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class Registration {
-    public static void register(String name,String surname,String email,String password) throws SQLException, RegistrationException {
+    public static void register(String name,String surname,String email,String password) throws SQLException, RegistrationException, DatabaseException {
         DbContext.getConnection().setAutoCommit(false);
         DbContext.getConnection().setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
         try {
@@ -20,9 +21,8 @@ public class Registration {
             //vytvori noveho uzivatela
             Users user = createUser(name, surname, email, password);
 
-            //vlozi uzivatela do databazy a vrati jeho ID
-            Integer ID = user.insert();
-            user.setId(ID);
+            //vlozi uzivatela do databazy a nastavi jeho ID
+            user.insert();
 
             //vytvori ziadost o registraciu a vlozi ju do tabulky
             RegistrationRequest req = createRegistrationRequest(user);
@@ -39,7 +39,7 @@ public class Registration {
     }
     private static RegistrationRequest createRegistrationRequest(Users user) {
         RegistrationRequest req = new RegistrationRequest();
-        req.setText("Používateľ"+ user.getFullName() +"žiada o registráciu");
+        req.setText("Používateľ "+ user.getFullName() +" žiada o registráciu");
         req.setUser_id(user.getId());
         return req;
     }
@@ -73,7 +73,7 @@ public class Registration {
         return password.matches("(?=.*?[0-9])(?=.*?[A-Za-z]).+") && password.length() >= 6;
     }
     private static boolean isEmailFormatValid(String email) {
-        return email.matches("[a-zA-Z0-9._]+@[a-zA-Z0-9._]\\.[a-zA-Z]{2,5}");
+        return email.matches("[a-zA-Z0-9\\._]+@[a-zA-Z0-9\\._]+\\.[a-zA-Z]{2,5}");
     }
     private static boolean containsOnlyLetters(String value) {
         return value.matches("^[A-Za-z]+$");

@@ -1,6 +1,12 @@
 package app.db;
 
 
+import app.config.DbContext;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Users {
     public enum USERTYPE {
         ADMIN,PROJECT_ADMIN,USER,FEM
@@ -96,10 +102,38 @@ public class Users {
         return name + " " + surname;
     }
 
-    public Integer insert() {
-        //TODO insert user and return ID
-        //ak tam ale bude uzivatel s danym menom tak musi vyhodit chybu
-        return 0;
+    public void insert() throws SQLException {
+        //TODO ak tam ale bude uzivatel s danym emailom tak musi vyhodit chybu
+        String sql = "INSERT INTO users(name,surname,email,password,userType,approved,deleted) VALUES(?,?,?,?,?,?,?);";
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
+
+            s.setString(1, name);
+            s.setString(2, surname);
+            s.setString(3, email);
+            s.setString(4, password);
+            s.setString(5, userType.toString());
+            s.setBoolean(6,approved);
+            s.setBoolean(7,deleted);
+
+
+            if  (s.executeUpdate() > 0) {
+                id = getLastInsertedID();
+            }
+
+        }
+    }
+    private Integer getLastInsertedID() throws SQLException {
+        String sql = "SELECT LAST_INSERT_ID();";
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
+
+            try  (ResultSet r = s.executeQuery() ) {
+                if (r.next()) {
+                    return r.getInt(1);
+                }
+                return null;
+            }
+
+        }
     }
 
 

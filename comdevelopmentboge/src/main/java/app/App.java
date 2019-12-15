@@ -44,7 +44,7 @@ public class App extends Application {
 
     public static void main(String[] args) throws IOException {
         //Generate.createAndGenerate();
-        //Configuration.connect();
+        Configuration.connect();
         launch();
 
     }

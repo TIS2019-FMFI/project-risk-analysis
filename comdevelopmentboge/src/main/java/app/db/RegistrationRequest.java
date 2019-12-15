@@ -1,19 +1,17 @@
 package app.db;
 
+import app.config.DbContext;
+import app.exception.DatabaseException;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class RegistrationRequest {
-    private Integer id;
     private String text;
     private Integer user_id;
 
     public RegistrationRequest(){}
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getText() {
         return text;
@@ -31,7 +29,18 @@ public class RegistrationRequest {
         this.user_id = user_id;
     }
 
-    public void insert() {
+    public void insert() throws SQLException, DatabaseException {
         //TODO vlozit request do databazy
+        String sql = "INSERT INTO registration_requests(user_id,text) VALUES(?,?) ";
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
+
+            s.setInt(1, user_id);
+            s.setString(2, text);
+
+            if (s.executeUpdate() < 0) {
+                throw new DatabaseException("Nepodarilo sa vlozit riadok do tabulky");
+            }
+
+        }
     }
 }
