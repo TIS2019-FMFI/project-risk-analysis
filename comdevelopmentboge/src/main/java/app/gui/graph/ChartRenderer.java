@@ -27,7 +27,7 @@ public class ChartRenderer {
 
         LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getRDCostsData(projectCode);
 
-        return createCostsChart(monthlyCostsData, "Project "+projectCode+" R&D costs");
+        return createBarChart(monthlyCostsData, "Project "+projectCode+" R&D costs");
     }
 
     public static ChartPanel createProjectCostsChart(String projectCode){
@@ -35,16 +35,22 @@ public class ChartRenderer {
         LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getCostsData(projectCode);
         logger.info(monthlyCostsData.entrySet().size()+" size of data");
 
-        return createCostsChart(monthlyCostsData, "Project "+projectCode+" costs");
+        return createBarChart(monthlyCostsData, "Project "+projectCode+" costs");
     }
 
     public static ChartPanel createProjectPrototypeChart(String projectCode){
         LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getPrototypeCosts(projectCode);
 
-        return createCostsChart(monthlyCostsData, "Project "+projectCode+" prototype costs");
+        return createBarChart(monthlyCostsData, "Project "+projectCode+" prototype costs");
     }
 
-    private static ChartPanel createCostsChart(LinkedHashMap<Period, BigDecimal> data, String title){
+    public static ChartPanel createPrototypeRevenuesChart(String projectCode){
+        LinkedHashMap<Period, BigDecimal> monthlyRevenuesData = ChartService.getChartService().getPrototypeRevenues(projectCode);
+
+        return createBarChart(monthlyRevenuesData, "Project "+projectCode+" prototype revenues");
+    }
+
+    private static ChartPanel createBarChart(LinkedHashMap<Period, BigDecimal> data, String title){
 
         //todo cumulative curve
 

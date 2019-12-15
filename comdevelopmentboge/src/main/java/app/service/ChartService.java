@@ -77,4 +77,26 @@ public class ChartService {
         }
         return costs;
     }
+
+    public LinkedHashMap<Period, BigDecimal> getPrototypeRevenues(String projectCode) {
+        LinkedHashMap<Period, BigDecimal> costs = new LinkedHashMap<>();
+        String sql = "select Periode as month, Jahr as year, sum(Wert) from sap where projectNr=? and Objektbezeichnung='Samples + Revenues Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and Wert<=0 group by Periode, Jahr order by Jahr, Periode";
+        try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
+            preparedStatement.setString(1,projectCode);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                String month = rs.getString(1);
+                String year = rs.getString(2);
+                BigDecimal amount = rs.getBigDecimal(3);
+                amount = amount.multiply(BigDecimal.valueOf(-1));
+                costs.put(new Period(month, year), amount );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return costs;
+    }
 }

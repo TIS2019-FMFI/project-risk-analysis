@@ -6,6 +6,7 @@ module app {
     requires java.desktop;
     requires java.xml.crypto;
     requires java.sql;
+    requires javafx.swing;
     requires poi;
     requires poi.ooxml;
 
@@ -16,11 +17,15 @@ module app {
     opens app.gui.profile to javafx.fxml;
     opens app.gui.registration to javafx.fxml;
     opens app.gui.project to  javafx.fxml,javafx.base;
+    opens app.gui.home to javafx.fxml;
+    opens app.gui.administration to javafx.fxml;
 
     exports app.gui to javafx.fxml;
     exports app.gui.auth to javafx.fxml;
     exports app.gui.profile to javafx.fxml;
     exports app.gui.registration to javafx.fxml;
     exports app.gui.project to  javafx.fxml;
+    exports app.gui.home to javafx.fxml;
+    exports app.gui.administration to javafx.fxml;
     exports app;
 }

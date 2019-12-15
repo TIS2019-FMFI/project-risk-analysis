@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<AnchorPane fx:id="project_list_menu_bar" prefHeight="52.0" prefWidth="784.0" style="-fx-background-color: #ff0000;" AnchorPane.bottomAnchor="750" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ImageView fx:id="user" fitHeight="52.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="0.0" StackPane.alignment="CENTER_RIGHT">
+            <image>
+                <Image url="@/app/images/user.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="900.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="50.0">
+            <image>
+                <Image url="@/app/images/users.png" />
+            </image>
+        </ImageView>
+        <AnchorPane layoutX="14.0" layoutY="4.0" prefHeight="43.0" prefWidth="571.0">
+            <children>
+                <DatePicker layoutY="9.0" promptText="Od" AnchorPane.leftAnchor="10.0" />
+                <DatePicker layoutX="193.0" layoutY="9.0" promptText="Do" />
+                <ImageView fitHeight="30.0" fitWidth="40.0" layoutX="515.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@/app/images/confirm.png" />
+                    </image>
+                </ImageView>
+                <ImageView fitHeight="30.0" fitWidth="40.0" layoutX="465.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@/app/images/cancel.png" />
+                    </image>
+                </ImageView>
+                <ImageView fitHeight="30.0" fitWidth="40.0" layoutX="415.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@/app/images/refresh.png" />
+                    </image>
+                </ImageView>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

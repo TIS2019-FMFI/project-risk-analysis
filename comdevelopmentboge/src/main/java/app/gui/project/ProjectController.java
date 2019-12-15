@@ -88,26 +88,32 @@ public class ProjectController {
         BorderPane rdCostsPane = new BorderPane();
         BorderPane projectCostsPane = new BorderPane();
         BorderPane prototypeCostsPane= new BorderPane();
+        BorderPane prototypeRevenuesPane= new BorderPane();
 
         SwingNode rdCostsNode = new SwingNode();
         SwingNode projectCostsNode = new SwingNode();
         SwingNode prototypeCostsNode = new SwingNode();
+        SwingNode prototypeRevenuesNode = new SwingNode();
 
         ChartPanel rdCostsChart = ChartRenderer.createRDCostsChart("CH-060968");
         ChartPanel projectCostsChart = ChartRenderer.createProjectCostsChart("CH-060968");
         ChartPanel prototypeCostsChart = ChartRenderer.createProjectPrototypeChart("CH-060020");
+        ChartPanel prototypeRevenuesChart = ChartRenderer.createPrototypeRevenuesChart("PC-060890");
 
         createSwingContent(rdCostsNode, rdCostsChart);
         createSwingContent(projectCostsNode, projectCostsChart);
         createSwingContent(prototypeCostsNode, prototypeCostsChart);
+        createSwingContent(prototypeRevenuesNode, prototypeRevenuesChart);
 
         rdCostsPane.setCenter(rdCostsNode);
         projectCostsPane.setCenter(projectCostsNode);
         prototypeCostsPane.setCenter(prototypeCostsNode);
+        prototypeRevenuesPane.setCenter(prototypeRevenuesNode);
 
         projectGraphGrid.add(rdCostsPane, 0, 0);
         projectGraphGrid.add(projectCostsPane, 1,0);
         projectGraphGrid.add(prototypeCostsPane, 0,1);
+        projectGraphGrid.add(prototypeRevenuesNode, 1,1);
     }
 
     private void createSwingContent(final SwingNode swingNode, final ChartPanel panel) throws IOException {

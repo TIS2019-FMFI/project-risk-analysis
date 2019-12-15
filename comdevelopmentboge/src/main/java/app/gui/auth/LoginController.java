@@ -57,10 +57,6 @@ public class LoginController {
         RegistrationController.getRegistrationController().initialize();
     }
 
-    public void openMainPage(MouseEvent event) throws IOException {
-        HomeController.getHomeController().initialize();
-    }
-
 
     public void login(MouseEvent event) throws IOException {
         Alert alert = new Alert(Alert.AlertType.ERROR, "Nesprávny tvar emailu", ButtonType.OK);
@@ -68,6 +64,8 @@ public class LoginController {
         if (alert.getResult() == ButtonType.OK) {
            alert.close();
         }
+
+        TabController.getInstance().init();
     }
 
 }
