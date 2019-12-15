@@ -35,7 +35,8 @@ public class SAPService {
 
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-                sap.setBuchDatum(sdf.parse(rs.getString(8)));
+                java.sql.Date date = new java.sql.Date(sdf.parse(rs.getString(8)).getTime());
+                sap.setBuchDatum(date);
                 sap.setWert(rs.getBigDecimal(9));
                 sap.setMenge(rs.getDouble(10));
                 sap.setGME(rs.getString(11));
