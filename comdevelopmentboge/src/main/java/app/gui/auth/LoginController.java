@@ -54,16 +54,16 @@ public class LoginController {
 
     //TODO - nacitanie registracie
     public void openRegistration(MouseEvent event) throws  IOException {
-        RegistrationController.getRegistrationController().initialize();
+        RegistrationController.getInstance().init();
     }
 
 
     public void login(MouseEvent event) throws IOException {
-        Alert alert = new Alert(Alert.AlertType.ERROR, "Nesprávny tvar emailu", ButtonType.OK);
+        /*Alert alert = new Alert(Alert.AlertType.ERROR, "Nesprávny tvar emailu", ButtonType.OK);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.OK) {
            alert.close();
-        }
+        }*/
 
         TabController.getInstance().init();
     }

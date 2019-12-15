@@ -30,8 +30,6 @@ public class ChartService {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
         return costs;
     }
@@ -50,8 +48,6 @@ public class ChartService {
                 costs.put(new Period(month, year), amount);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return costs;
@@ -72,8 +68,6 @@ public class ChartService {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
         return costs;
     }
@@ -93,8 +87,6 @@ public class ChartService {
                 costs.put(new Period(month, year), amount );
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return costs;

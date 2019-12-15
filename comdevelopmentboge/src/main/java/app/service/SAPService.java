@@ -3,6 +3,7 @@ package app.service;
 import app.config.DbContext;
 import app.db.SAP;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,7 +36,7 @@ public class SAPService {
 
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-                sap.setBuchDatum(sdf.parse(rs.getString(8)));
+                sap.setBuchDatum((Date) sdf.parse(rs.getString(8)));
                 sap.setWert(rs.getBigDecimal(9));
                 sap.setMenge(rs.getDouble(10));
                 sap.setGME(rs.getString(11));
@@ -44,8 +45,6 @@ public class SAPService {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 

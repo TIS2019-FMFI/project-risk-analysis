@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class ExcellParser {
 
     public static ArrayList<ArrayList<String>> readFromFile() throws IOException {
-        String path = "./resources/SAP_DATA_ver2.xlsx";
+        String path = ExcellParser.class.getResource("SAP_DATA_ver2.xlsx").getPath();
 
         FileInputStream file = new FileInputStream(new File(path));
         XSSFWorkbook workbook = new XSSFWorkbook(file);

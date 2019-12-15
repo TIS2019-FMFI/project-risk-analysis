@@ -2,16 +2,14 @@ package app.gui.registration;
 
 import app.App;
 import app.exception.RegistrationException;
+import app.gui.TabController;
 import app.transactions.Registration;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SubScene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -33,16 +31,23 @@ public class RegistrationController {
     @FXML private ImageView eye;
     @FXML private PasswordField passwordField;
     @FXML private TextField passwordVisible;
+    @FXML private Button confirm;
+    @FXML private Button cancel;
 
 
-    private static RegistrationController registrationController = new RegistrationController();
-    public static RegistrationController getRegistrationController() { return registrationController;}
+    private static RegistrationController instance = new RegistrationController();
+    public static RegistrationController getInstance(){return instance;}
 
-    public void initialize() throws IOException {
+    public void init() throws IOException {
         setScene();
         eye.setImage(eyeOff);
         passwordVisible.setVisible(false);
         passwordField.setVisible(true);
+
+        eye.setOnMouseClicked(this::showPassword);
+        confirm.setOnMouseClicked(this::confirmRegistration);
+        cancel.setOnMouseClicked(this::cancelRegistration);
+
     }
 
     private static void setScene() throws IOException {
@@ -98,6 +103,7 @@ public class RegistrationController {
     @FXML
     private void cancelRegistration(MouseEvent event) {
         //TODO zavolat login stranku
+
     }
 
 

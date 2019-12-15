@@ -1,5 +1,7 @@
 package app;
 
+import app.config.Configuration;
+import app.importer.Generate;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,6 +19,7 @@ public class App extends Application {
     private static Scene scene;
 
     public static Scene getScene(){return scene;}
+
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -39,8 +42,11 @@ public class App extends Application {
         return fxmlLoader.load();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        //Generate.createAndGenerate();
+        //Configuration.connect();
         launch();
+
     }
 
 }

@@ -44,7 +44,7 @@ public class ProjectService {
 
         ArrayList<String> result = new ArrayList<>();
 
-        String sql = "select Projects.name from Projects";
+        String sql = "select Projects.projectName from Projects";
         try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
 
             ResultSet rs = preparedStatement.executeQuery();

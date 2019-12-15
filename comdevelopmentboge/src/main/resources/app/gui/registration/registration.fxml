@@ -101,7 +101,7 @@
                                 </ImageView>
                             </children>
                         </StackPane>
-                        <Button fx:id="confirm" mnemonicParsing="false" onMouseClicked="#confirmRegistration" prefHeight="50.0" prefWidth="350.0" style="-fx-background-radius: 100; -fx-background-color: red;" text="Zaregistrovať sa" textFill="WHITE">
+                        <Button fx:id="confirm" mnemonicParsing="false" prefHeight="50.0" prefWidth="350.0" style="-fx-background-radius: 100; -fx-background-color: red;" text="Zaregistrovať sa" textFill="WHITE">
                             <font>
                                 <Font name="System Bold" size="24.0" />
                             </font>
@@ -109,7 +109,7 @@
                                 <Insets top="10.0" />
                             </VBox.margin>
                         </Button>
-                  <Button fx:id="cancel" mnemonicParsing="false" onMouseClicked="#cancelRegistration" prefHeight="50.0" prefWidth="350.0" style="-fx-background-radius: 100; -fx-background-color: lightgrey;" text="Zrušiť">
+                  <Button fx:id="cancel" mnemonicParsing="false"  prefHeight="50.0" prefWidth="350.0" style="-fx-background-radius: 100; -fx-background-color: lightgrey;" text="Zrušiť">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
