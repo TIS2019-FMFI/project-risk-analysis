@@ -9,6 +9,8 @@ module app {
     requires javafx.swing;
     requires poi;
     requires poi.ooxml;
+    requires commons.codec;
+
 
 
     opens app to javafx.fxml;
