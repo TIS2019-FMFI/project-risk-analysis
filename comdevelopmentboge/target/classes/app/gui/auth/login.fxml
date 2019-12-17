@@ -37,7 +37,7 @@
                         <Font name="System Italic" size="36.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="emailField" style="-fx-background-color: #f9f9f9; -fx-border-color: #f9f9f9  #f9f9f9 black  #f9f9f9;">
+                  <TextField fx:id="email" style="-fx-background-color: #f9f9f9; -fx-border-color: #f9f9f9  #f9f9f9 black  #f9f9f9;">
                      <VBox.margin>
                         <Insets bottom="20.0" />
                      </VBox.margin>

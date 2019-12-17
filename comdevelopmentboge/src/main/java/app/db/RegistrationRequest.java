@@ -30,7 +30,6 @@ public class RegistrationRequest {
     }
 
     public void insert() throws SQLException, DatabaseException {
-        //TODO vlozit request do databazy
         String sql = "INSERT INTO registration_requests(user_id,text) VALUES(?,?) ";
         try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
 

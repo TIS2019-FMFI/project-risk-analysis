@@ -1,6 +1,7 @@
 package app.gui.registration;
 
 import app.App;
+import app.config.SignedUser;
 import app.exception.MyException;
 import app.exception.RegistrationException;
 import app.gui.TabController;
@@ -32,8 +33,7 @@ public class RegistrationController {
     @FXML private ImageView eye;
     @FXML private PasswordField passwordField;
     @FXML private TextField passwordVisible;
-    @FXML private Button confirm;
-    @FXML private Button cancel;
+
 
 
     private static RegistrationController instance = new RegistrationController();
@@ -80,15 +80,17 @@ public class RegistrationController {
     private void confirmRegistration(MouseEvent event) throws IOException {
         try {
             Registration.register(name.getText(),surname.getText(),email.getText(),getPasswordText());
-            App.setRoot(loadFXML("registration-waiting"));
-            //TODO otvori sa stranka pre cakanie na potvrdenie
+            openWaitingPage();
         } catch (MyException e) {
             showAlert(e.getMessage());
         } catch (SQLException e) {
-            e.printStackTrace();
             showAlert("Nepodarilo sa spojenie s databázou. Vyskúšajte ešte raz");
         }
     }
+    private void openWaitingPage() throws IOException {
+        App.setRoot(loadFXML("registration-waiting"));
+    }
+
     private void showAlert(String text) {
         Alert alert = new Alert(Alert.AlertType.ERROR, text, ButtonType.OK);
         alert.showAndWait();
@@ -100,6 +102,17 @@ public class RegistrationController {
     private void cancelRegistration(MouseEvent event) {
         //TODO zavolat login stranku
 
+    }
+    @FXML
+    private void refreshData(MouseEvent event) throws IOException {
+        //tato metoda sa da zavolat len ak sa uspesne zaregistroval, preto bude nastaveny SignedUser
+        try {
+            if (Registration.isRegistrationApproved(SignedUser.getUser())) {
+                TabController.getInstance().init();
+            }
+        } catch (SQLException  e) {
+            showAlert("Nepodarilo sa spojenie s databázou. Vyskúšajte ešte raz");
+        }
     }
 
 

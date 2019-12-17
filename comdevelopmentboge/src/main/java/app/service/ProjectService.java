@@ -68,7 +68,7 @@ public class ProjectService {
         return null;
     }
 
-    public ArrayList<Projects> findAllCustomerProjects(Customers customer){
+    public ArrayList<Projects> findAllCustomerProjects(Customer customer){
         return null;
     }
 

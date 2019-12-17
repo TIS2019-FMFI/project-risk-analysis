@@ -1,57 +1,117 @@
 package app.gui.profile;
 
+import app.App;
+import app.config.SignedUser;
+import app.gui.registration.RegistrationController;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
+
+import java.awt.*;
+import java.io.IOException;
 
 public class ProfileController {
 
-    double x, y;
-    boolean fullSized;
+    private String emailPrevious;
+    private String passwordPrevious;
+    private boolean passwordShown = false;
+
+    private Image eyeOn = new Image("app/images/eyeOn.png");
+    private Image eyeOff = new Image("app/images/eyeOff.png");
+    private Image edit = new Image("app/images/edit.png");
+    private Image confirm = new Image("app/images/confirm.png");
+
+    @FXML private TextField email;
+    @FXML private TextField passwordVisible;
+    @FXML private PasswordField passwordField;
+    @FXML private ImageView eye;
+    @FXML private ImageView email_edit;
+    @FXML private ImageView password_edit;
+    @FXML private ImageView email_save;
+    @FXML private ImageView password_save;
+    @FXML private ImageView close;
+    @FXML private Label name;
 
 
-    @FXML
-    void dragged(MouseEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setX(event.getScreenX() - x);
-        stage.setY(event.getScreenY() - y);
+    private static ProfileController instance = new ProfileController();
+    public static ProfileController getInstance(){return instance;}
+
+
+    public void init() throws IOException {
+        setScene();
+
     }
 
-    @FXML
-    void pressed(MouseEvent event) {
-        x = event.getSceneX();
-        y = event.getSceneY();
+
+    private void setFields() {
+        name.setText(SignedUser.getUser().getFullName());
+
+        email.setText(SignedUser.getUser().getEmail());
+        emailPrevious = SignedUser.getUser().getEmail();
+
+        //TODO prekonvertovat z MD5 na heslo. da sa to vobec ?
+        passwordField.setText(SignedUser.getUser().getPassword());
+        passwordPrevious = SignedUser.getUser().getPassword();
     }
 
-    @FXML
-    private void min(MouseEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setIconified(true);
+    private void setScene() throws IOException {
+        Parent parent = loadFXML("profile");
+        App.setRoot(parent);
+        setFields();
     }
 
+    private Parent loadFXML(String fxml) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(ProfileController.class.getResource(fxml + ".fxml"));
+        return fxmlLoader.load();
+    }
     @FXML
-    private void max(MouseEvent event) {
-        fullSized = !fullSized;
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        if(fullSized) {
-            stage.setMaximized(true);
+    private void showPassword(MouseEvent event) {
+        passwordShown = !passwordShown;
+        if(passwordShown) {
+            eye.setImage(eyeOn);
+            passwordVisible.setText(passwordField.getText());
+            passwordVisible.setVisible(true);
+            passwordField.setVisible(false);
         }
         else {
-            stage.setMaximized(false);
+            eye.setImage(eyeOff);
+            passwordField.setText(passwordVisible.getText());
+            passwordField.setVisible(true);
+            passwordVisible.setVisible(false);
         }
 
     }
 
+    private String getPasswordText() {
+        return passwordShown ? passwordVisible.getText() : passwordField.getText();
+    }
+
     @FXML
-    private void close(MouseEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
+    private void emailEdit(MouseEvent event) {
+        emailPrevious = email.getText();
+
+        email.setEditable(true);
+        email_edit.setVisible(false);
+        email_save.setVisible(true);
+    }
+
+    @FXML
+    private void cancelEdit(MouseEvent event) {
+        email.setText(emailPrevious);
+        passwordField.setText(passwordPrevious);
+
+        email.setEditable(false);
+        passwordField.setEditable(false);
+        passwordVisible.setEditable(false);
     }
 
 
-
-    public void initialize() {
-
-    }
 }

@@ -4,11 +4,11 @@ import app.db.*;
 
 public class CustomerService {
 
-    public Customers findCustomerById(Integer id){
+    public Customer findCustomerById(Integer id){
         return null;
     }
 
-    public Customers findCustomerByName(String name){
+    public Customer findCustomerByName(String name){
         return null;
     }
 

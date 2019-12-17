@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Users {
+public class User {
     public enum USERTYPE {
         ADMIN,PROJECT_ADMIN,USER,FEM
     }
@@ -21,9 +21,9 @@ public class Users {
     private Boolean approved;
 
 
-    public Users(){}
+    public User(){}
 
-    public Users(Integer id,String name, String surname, String email, String password, USERTYPE userType, Boolean deleted, Boolean approved) {
+    public User(Integer id,String name, String surname, String email, String password, USERTYPE userType, Boolean deleted, Boolean approved) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -103,7 +103,6 @@ public class Users {
     }
 
     public void insert() throws SQLException {
-        //TODO ak tam ale bude uzivatel s danym emailom tak musi vyhodit chybu
         String sql = "INSERT INTO users(name,surname,email,password,userType,approved,deleted) VALUES(?,?,?,?,?,?,?);";
         try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
 
