@@ -133,11 +133,11 @@ public class Generate {
 //USERS
 
         ArrayList<List> users = new ArrayList();
-        users.add(Arrays.asList("Adam","Mrkvicka","adam@boge.com","nenavidimMrkvu","admin",true,false));
-        users.add(Arrays.asList("Peter","Zahradka","peter@boge.com","pestujemTravicku","user",true,false));
-        users.add(Arrays.asList("Jozef","Strom","jozef@boge.com","stromySuLaska","projectAdmin",true,false));
-        users.add(Arrays.asList("Anna","Bobrova","anna@boge.com","boborIbaVMene","fem",true,false));
-        users.add(Arrays.asList("Lojzo","Hipster","lojzo@boge.com","rawVeganForLife","user",false,false));
+        users.add(Arrays.asList("Adam","Mrkvicka","adam@boge.com","nenavidimMrkvu","ADMIN",true,false));
+        users.add(Arrays.asList("Peter","Zahradka","peter@boge.com","pestujemTravicku","USER",true,false));
+        users.add(Arrays.asList("Jozef","Strom","jozef@boge.com","stromySuLaska","PROJECT_ADMIN",true,false));
+        users.add(Arrays.asList("Anna","Bobrova","anna@boge.com","boborIbaVMene","FEM",true,false));
+        users.add(Arrays.asList("Lojzo","Hipster","lojzo@boge.com","rawVeganForLife","USER",false,false));
 
         sqlCreate = "CREATE TABLE USERS (" +
                 "name varchar(50)," +
