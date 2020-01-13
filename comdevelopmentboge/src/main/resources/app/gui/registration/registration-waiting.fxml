@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<VBox prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.gui.registration.RegistrationController">
+   <children>
+      <VBox alignment="CENTER" prefHeight="150.0" prefWidth="1000.0">
+         <children>
+              <Label id="text" alignment="CENTER" prefWidth="1000.0" text="Čaká sa na potvrdenie registrácie" textAlignment="CENTER" textFill="#b90000" textOverrun="CLIP">
+                  <font>
+                      <Font name="System Bold" size="32.0" />
+                  </font>
+               <VBox.margin>
+                  <Insets top="50.0" />
+               </VBox.margin>
+              </Label>
+
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1000.0">
+         <children>
+              <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                  <Image url="@../../images/hourglass.png" />
+                  </image>
+              </ImageView>
+             <Button fx:id="refresh" onMouseClicked="#refreshData" mnemonicParsing="false" prefHeight="35.0" prefWidth="200.0" style="-fx-background-radius: 100; -fx-background-color: #b90000;" text="Obnoviť" textFill="WHITE">
+                 <font>
+                     <Font name="System Bold" size="24.0" />
+                 </font>
+                 <VBox.margin>
+                     <Insets top="50.0" />
+                 </VBox.margin>
+             </Button>
+         </children>
+         <VBox.margin>
+            <Insets bottom="50.0" top="50.0" />
+         </VBox.margin>
+      </VBox>
+   </children>
+</VBox>

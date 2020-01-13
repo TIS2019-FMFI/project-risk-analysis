@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#cancelEdit" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #f7f5f6;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.gui.profile.ProfileController">
+    <children>
+        <AnchorPane minHeight="800.0" minWidth="1000.0">
+            <children>
+                <VBox alignment="TOP_RIGHT" prefHeight="50.0" prefWidth="1000.0">
+                    <children>
+                        <ImageView fx:id="close" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../images/close.png" />
+                            </image>
+                     <VBox.margin>
+                        <Insets right="10.0" top="10.0" />
+                     </VBox.margin>
+                        </ImageView>
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" layoutX="1.0" layoutY="82.0" prefHeight="80.0" prefWidth="1000.0">
+                    <children>
+                        <Label fx:id="name" alignment="CENTER" style="-fx-font-weight: bold;" text="Meno Priezvisko">
+                            <font>
+                                <Font size="48.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+                <TextField fx:id="email" alignment="TOP_LEFT" editable="false" layoutX="381.0" layoutY="207.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="545.0" style="-fx-background-color: #f0001c; -fx-background-radius: 100;" />
+                <Label alignment="CENTER" contentDisplay="CENTER" layoutX="438.0" layoutY="182.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="145.0" style="-fx-background-color: white; -fx-background-radius: 100; -fx-font-weight: bold;" text="E-mail" textAlignment="CENTER">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </Label>
+                <PasswordField fx:id="passwordField" editable="false" layoutX="381.0" layoutY="388.0" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="100.0" prefWidth="545.0" style="-fx-background-color: #f0001c; -fx-background-radius: 100;" />
+                <TextField fx:id="passwordVisible" alignment="TOP_LEFT" editable="false" layoutX="381.0" layoutY="383.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="545.0" style="-fx-background-color: #f0001c; -fx-background-radius: 100;" visible="false" />
+                <Label alignment="CENTER" layoutX="428.0" layoutY="358.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="145.0" style="-fx-background-color: white; -fx-background-radius: 100; -fx-font-weight: bold;" text="Heslo" textAlignment="CENTER">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </Label>
+                <ImageView fx:id="email_edit" onMouseClicked="#emailEdit" fitHeight="40.0" fitWidth="40.0" layoutX="851.0" layoutY="242.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../images/edit.png" />
+                    </image>
+                </ImageView>
+            <ImageView fx:id="email_save" fitHeight="40.0" fitWidth="40.0" layoutX="851.0" layoutY="242.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../../images/confirm.png" />
+               </image>
+            </ImageView>
+                <ImageView fx:id="password_edit" fitHeight="40.0" fitWidth="40.0" layoutX="851.0" layoutY="418.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../images/edit.png" />
+                    </image>
+                </ImageView>
+            <ImageView fx:id="password_save" fitHeight="40.0" fitWidth="40.0" layoutX="851.0" layoutY="418.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../../images/confirm.png" />
+               </image>
+            </ImageView>
+                <ImageView fx:id="eye" fitHeight="40.0" fitWidth="40.0" layoutX="805.0" layoutY="418.0" onMouseClicked="#showPassword" pickOnBounds="true" preserveRatio="true" visible="false">
+                   <image>
+                      <Image url="@../../images/eyeOff.png" />
+                   </image>
+                </ImageView>
+                <ImageView fx:id="user_picture" fitHeight="250.0" fitWidth="250.0" layoutX="70.0" layoutY="214.0" pickOnBounds="true" preserveRatio="true">
+                   <image>
+                      <Image url="@../../images/profile_icon.png" />
+                   </image>
+                </ImageView>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>
