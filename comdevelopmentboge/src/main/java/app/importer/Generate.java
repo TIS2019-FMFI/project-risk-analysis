@@ -21,14 +21,14 @@ public class Generate {
 
 //SAP
 
-        sqlCreate = "CREATE TABLE SAP (" +
+        sqlCreate = "CREATE TABLE sap (" +
                 "Projektdef varchar(50)," +
                 "PSPElement varchar(50)," +
                 "Objektbezeichnung varchar(50)," +
                 "Kostenart varchar(50)," +
                 "KostenartenBez varchar(50)," +
                 "Bezeichnung varchar(50)," +
-                "Partnerobject varchar(50)," +
+                "Partnerobjekt varchar(50)," +
                 "Periode varchar(50)," +
                 "Jahr varchar(50)," +
                 "Belegnr varchar(50)," +
@@ -39,18 +39,18 @@ public class Generate {
                 "GME varchar(50))";
 
 
-        sqlGenerate = "INSERT INTO SAP " +
-                "(Projektdef,PSPElement,Objektbezeichnung,Kostenart,KostenartenBez,Bezeichnung,Partnerobject,Periode,Jahr,Belegnr,BuchDatum,WertKWahr,KWahr,MengeErf,GME)"+
+        sqlGenerate = "INSERT INTO sap " +
+                "(Projektdef,PSPElement,Objektbezeichnung,Kostenart,KostenartenBez,Bezeichnung,Partnerobjekt,Periode,Jahr,Belegnr,BuchDatum,WertKWahr,KWahr,MengeErf,GME)"+
                 "VALUES"+
                 "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 
         try( Statement s = DbContext.getConnection().createStatement()) {
-            s.executeUpdate("DROP TABLE IF EXISTS SAP");
+            s.executeUpdate("DROP TABLE IF EXISTS sap");
             s.executeUpdate(sqlCreate);
-            System.out.println("Table SAP created");
+            System.out.println("Table sap created");
         } catch (SQLException e) {
-            System.out.println("Table SAP failed");
+            System.out.println("Table sap failed");
             e.printStackTrace();
         }
 
@@ -82,10 +82,27 @@ public class Generate {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+//CUSTOMERS
+
+        sqlCreate = "CREATE TABLE customers ( id int primary key AUTO_INCREMENT, " +
+                "name varchar(50) UNIQUE NOT NULL)";
+
+        sqlGenerate = "insert into customers (name) values ('audi')";
+
+        try( Statement s = DbContext.getConnection().createStatement()) {
+            s.executeUpdate("DROP TABLE IF EXISTS customers");
+            s.executeUpdate(sqlCreate);
+            System.out.println("Table customers created");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+
 
 //PROJECTS
 
-        sqlCreate = "CREATE TABLE PROJECTS (" +
+        sqlCreate = "CREATE TABLE projects (" +
                 "projectNumber varchar(50) UNIQUE NOT NULL," +
                 "projectName varchar(50) NOT NULL," +
                 "partNumber varchar(50)," +
@@ -94,27 +111,29 @@ public class Generate {
                 "volumes varchar(50)," +
                 "DDCost double," +
                 "prototypeCosts double," +
-                "lastUpdate date)";
+                "lastUpdate date," +
+                "customer_id int references customers(id))";
 
-        sqlGenerate = "INSERT INTO PROJECTS"+
-                "(projectNumber,projectName,partNumber,ROS,ROCE,volumes,DDCost,prototypeCosts,lastUpdate)"+
+        sqlGenerate = "INSERT INTO projects"+
+                "(projectNumber,projectName,partNumber,ROS,ROCE,volumes,DDCost,prototypeCosts,lastUpdate, customer_id)"+
                 "VALUES"+
-                "(?,?,?,?,?,?,?,?,?)";
+                "(?,?,?,?,?,?,?,?,?,?)";
 
         try( Statement s = DbContext.getConnection().createStatement()) {
-            s.executeUpdate("DROP TABLE IF EXISTS PROJECTS");
+            s.executeUpdate("DROP TABLE IF EXISTS projects");
             s.executeUpdate(sqlCreate);
-            System.out.println("Table PROJECTS created");
+            System.out.println("Table projects created");
         } catch (SQLException e) {
-            System.out.println("Table PROJECTS failed");
+            System.out.println("Table projects failed");
             e.printStackTrace();
         }
 
+        int projectNr = 0;
         try(PreparedStatement s = DbContext.getConnection().prepareStatement(sqlGenerate)) {
             for(List arr : projects){
 
                 s.setString(1,arr.get(0).toString());
-                s.setString(2,arr.get(1).toString());
+                s.setString(2,"project"+projectNr++);
                 s.setString(3,arr.get(2).toString());
                 s.setString(4,arr.get(3).toString());
                 s.setString(5,arr.get(4).toString());
@@ -122,12 +141,13 @@ public class Generate {
                 s.setBigDecimal(7, BigDecimal.ZERO);
                 s.setBigDecimal(8,BigDecimal.ZERO);
                 s.setDate(9,null);
+                s.setInt(10, 1);
                 s.executeUpdate();
 
             }
-            System.out.println("Table PROJECTS filled");
+            System.out.println("Table projects filled");
         } catch (SQLException e) {
-            System.out.println("PROJECTS INSERT FAILED");
+            System.out.println("projects INSERT FAILED");
             e.printStackTrace();
         }
 
@@ -143,7 +163,8 @@ public class Generate {
         users.add(Arrays.asList("Anna","Bobrova","anna@boge.com","boborIbaVMene","FEM",true,false));
         users.add(Arrays.asList("Lojzo","Hipster","lojzo@boge.com","rawVeganForLife","USER",false,false));
 
-        sqlCreate = "CREATE TABLE USERS (" +
+        sqlCreate = "CREATE TABLE users (" +
+                "id integer primary key AUTO_INCREMENT,"+
                 "name varchar(50) NOT NULL," +
                 "surname varchar(50) NOT NULL," +
                 "email varchar(50)," +
@@ -152,15 +173,15 @@ public class Generate {
                 "approved boolean," +
                 "deleted boolean NOT NULL)";
 
-        sqlGenerate = "INSERT INTO USERS"+
+        sqlGenerate = "INSERT INTO users"+
                 "(name,surname,email,password,userType,approved,deleted)"+
                 "VALUES"+
                 "(?,?,?,?,?,?,?)";
 
         try( Statement s = DbContext.getConnection().createStatement()) {
-            s.executeUpdate("DROP TABLE IF EXISTS USERS");
+            s.executeUpdate("DROP TABLE IF EXISTS users");
             s.executeUpdate(sqlCreate);
-            System.out.println("Table USERS created");
+            System.out.println("Table users created");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -176,53 +197,40 @@ public class Generate {
                 s.setBoolean(7,(Boolean)arr.get(6));
                 s.executeUpdate();
             }
-            System.out.println("Table USERS filled");
+            System.out.println("Table users filled");
         } catch (SQLException e) {
-            System.out.println("USER INSERT FAILED");
-            e.printStackTrace();
-        }
-
-//CUSTOMERS
-
-        sqlCreate = "CREATE TABLE CUSTOMERS (" +
-                "name varchar(50) UNIQUE NOT NULL)";
-
-        try( Statement s = DbContext.getConnection().createStatement()) {
-            s.executeUpdate("DROP TABLE IF EXISTS CUSTOMERS");
-            s.executeUpdate(sqlCreate);
-            System.out.println("Table CUSTOMERS created");
-        } catch (SQLException e) {
+            System.out.println("user INSERT FAILED");
             e.printStackTrace();
         }
 
 
 //REMINDERS
 
-        sqlCreate = "CREATE TABLE REMINDERS (" +
+        sqlCreate = "CREATE TABLE reminders (" +
                 "text varchar(150) NOT NULL," +
                 "partNumber varchar(50)," +
                 "timePeriod varchar(50)," +
                 "isFEM BOOLEAN NOT NULL)";
 
         try( Statement s = DbContext.getConnection().createStatement()) {
-            s.executeUpdate("DROP TABLE IF EXISTS REMINDERS");
+            s.executeUpdate("DROP TABLE IF EXISTS reminders");
             s.executeUpdate(sqlCreate);
-            System.out.println("Table REMINDERS created");
+            System.out.println("Table reminders created");
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
 
 
-//REGISTRATION REQUEST
+//REGISTRATION REQUESTS
 
-        sqlCreate = "CREATE TABLE REGISTRATION_REQUEST (" +
+        sqlCreate = "CREATE TABLE registration_requests (" +
                 "text varchar(150) NOT NULL)";
 
         try( Statement s = DbContext.getConnection().createStatement()) {
-            s.executeUpdate("DROP TABLE IF EXISTS REGISTRATION_REQUEST");
+            s.executeUpdate("DROP TABLE IF EXISTS registration_requests");
             s.executeUpdate(sqlCreate);
-            System.out.println("Table REGISTRATION_REQUEST created");
+            System.out.println("Table registration_requests created");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -230,7 +238,7 @@ public class Generate {
 
 //LOGS
 
-        sqlCreate = "CREATE TABLE LOGS (" +
+        sqlCreate = "CREATE TABLE logs (" +
                 "text varchar(50) NOT NULL," +
                 "date date NOT NULL," +
                 "time time NOT NULL)";
@@ -238,13 +246,12 @@ public class Generate {
 
 
         try( Statement s = DbContext.getConnection().createStatement()) {
-            s.executeUpdate("DROP TABLE IF EXISTS LOGS");
+            s.executeUpdate("DROP TABLE IF EXISTS logs");
             s.executeUpdate(sqlCreate);
-            System.out.println("Table LOGS created");
+            System.out.println("Table logs created");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
 

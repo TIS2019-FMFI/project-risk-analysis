@@ -34,9 +34,9 @@ public class SAPService {
                 sap.setPeriode(rs.getString(6));
                 sap.setJahr(rs.getString(7));
 
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
-                java.sql.Date date = new java.sql.Date(sdf.parse(rs.getString(8)).getTime());
+                java.sql.Date date = new java.sql.Date(sdf.parse(rs.getString(11)).getTime());
                 sap.setBuchDatum(date);
                 sap.setWert(rs.getBigDecimal(9));
                 sap.setMenge(rs.getDouble(10));
