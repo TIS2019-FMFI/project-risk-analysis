@@ -68,7 +68,7 @@ public class LoginController {
     private void login(MouseEvent event) {
         try {
             LoginTransaction.login(email.getText(),getPasswordText());
-            TabController.getInstance().init();
+            FXMLLoader.load(TabController.class.getResource("main-box.fxml"));
         } catch (LoginException e) {
             showAlert(e.getMessage());
         } catch (SQLException e) {

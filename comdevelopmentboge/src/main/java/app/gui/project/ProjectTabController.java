@@ -3,114 +3,62 @@ package app.gui.project;
 import app.App;
 import app.gui.TabController;
 import app.service.ProjectService;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
-import javafx.util.Callback;
 
+import com.jfoenix.controls.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
-public class ProjectTabController extends TabController{
+public class ProjectTabController{
 
-    Logger logger = Logger.getLogger(ProjectTabController.class.toString());
-
-    @FXML
-    private ScrollPane projectListBoard;
+    private static ProjectTabController instance;
+    public static ProjectTabController getInstance(){return instance;}
 
     @FXML
-    public void initialize() throws ClassNotFoundException {
-        ObservableList<ListItem> data = FXCollections.observableArrayList();
+    private JFXListView<Label> projectListView;
+
+    @FXML
+    public void initialize() {
+
+        instance = this;
 
         ArrayList<String> projectNames = ProjectService.getProjectService().getAllProjectNames();
         for(String name : projectNames) {
-            ListItem listItem = new ListItem(name);
-            data.add(listItem);
+            projectListView.getItems().add(new Label(name));
         }
 
-
-
-        final ListView<ListItem> listView = new ListView<>(data);
-        listView.setCellFactory(new Callback<ListView<ListItem>, ListCell<ListItem>>() {
-            @Override
-            public ListCell<ListItem> call(ListView<ListItem> listView) {
-                return new CustomListCell();
-            }
-        });
-
-        projectListBoard.prefWidthProperty().bind(App.getScene().widthProperty());
-        projectListBoard.prefHeightProperty().bind(App.getScene().heightProperty());
-
-        listView.prefHeightProperty().bind(projectListBoard.prefHeightProperty());
-        listView.prefWidthProperty().bind(projectListBoard.prefWidthProperty());
-
-        projectListBoard.setContent(listView);
-        projectListBoard.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-
-        listView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        projectListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(MouseEvent event) {
-                ListItem item =  listView.getSelectionModel().getSelectedItem();
+                Label label = projectListView.getSelectionModel().getSelectedItem();
                 try {
-                    showProjectDetails(item);
+                    showProjectDetails(label.getId());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
-
+        projectListView.setPrefWidth(App.getScene().getWidth());
+        projectListView.setPrefHeight(App.getScene().getHeight() - 80);
     }
 
-    private void showProjectDetails(ListItem item) throws IOException {
-        projectListBoard.setContent(FXMLLoader.load(ProjectController.class.getResource("project-details-board.fxml")));
-        TabController.getInstance().setMenuBar("bar/project-details-menu-bar.fxml");
+    private void showProjectDetails(String item) throws IOException {
+        TabController.getInstance().selectProjectDetailsTab();
     }
 
-    private static class ListItem {
-        private String name;
 
-        public String getName() {
-            return name;
-        }
-
-        public ListItem(String name) {
-            super();
-            this.name = name;
-        }
-    }
-
-    private class CustomListCell extends ListCell<ListItem> {
-        private HBox content;
-        private Text name;
-
-        public CustomListCell() {
-            super();
-            name = new Text();
-            content = new HBox(name);
-            content.setSpacing(10);
-        }
-
-        @Override
-        protected void updateItem(ListItem item, boolean empty) {
-            super.updateItem(item, empty);
-            if (item != null && !empty) { // <== test for null item and empty parameter
-                content.setStyle("-fx-background-color: grey");
-                content.setPrefHeight(30);
-                name.setStyle("-fx-fill: white; -fx-font-size: 20");
-                name.setText(item.getName());
-                setGraphic(content);
-            } else {
-                setGraphic(null);
-            }
+    public void reloadList(){
+        ArrayList<String> projectNames = ProjectService.getProjectService().findProjectsByCriteria();
+        projectListView.getItems().clear();
+        for(String name : projectNames) {
+            projectListView.getItems().add(new Label(name));
+            System.out.println(name);
         }
     }
 }

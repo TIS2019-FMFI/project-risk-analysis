@@ -16,7 +16,7 @@ public class ChartService {
 
     public LinkedHashMap<Period, BigDecimal> getRDCostsData(String projectCode) {
         LinkedHashMap<Period, BigDecimal> costs = new LinkedHashMap<>();
-        String sql = "select Periode as month, Jahr as year, sum(Wert) from sap where projectNr=? and Objektbezeichnung='Research & Development Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and KostenartenBez='Entwicklungskosten' group by Periode, Jahr order by Jahr, Periode";
+        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and Objektbezeichnung='Research & Development Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and KostenartenBez='Entwicklungskosten' group by Periode, Jahr order by Jahr, Periode";
         try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
             preparedStatement.setString(1,projectCode);
 
@@ -36,7 +36,7 @@ public class ChartService {
 
     public LinkedHashMap<Period, BigDecimal> getCostsData(String projectCode) {
         LinkedHashMap<Period, BigDecimal> costs = new LinkedHashMap<>();
-        String sql = "select Periode as month, Jahr as year, sum(Wert) from sap where projectNr=? and Objektbezeichnung='Research & Development Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and KostenartenBez not like '%Entwicklungskosten%' group by Periode, Jahr order by Jahr, Periode";
+        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and Objektbezeichnung='Research & Development Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and KostenartenBez not like '%Entwicklungskosten%' group by Periode, Jahr order by Jahr, Periode";
         try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
             preparedStatement.setString(1,projectCode);
 
@@ -53,9 +53,9 @@ public class ChartService {
         return costs;
     }
 
-    public LinkedHashMap<Period, BigDecimal> getPrototypeCosts(String projectCode) {
+    public LinkedHashMap<Period, BigDecimal> getPrototypeCosts(String projectCode)  {
         LinkedHashMap<Period, BigDecimal> costs = new LinkedHashMap<>();
-        String sql = "select Periode as month, Jahr as year, sum(Wert) from sap where projectNr=? and Objektbezeichnung='Samples + Revenues Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' group by Periode, Jahr order by Jahr, Periode";
+        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and Objektbezeichnung='Samples + Revenues Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' group by Periode, Jahr order by Jahr, Periode";
         try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
             preparedStatement.setString(1,projectCode);
 
@@ -74,7 +74,7 @@ public class ChartService {
 
     public LinkedHashMap<Period, BigDecimal> getPrototypeRevenues(String projectCode) {
         LinkedHashMap<Period, BigDecimal> costs = new LinkedHashMap<>();
-        String sql = "select Periode as month, Jahr as year, sum(Wert) from sap where projectNr=? and Objektbezeichnung='Samples + Revenues Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and Wert<=0 group by Periode, Jahr order by Jahr, Periode";
+        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and Objektbezeichnung='Samples + Revenues Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and WertKWahr<=0 group by Periode, Jahr order by Jahr, Periode";
         try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
             preparedStatement.setString(1,projectCode);
 

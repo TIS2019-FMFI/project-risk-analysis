@@ -2,6 +2,7 @@ package app.gui;
 
 import app.App;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Tab;
@@ -13,15 +14,18 @@ import java.io.IOException;
 
 public class TabController {
 
-    private static TabController instance = new TabController();
+    private static TabController instance;
     public static TabController getInstance(){return instance;}
 
+    @FXML
     private VBox mainBox;
     private TabPane mainTabPane;
 
 
-    public void init() throws IOException {
-        mainBox = new VBox();
+    public void initialize() throws IOException {
+
+        instance = this;
+
         mainBox.getChildren().add(loadFXML("bar/main-page-menu-bar"));
         mainTabPane = (TabPane) loadFXML("tab-pane");
         mainBox.getChildren().add(mainTabPane);
@@ -71,7 +75,22 @@ public class TabController {
         for (Tab tab : tabs) {
             if (tab.getId().equals("projectTab")) {
                 try {
-                    tab.setContent(loadFXML("project/project-list-board"));
+                    tab.setContent(loadFXML("project/project-board"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void selectProjectDetailsTab() throws IOException {
+        setMenuBar("bar/project-details-menu-bar.fxml");
+
+        ObservableList<Tab> tabs = mainTabPane.getTabs();
+        for (Tab tab : tabs) {
+            if (tab.getId().equals("projectTab")) {
+                try {
+                    tab.setContent(loadFXML("project/project-details-board"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

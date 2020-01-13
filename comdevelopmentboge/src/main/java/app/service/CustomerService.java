@@ -1,8 +1,37 @@
 package app.service;
 
+import app.config.DbContext;
 import app.db.*;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+
 public class CustomerService {
+
+    private CustomerService(){}
+    public static CustomerService getCustomerService(){return customerService;}
+    private static CustomerService customerService = new CustomerService();
+
+    public ArrayList<Customer> getAllCustomer(){
+        ArrayList<Customer> result = new ArrayList<>();
+
+        String sql = "select * from customers";
+        try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                result.add(new Customer(rs.getInt(1), rs.getString(2)));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 
     public Customer findCustomerById(Integer id){
         return null;

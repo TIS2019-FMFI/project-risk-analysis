@@ -4,9 +4,11 @@ import app.App;
 import app.gui.TabController;
 import app.gui.graph.ChartRenderer;
 import app.service.SAPService;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -14,6 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import app.db.*;
+import javafx.scene.layout.VBox;
 import org.apache.poi.ss.usermodel.Table;
 import org.jfree.chart.ChartPanel;
 
@@ -96,11 +99,8 @@ public class ProjectController {
         sapDetailsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         sapDetailsTable.setFixedCellSize(50);
-        sapDetailsTable.prefHeightProperty().bind(sapDetailsTable.fixedCellSizeProperty().multiply(Bindings.size(projectDetailsTable.getItems()).add(1.01)));
-        sapDetailsTable.minHeightProperty().bind(sapDetailsTable.prefHeightProperty());
-        sapDetailsTable.maxHeightProperty().bind(sapDetailsTable.prefHeightProperty());
-
         sapDetailsTable.prefWidthProperty().bind(App.getScene().widthProperty());
+        sapDetailsTable.prefHeight(50);
     }
 
     private void createProjectTable() {
@@ -133,11 +133,6 @@ public class ProjectController {
         TableColumn<Projects, Integer> prototypeCost = new TableColumn<>("Offered/Planned \n prototype costs");
         prototypeCost.setCellValueFactory(new PropertyValueFactory<Projects, Integer>("prototypeCost"));
 
-//        Projects project = ProjectService.getProjectService().findProjectById(0);
-//
-//         projectDetailsTable.getItems().clear();
-//        projectDetailsTable.getItems().add(project);
-
 
         projectDetailsTable.getColumns().clear();
         projectDetailsTable.getColumns().addAll(projectNumber,customer, projectName, partNumber, ros, roce, volumes,ddCost, prototypeCost);
@@ -146,8 +141,6 @@ public class ProjectController {
 
         projectDetailsTable.setFixedCellSize(50);
         projectDetailsTable.prefHeightProperty().bind(projectDetailsTable.fixedCellSizeProperty().multiply(Bindings.size(projectDetailsTable.getItems()).add(1.01)));
-        projectDetailsTable.minHeightProperty().bind(projectDetailsTable.prefHeightProperty());
-        projectDetailsTable.maxHeightProperty().bind(projectDetailsTable.prefHeightProperty());
 
         projectDetailsTable.prefWidthProperty().bind(App.getScene().widthProperty());
     }
@@ -186,7 +179,7 @@ public class ProjectController {
 
     private void createSwingContent(final SwingNode swingNode, final ChartPanel panel) throws IOException {
 
-        SwingUtilities.invokeLater(() -> {
+        Platform.runLater(()->{
             swingNode.setContent(panel);
 
         });

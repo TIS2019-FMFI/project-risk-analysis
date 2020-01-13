@@ -5,6 +5,7 @@ import app.config.SignedUser;
 import app.exception.MyException;
 import app.exception.RegistrationException;
 import app.gui.TabController;
+import app.gui.auth.LoginController;
 import app.transactions.Registration;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -108,7 +109,8 @@ public class RegistrationController {
         //tato metoda sa da zavolat len ak sa uspesne zaregistroval, preto bude nastaveny SignedUser
         try {
             if (Registration.isRegistrationApproved(SignedUser.getUser())) {
-                TabController.getInstance().init();
+                FXMLLoader.load(TabController.class.getResource("main-box.fxml"));
+
             }
         } catch (SQLException  e) {
             showAlert("Nepodarilo sa spojenie s databázou. Vyskúšajte ešte raz");

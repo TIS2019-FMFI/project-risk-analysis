@@ -6,7 +6,6 @@ public class Customer {
 
 
     public Customer(Integer id, String name) {
-        super();
         this.id = id;
         this.name = name;
     }
@@ -25,5 +24,10 @@ public class Customer {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString(){
+        return name;
     }
 }

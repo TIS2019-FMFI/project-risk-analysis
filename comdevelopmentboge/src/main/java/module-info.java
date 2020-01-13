@@ -9,7 +9,8 @@ module app {
     requires javafx.swing;
     requires poi;
     requires poi.ooxml;
-    requires org.apache.commons.codec;
+    requires commons.codec;
+    requires com.jfoenix;
 
 
     opens app to javafx.fxml;
@@ -17,7 +18,7 @@ module app {
     opens app.gui.auth to javafx.fxml;
     opens app.gui.profile to javafx.fxml;
     opens app.gui.registration to javafx.fxml;
-    opens app.gui.project to  javafx.fxml,javafx.base;
+    opens app.gui.project to  javafx.fxml,javafx.base,com.jfoenix;
     opens app.gui.home to javafx.fxml;
     opens app.gui.administration to javafx.fxml;
     opens app.db to javafx.base;
@@ -26,7 +27,7 @@ module app {
     exports app.gui.auth to javafx.fxml;
     exports app.gui.profile to javafx.fxml;
     exports app.gui.registration to javafx.fxml;
-    exports app.gui.project to  javafx.fxml;
+    exports app.gui.project to  javafx.fxml, com.jfoenix;
     exports app.gui.home to javafx.fxml;
     exports app.gui.administration to javafx.fxml;
     exports app;
