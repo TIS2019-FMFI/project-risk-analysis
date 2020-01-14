@@ -33,7 +33,7 @@ public class Generate {
                 "Jahr varchar(50)," +
                 "Belegnr varchar(50)," +
                 "BuchDatum varchar(50)," +
-                "WertKWahr varchar(50)," +
+                "WertKWahr double," +
                 "KWahr varchar(50)," +
                 "MengeErf varchar(50)," +
                 "GME varchar(50))";
@@ -103,6 +103,7 @@ public class Generate {
 //PROJECTS
 
         sqlCreate = "CREATE TABLE projects (" +
+                "id int primary key auto_increment,"+
                 "projectNumber varchar(50) UNIQUE NOT NULL," +
                 "projectName varchar(50) NOT NULL," +
                 "partNumber varchar(50)," +
