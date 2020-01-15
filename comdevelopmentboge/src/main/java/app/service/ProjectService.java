@@ -4,8 +4,6 @@ import app.config.DbContext;
 import app.db.*;
 import app.gui.project.ProjectListFilter;
 
-import javax.xml.transform.Result;
-import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -88,7 +86,7 @@ public class ProjectService {
         String projectNumber = ProjectListFilter.getProjectListFilter().getProjectNumber();
         int customer = ProjectListFilter.getProjectListFilter().getCustomer();
 
-        String sql = "select projectName from projects ";
+        String sql = "select projectNumber from projects ";
         String criteria1 = "";
         String criteria2 = "";
         String criteria3 = "";
@@ -124,15 +122,40 @@ public class ProjectService {
 
     }
 
-    public Projects findProjectByProjectName(String projectName){
+    public Project findProjectByProjectName(String projectName){
         return null;
     }
 
-    public Projects findProjectByProjectNumber(Integer projectNumber){
-        return null;
+    // sap-ProjektDef, projects-projectNumber jedinecny identifikator projektu
+    public Project findProjectByProjectNumber(String projectNumber){
+        Project project = new Project();
+        String sql = "select projects.*, customers.name  from projects inner join customers on projects.customer_id=customers.id where projects.projectNumber=?";
+        try(PreparedStatement st = DbContext.getConnection().prepareStatement(sql)){
+            st.setString(1, projectNumber);
+
+            ResultSet rs = st.executeQuery();
+            if(rs.next()){
+                project.setId(rs.getInt(1));
+                project.setProjectName(rs.getString(2));
+                project.setProjectNumber(rs.getString(3));
+                project.setPartNumber(rs.getString(4));
+                project.setRos(rs.getString(5));
+                project.setRoce(rs.getString(6));
+                project.setVolumes(rs.getBigDecimal(7));
+                project.setDdCost(rs.getBigDecimal(8));
+                project.setPrototypeCost(rs.getBigDecimal(9));
+                project.setLastUpdated(rs.getDate(10));
+                project.setCustomerId(rs.getInt(11));
+                project.setCustomerName(rs.getString(12));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return project;
     }
 
-    public ArrayList<Projects> findAllCustomerProjects(Customer customer){
+    public ArrayList<Project> findAllCustomerProjects(Customer customer){
         return null;
     }
 

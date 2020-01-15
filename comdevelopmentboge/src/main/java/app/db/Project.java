@@ -3,11 +3,12 @@ package app.db;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Projects {
+public class Project {
     private Integer id;
     private String projectNumber;
     private String projectName;
-    private String customer;
+    private Integer customerId;
+    private String customerName;
     private String partNumber;
     private String ros;
     private String roce;
@@ -88,12 +89,12 @@ public class Projects {
         this.prototypeCost = prototypeCost;
     }
 
-    public String getCustomer() {
-        return customer;
+    public Integer getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer(String customer) {
-        this.customer = customer;
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 
     public Date getLastUpdated() {
@@ -102,5 +103,13 @@ public class Projects {
 
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 }

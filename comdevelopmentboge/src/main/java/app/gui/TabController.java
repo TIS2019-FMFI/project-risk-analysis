@@ -1,6 +1,7 @@
 package app.gui;
 
 import app.App;
+import app.gui.project.ProjectController;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +11,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 
 public class TabController {
@@ -83,7 +85,7 @@ public class TabController {
         }
     }
 
-    public void selectProjectDetailsTab() throws IOException {
+    public void selectProjectDetailsTab(String projectDef) throws IOException{
         setMenuBar("bar/project-details-menu-bar.fxml");
 
         ObservableList<Tab> tabs = mainTabPane.getTabs();
@@ -91,7 +93,10 @@ public class TabController {
             if (tab.getId().equals("projectTab")) {
                 try {
                     tab.setContent(loadFXML("project/project-details-board"));
+                    ProjectController.getProjectController().displayProjectData(projectDef);
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
