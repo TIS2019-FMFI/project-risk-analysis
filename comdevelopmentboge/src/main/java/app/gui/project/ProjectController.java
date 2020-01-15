@@ -1,28 +1,23 @@
 package app.gui.project;
 
 import app.App;
-import app.gui.TabController;
 import app.gui.graph.ChartRenderer;
+import app.gui.graph.Period;
+import app.service.ProjectService;
 import app.service.SAPService;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.scene.control.Tab;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import app.db.*;
-import javafx.scene.layout.VBox;
-import org.apache.poi.ss.usermodel.Table;
 import org.jfree.chart.ChartPanel;
 
-import javax.swing.*;
-import javax.swing.text.html.ImageView;
-import java.awt.*;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.*;
@@ -31,6 +26,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class ProjectController {
+
+    private static ProjectController projectController;
+    public static ProjectController getProjectController(){return projectController;}
 
     Logger logger = Logger.getLogger(ProjectController.class.toString());
 
@@ -41,19 +39,27 @@ public class ProjectController {
     private TableView sapDetailsTable;
 
     @FXML
-    private GridPane projectGraphGrid;
-
+    private HBox firstChartGroup;
 
     @FXML
-    public void initialize() throws ClassNotFoundException, IOException, ParseException {
-        logger.info("project page initialization");
+    private HBox secondChartGroup;
 
-        createProjectTable();
-        createSapTable();
-        createCharts();
+    @FXML
+    private HBox thirdChartGroup;
+
+    @FXML
+    public void initialize(){
+        projectController = this;
     }
 
-    private void createSapTable() throws ParseException {
+    public void displayProjectData(String projectDef) throws ParseException, IOException {
+
+        createProjectTable(projectDef);
+        createSapTable(projectDef);
+        createCharts(projectDef);
+    }
+
+    private void createSapTable(String projectDef) throws ParseException {
         TableColumn<SAP, String> PSPElement = new TableColumn<>("PSPElement");
         PSPElement.setCellValueFactory(new PropertyValueFactory<SAP, String>("PSPElement"));
 
@@ -87,7 +93,7 @@ public class ProjectController {
         TableColumn<SAP, String> GME = new TableColumn<>("GME");
         GME.setCellValueFactory(new PropertyValueFactory<>("GME"));
 
-        List<SAP> data = SAPService.getSapService().getAllSAPData();
+        List<SAP> data = SAPService.getSapService().getSapData(projectDef);
 
         sapDetailsTable.getItems().clear();
         sapDetailsTable.getItems().addAll(data);
@@ -103,86 +109,67 @@ public class ProjectController {
         sapDetailsTable.prefHeight(50);
     }
 
-    private void createProjectTable() {
+    private void createProjectTable(String projectDef) {
         projectDetailsTable.setEditable(true);
 
-        TableColumn<Projects, String> projectNumber = new TableColumn<>("Project Nr.");
-        projectNumber.setCellValueFactory(new PropertyValueFactory<Projects, String>("projectNumber"));
+        TableColumn<Project, String> projectNumber = new TableColumn<>("Project Nr.");
+        projectNumber.setCellValueFactory(new PropertyValueFactory<Project, String>("projectNumber"));
 
-        TableColumn<Projects, String> customer = new TableColumn<>("Customer");
-        customer.setCellValueFactory(new PropertyValueFactory<Projects, String>("customer"));
+        TableColumn<Project, String> customer = new TableColumn<>("Customer");
+        customer.setCellValueFactory(new PropertyValueFactory<Project, String>("customerName"));
 
-        TableColumn<Projects, String> projectName = new TableColumn<>("ProjectName");
-        projectName.setCellValueFactory(new PropertyValueFactory<Projects, String>("projectName"));
+        TableColumn<Project, String> projectName = new TableColumn<>("ProjectName");
+        projectName.setCellValueFactory(new PropertyValueFactory<Project, String>("projectName"));
 
-        TableColumn<Projects, String> partNumber = new TableColumn<>("Part Number");
-        partNumber.setCellValueFactory(new PropertyValueFactory<Projects, String>("partNumber"));
+        TableColumn<Project, String> partNumber = new TableColumn<>("Part Number");
+        partNumber.setCellValueFactory(new PropertyValueFactory<Project, String>("partNumber"));
 
-        TableColumn<Projects, String> ros = new TableColumn<>("Ros");
-        ros.setCellValueFactory(new PropertyValueFactory<Projects, String>("ros"));
+        TableColumn<Project, String> ros = new TableColumn<>("Ros");
+        ros.setCellValueFactory(new PropertyValueFactory<Project, String>("ros"));
 
-        TableColumn<Projects, String> roce = new TableColumn<>("Roce");
-        roce.setCellValueFactory(new PropertyValueFactory<Projects, String>("roce"));
+        TableColumn<Project, String> roce = new TableColumn<>("Roce");
+        roce.setCellValueFactory(new PropertyValueFactory<Project, String>("roce"));
 
-        TableColumn<Projects, Integer> volumes = new TableColumn<>("Volumes");
-        volumes.setCellValueFactory(new PropertyValueFactory<Projects, Integer>("volumes"));
+        TableColumn<Project, Integer> volumes = new TableColumn<>("Volumes");
+        volumes.setCellValueFactory(new PropertyValueFactory<Project, Integer>("volumes"));
 
-        TableColumn<Projects, Integer> ddCost = new TableColumn<>("Offered/Planned \n D&D costs");
-        ddCost.setCellValueFactory(new PropertyValueFactory<Projects, Integer>("ddCost"));
+        TableColumn<Project, Integer> ddCost = new TableColumn<>("Offered/Planned \n D&D costs");
+        ddCost.setCellValueFactory(new PropertyValueFactory<Project, Integer>("ddCost"));
 
-        TableColumn<Projects, Integer> prototypeCost = new TableColumn<>("Offered/Planned \n prototype costs");
-        prototypeCost.setCellValueFactory(new PropertyValueFactory<Projects, Integer>("prototypeCost"));
+        TableColumn<Project, Integer> prototypeCost = new TableColumn<>("Offered/Planned \n prototype costs");
+        prototypeCost.setCellValueFactory(new PropertyValueFactory<Project, Integer>("prototypeCost"));
 
+        Project projectData = ProjectService.getProjectService().findProjectByProjectNumber(projectDef);
+        projectDetailsTable.getItems().clear();
+        projectDetailsTable.getItems().add(projectData);
 
         projectDetailsTable.getColumns().clear();
         projectDetailsTable.getColumns().addAll(projectNumber,customer, projectName, partNumber, ros, roce, volumes,ddCost, prototypeCost);
 
         projectDetailsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
+        //fixme cant resize the table height to height of one row
         projectDetailsTable.setFixedCellSize(50);
         projectDetailsTable.prefHeightProperty().bind(projectDetailsTable.fixedCellSizeProperty().multiply(Bindings.size(projectDetailsTable.getItems()).add(1.01)));
+        projectDetailsTable.minHeightProperty().bind(projectDetailsTable.prefHeightProperty());
+        projectDetailsTable.maxHeightProperty().bind(projectDetailsTable.prefHeightProperty());
 
         projectDetailsTable.prefWidthProperty().bind(App.getScene().widthProperty());
     }
 
-    private void createCharts() throws IOException {
-        BorderPane rdCostsPane = new BorderPane();
-        BorderPane projectCostsPane = new BorderPane();
-        BorderPane prototypeCostsPane= new BorderPane();
-        BorderPane prototypeRevenuesPane= new BorderPane();
+    private void createCharts(String projectDef) throws IOException {
 
-        SwingNode rdCostsNode = new SwingNode();
-        SwingNode projectCostsNode = new SwingNode();
-        SwingNode prototypeCostsNode = new SwingNode();
-        SwingNode prototypeRevenuesNode = new SwingNode();
+        StackPane projectCostsPane = ChartRenderer.createProjectCostsChart(projectDef);
+        StackPane prototypeCostsPane = ChartRenderer.createProjectPrototypeChart(projectDef);
+        StackPane prototypeRevenuesPane = ChartRenderer.createPrototypeRevenuesChart(projectDef);
+        StackPane rdCostsPane = ChartRenderer.createRDCostsChart(projectDef);
+        StackPane projectSummaryRevenues = ChartRenderer.createSummaryProjectRevenues(projectDef);
+        StackPane projectSummaryCosts = ChartRenderer.createSummaryProjectCosts(projectDef);
 
-        ChartPanel rdCostsChart = ChartRenderer.createRDCostsChart("CH-060968");
-        ChartPanel projectCostsChart = ChartRenderer.createProjectCostsChart("CH-060968");
-        ChartPanel prototypeCostsChart = ChartRenderer.createProjectPrototypeChart("CH-060020");
-        ChartPanel prototypeRevenuesChart = ChartRenderer.createPrototypeRevenuesChart("PC-060890");
-
-        createSwingContent(rdCostsNode, rdCostsChart);
-        createSwingContent(projectCostsNode, projectCostsChart);
-        createSwingContent(prototypeCostsNode, prototypeCostsChart);
-        createSwingContent(prototypeRevenuesNode, prototypeRevenuesChart);
-
-        rdCostsPane.setCenter(rdCostsNode);
-        projectCostsPane.setCenter(projectCostsNode);
-        prototypeCostsPane.setCenter(prototypeCostsNode);
-        prototypeRevenuesPane.setCenter(prototypeRevenuesNode);
-
-        projectGraphGrid.add(rdCostsPane, 0, 0);
-        projectGraphGrid.add(projectCostsPane, 1,0);
-        projectGraphGrid.add(prototypeCostsPane, 0,1);
-        projectGraphGrid.add(prototypeRevenuesNode, 1,1);
+        firstChartGroup.getChildren().clear();
+        firstChartGroup.getChildren().addAll(projectCostsPane, prototypeCostsPane);
+        secondChartGroup.getChildren().clear();
+        secondChartGroup.getChildren().addAll(prototypeRevenuesPane, rdCostsPane);
+        thirdChartGroup.getChildren().addAll(projectSummaryRevenues, projectSummaryCosts);
     }
-
-    private void createSwingContent(final SwingNode swingNode, final ChartPanel panel) throws IOException {
-
-        Platform.runLater(()->{
-            swingNode.setContent(panel);
-
-        });
-    }
-
 }

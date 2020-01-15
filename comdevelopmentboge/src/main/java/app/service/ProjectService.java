@@ -15,30 +15,30 @@ public class ProjectService {
     private static ProjectService projectService = new ProjectService();
     public static ProjectService getProjectService(){ return  projectService;}
 
-    public Projects findProjectById(Integer id) {
-        Projects project = new Projects();
-        String sql = "select projectNumber, projectName, partNumber, ROS, ROCE, volumes, DDCost, prototypeCosts, Customers.name from projects cross join Customers on Projects.customer_id=Customers.id where projects.id=?";
-        try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
-            preparedStatement.setString(1,String.valueOf(id));
-
-            ResultSet rs = preparedStatement.executeQuery();
-            if(rs.next()) {
-                project.setId(id);
-                project.setProjectNumber(rs.getString(2));
-                project.setProjectName(rs.getString(3));
-                project.setRos(rs.getString(4));
-                project.setRoce(rs.getString(5));
-                project.setVolumes(rs.getBigDecimal(6));
-                project.setDdCost(rs.getBigDecimal(7));
-                project.setPrototypeCost(rs.getBigDecimal(8));
-                project.setCustomer(rs.getString(9));
-
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return project;
-    }
+//    public Project findProjectById(Integer id) {
+//        Project project = new Project();
+//        String sql = "select projectNumber, projectName, partNumber, ROS, ROCE, volumes, DDCost, prototypeCosts, Customers.name from projects cross join Customers on Projects.customer_id=Customers.id where projects.id=?";
+//        try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
+//            preparedStatement.setString(1,String.valueOf(id));
+//
+//            ResultSet rs = preparedStatement.executeQuery();
+//            if(rs.next()) {
+//                project.setId(id);
+//                project.setProjectNumber(rs.getString(2));
+//                project.setProjectName(rs.getString(3));
+//                project.setRos(rs.getString(4));
+//                project.setRoce(rs.getString(5));
+//                project.setVolumes(rs.getBigDecimal(6));
+//                project.setDdCost(rs.getBigDecimal(7));
+//                project.setPrototypeCost(rs.getBigDecimal(8));
+//                project.setCustomerId(rs.getInt(9));
+//
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return project;
+//    }
 
     public ArrayList<String> getAllProjectNames()  {
 

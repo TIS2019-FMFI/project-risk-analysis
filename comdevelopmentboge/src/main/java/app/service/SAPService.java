@@ -17,11 +17,12 @@ public class SAPService {
     private static SAPService sapService = new SAPService();
     public static SAPService getSapService(){return sapService;}
 
-    public List<SAP> getAllSAPData() throws ParseException {
+    public List<SAP> getSapData(String projectDef) throws ParseException {
         List<SAP> data = new ArrayList<>();
-        String sql = "select * from sap";
+        String sql = "select * from sap"+((projectDef!=null)?(" where ProjektDef=?"):"");
         try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
 
+            preparedStatement.setString(1, projectDef);
             ResultSet rs = preparedStatement.executeQuery();
             while(rs.next()){
 
