@@ -2,17 +2,16 @@ package app.db;
 import app.config.DbContext;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class Log {
     private Integer id;
     private Integer userId;
     private Timestamp time;
     private String text;
-
+    private String userFirstName;
+    private String userLastName;
 
     public Log(){}
 
@@ -54,6 +53,24 @@ public class Log {
     public void setText(String text) {
         this.text = text;
     }
+
+    public String getUserFirstName() {
+        return userFirstName;
+    }
+
+    public void setUserFirstName(String userFirstName) {
+        this.userFirstName = userFirstName;
+    }
+
+
+    public String getUserLastName() {
+        return userLastName;
+    }
+
+    public void setUserLastName(String userLastName) {
+        this.userLastName = userLastName;
+    }
+
 
     public void insert(){
         String sql = "insert into logs (user_id, time, text) values (?,?,?)";

@@ -4,32 +4,21 @@ import app.App;
 import app.config.SignedUser;
 import app.exception.DatabaseException;
 import app.gui.graph.ChartRenderer;
-import app.gui.graph.Period;
-import app.service.AdministrationService;
+import app.service.ProjectAdministrationService;
 import app.service.CustomerService;
 import app.service.ProjectService;
 import app.service.SAPService;
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.embed.swing.SwingNode;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import app.db.*;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
 import javafx.util.converter.BigDecimalStringConverter;
-import javafx.util.converter.IntegerStringConverter;
-import org.jfree.chart.ChartPanel;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -98,7 +87,7 @@ public class ProjectController {
     public void displayProjectData(String projectDef) throws ParseException, IOException {
 
         //if admin or project admin are signed in, show edit images
-        List<Integer> projectAdmins = AdministrationService.getInstance().getProjectAdminIds(projectDef);
+        List<Integer> projectAdmins = ProjectAdministrationService.getInstance().getProjectAdminIds(projectDef);
         if(SignedUser.getUser().getUserType().equals("ADMIN") || projectAdmins.contains(SignedUser.getUser().getId())){
             editPane.setVisible(true);
         }else{
@@ -377,7 +366,7 @@ public class ProjectController {
             text += columnName + "=" + changes.get(columnName) + ", ";
         }
 
-        text = text.substring(0, text.length() - 2) + " on project: " + projectDef;
+        text = text.substring(0, text.length() - 2) + " of project: " + projectDef;
 
         Log log = new Log();
         log.setUserId(userId);
