@@ -204,6 +204,19 @@ public class Generate {
             e.printStackTrace();
         }
 
+//ADMINISTRATION
+        sqlCreate = "CREATE TABLE administration(" +
+                "user_id int references users(id),"+
+                "project_id int references projects(id)"+
+                ")";
+
+        try( Statement s = DbContext.getConnection().createStatement()) {
+            s.executeUpdate("DROP TABLE IF EXISTS administration");
+            s.executeUpdate(sqlCreate);
+            System.out.println("Table administration created");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
 //REMINDERS
 
@@ -240,9 +253,10 @@ public class Generate {
 //LOGS
 
         sqlCreate = "CREATE TABLE logs (" +
-                "text varchar(50) NOT NULL," +
-                "date date NOT NULL," +
-                "time time NOT NULL)";
+                "id int primary key AUTO_INCREMENT, "+
+                "user_id int references users(id),"+
+                "text longtext NOT NULL,"+
+                "time timestamp NOT NULL)";
 
 
 
