@@ -1,6 +1,7 @@
 package app.gui;
 
 import app.App;
+import app.config.SignedUser;
 import app.gui.project.ProjectController;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -28,7 +29,11 @@ public class TabController {
 
         instance = this;
 
-        mainBox.getChildren().add(loadFXML("bar/main-page-menu-bar"));
+        if(SignedUser.getUser().getUserType().equals("ADMIN")){
+            mainBox.getChildren().add(loadFXML("bar/admin-main-page-menu-bar"));
+        } else{
+            mainBox.getChildren().add(loadFXML("bar/main-page-menu-bar"));
+        }
         mainTabPane = (TabPane) loadFXML("tab-pane");
         mainBox.getChildren().add(mainTabPane);
 
@@ -104,7 +109,12 @@ public class TabController {
     }
 
     public void selectMainPageTab() throws IOException {
-        setMenuBar("bar/main-page-menu-bar.fxml");
+
+        if(SignedUser.getUser().getUserType().equals("ADMIN")){
+            setMenuBar("bar/admin-main-page-menu-bar.fxml");
+        } else{
+            setMenuBar("bar/main-page-menu-bar.fxml");
+        }
     }
 
     public void setMenuBar(String fxml) throws IOException {
@@ -112,6 +122,4 @@ public class TabController {
         mainBox.getChildren().add(0, FXMLLoader.load(TabController.class.getResource(fxml)));
 
     }
-
-
 }

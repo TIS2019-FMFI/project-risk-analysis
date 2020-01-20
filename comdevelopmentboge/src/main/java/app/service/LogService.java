@@ -6,7 +6,9 @@ import java.util.Date;
 
 public class LogService {
 
-    public ArrayList<Logs> findLogsByDate(Date date){
+    public ArrayList<Log> findLogsByDate(Date date){
         return null;
     }
+
+
 }

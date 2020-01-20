@@ -1,24 +1,38 @@
 package app.gui.project;
 
 import app.App;
+import app.config.SignedUser;
+import app.exception.DatabaseException;
 import app.gui.graph.ChartRenderer;
 import app.gui.graph.Period;
+import app.service.AdministrationService;
+import app.service.CustomerService;
 import app.service.ProjectService;
 import app.service.SAPService;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.embed.swing.SwingNode;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import app.db.*;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
+import javafx.util.converter.BigDecimalStringConverter;
+import javafx.util.converter.IntegerStringConverter;
 import org.jfree.chart.ChartPanel;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.*;
 import java.io.IOException;
@@ -48,11 +62,48 @@ public class ProjectController {
     private HBox thirdChartGroup;
 
     @FXML
+    private ImageView saveButton;
+    @FXML
+    private ImageView editButton;
+    @FXML
+    private FlowPane editPane;
+
+    //project table columns
+    private TableColumn<Project, String> projectNumber;
+    private TableColumn<Project, String> customer;
+    private TableColumn<Project, String> projectName;
+    private TableColumn<Project, String> partNumber;
+    private TableColumn<Project, String> ros;
+    private TableColumn<Project, String> roce;
+    private TableColumn<Project, BigDecimal> volumes;
+    private TableColumn<Project, BigDecimal> ddCost;
+    private TableColumn<Project, BigDecimal> prototypeCost;
+
+    //editing table changes
+    private HashMap<String, String> changes;
+
+    @FXML
     public void initialize(){
         projectController = this;
+
+        saveButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Project project = (Project) projectDetailsTable.getItems().get(0);
+                saveChangesToDatabase(project);
+            }
+        });
     }
 
     public void displayProjectData(String projectDef) throws ParseException, IOException {
+
+        //if admin or project admin are signed in, show edit images
+        List<Integer> projectAdmins = AdministrationService.getInstance().getProjectAdminIds(projectDef);
+        if(SignedUser.getUser().getUserType().equals("ADMIN") || projectAdmins.contains(SignedUser.getUser().getId())){
+            editPane.setVisible(true);
+        }else{
+            editPane.setVisible(false);
+        }
 
         createProjectTable(projectDef);
         createSapTable(projectDef);
@@ -110,34 +161,34 @@ public class ProjectController {
     }
 
     private void createProjectTable(String projectDef) {
-        projectDetailsTable.setEditable(true);
 
-        TableColumn<Project, String> projectNumber = new TableColumn<>("Project Nr.");
+        projectNumber = new TableColumn<>("Project Nr.");
         projectNumber.setCellValueFactory(new PropertyValueFactory<Project, String>("projectNumber"));
 
-        TableColumn<Project, String> customer = new TableColumn<>("Customer");
+        customer = new TableColumn<>("Customer");
         customer.setCellValueFactory(new PropertyValueFactory<Project, String>("customerName"));
 
-        TableColumn<Project, String> projectName = new TableColumn<>("ProjectName");
+        projectName = new TableColumn<>("ProjectName");
         projectName.setCellValueFactory(new PropertyValueFactory<Project, String>("projectName"));
 
-        TableColumn<Project, String> partNumber = new TableColumn<>("Part Number");
+        partNumber = new TableColumn<>("Part Number");
         partNumber.setCellValueFactory(new PropertyValueFactory<Project, String>("partNumber"));
 
-        TableColumn<Project, String> ros = new TableColumn<>("Ros");
+        ros = new TableColumn<>("Ros");
         ros.setCellValueFactory(new PropertyValueFactory<Project, String>("ros"));
 
-        TableColumn<Project, String> roce = new TableColumn<>("Roce");
+        roce = new TableColumn<>("Roce");
         roce.setCellValueFactory(new PropertyValueFactory<Project, String>("roce"));
 
-        TableColumn<Project, Integer> volumes = new TableColumn<>("Volumes");
-        volumes.setCellValueFactory(new PropertyValueFactory<Project, Integer>("volumes"));
+        volumes = new TableColumn<>("Volumes");
+        volumes.setCellValueFactory(new PropertyValueFactory<Project, BigDecimal>("volumes"));
 
-        TableColumn<Project, Integer> ddCost = new TableColumn<>("Offered/Planned \n D&D costs");
-        ddCost.setCellValueFactory(new PropertyValueFactory<Project, Integer>("ddCost"));
+        ddCost = new TableColumn<>("Offered/Planned \n D&D costs");
+        ddCost.setCellValueFactory(new PropertyValueFactory<Project, BigDecimal>("ddCost"));
 
-        TableColumn<Project, Integer> prototypeCost = new TableColumn<>("Offered/Planned \n prototype costs");
-        prototypeCost.setCellValueFactory(new PropertyValueFactory<Project, Integer>("prototypeCost"));
+        prototypeCost = new TableColumn<>("Offered/Planned \n prototype costs");
+        prototypeCost.setCellValueFactory(new PropertyValueFactory<Project, BigDecimal>("prototypeCost"));
+
 
         Project projectData = ProjectService.getProjectService().findProjectByProjectNumber(projectDef);
         projectDetailsTable.getItems().clear();
@@ -171,5 +222,167 @@ public class ProjectController {
         secondChartGroup.getChildren().clear();
         secondChartGroup.getChildren().addAll(prototypeRevenuesPane, rdCostsPane);
         thirdChartGroup.getChildren().addAll(projectSummaryRevenues, projectSummaryCosts);
+    }
+
+    @FXML
+    private void setEditableMode(){
+        projectDetailsTable.setEditable(true);
+        saveButton.setVisible(true);
+        changes = new HashMap<>();
+
+        projectName.setOnEditCommit(
+                (TableColumn.CellEditEvent<Project, String> t) ->
+                {( t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setProjectName(t.getNewValue());
+                  changes.put("projectName", t.getNewValue());
+                }
+        );
+
+        projectName.setCellFactory(
+                TextFieldTableCell.forTableColumn());
+
+        partNumber.setOnEditCommit(
+                (TableColumn.CellEditEvent<Project, String> t) ->
+                {
+                    (t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                    ).setPartNumber(t.getNewValue());
+                    changes.put("partNumber", t.getNewValue());
+                }
+        );
+
+        partNumber.setCellFactory(
+                TextFieldTableCell.forTableColumn());
+        customer.setOnEditCommit(
+                (TableColumn.CellEditEvent<Project, String> t) ->
+                {     ( t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setCustomerName(t.getNewValue());
+                    changes.put("customer", t.getNewValue());
+                }
+        );
+
+        customer.setCellFactory(
+                TextFieldTableCell.forTableColumn());
+
+        projectNumber.setOnEditCommit(
+                (TableColumn.CellEditEvent<Project, String> t) ->
+                {
+                    (t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                    ).setProjectNumber(t.getNewValue());
+                    changes.put("projectNumber", t.getNewValue());
+                }
+        );
+
+        projectNumber.setCellFactory(
+                TextFieldTableCell.forTableColumn());
+
+        roce.setOnEditCommit(
+                (TableColumn.CellEditEvent<Project, String> t) ->
+                {       ( t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setRoce(t.getNewValue());
+                    changes.put("roce", t.getNewValue());
+                }
+        );
+
+        roce.setCellFactory(
+                TextFieldTableCell.forTableColumn());
+        ros.setOnEditCommit(
+                (TableColumn.CellEditEvent<Project, String> t) ->
+                {
+                    (t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                    ).setRos(t.getNewValue());
+                    changes.put("ros", t.getNewValue());
+                }
+
+        );
+
+        ros.setCellFactory(
+                TextFieldTableCell.forTableColumn());
+        ddCost.setOnEditCommit(
+                (TableColumn.CellEditEvent<Project, BigDecimal> t) ->
+                {      ( t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setDdCost(t.getNewValue());
+                    changes.put("D&D Costs", String.valueOf(t.getNewValue()));
+                }
+        );
+
+        ddCost.setCellFactory(
+                TextFieldTableCell.forTableColumn(new BigDecimalStringConverter()));
+
+        prototypeCost.setOnEditCommit(
+                (TableColumn.CellEditEvent<Project, BigDecimal> t) ->
+                {       ( t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setPrototypeCost(t.getNewValue());
+                    changes.put("Prototype Costs", String.valueOf(t.getNewValue()));
+                }
+        );
+
+        prototypeCost.setCellFactory(
+                TextFieldTableCell.forTableColumn(new BigDecimalStringConverter()));
+
+        volumes.setOnEditCommit(
+                (TableColumn.CellEditEvent<Project, BigDecimal> t) ->
+                {
+                    (t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                    ).setVolumes(t.getNewValue());
+                    changes.put("volumes", String.valueOf(t.getNewValue()));
+                }
+        );
+
+        volumes.setCellFactory(
+                TextFieldTableCell.forTableColumn(new BigDecimalStringConverter()));
+    }
+
+    @FXML
+    public void saveChangesToDatabase(Project project){
+
+        Customer customer = null;
+        if(project.getCustomerName()!=null){
+            try {
+                customer = CustomerService.getCustomerService().findCustomerByName(project.getCustomerName());
+            } catch (DatabaseException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.OK) {
+                    alert.close();
+                    return;
+                }
+            }
+        }
+
+        saveButton.setVisible(false);
+
+        if(customer!=null){
+            project.setCustomerId(customer.getId());
+            project.update();
+        }
+        logChanges(project.getProjectNumber());
+
+    }
+
+    private void logChanges(String projectDef){
+        Integer userId = SignedUser.getUser().getId();
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+        String text = "updated values:";
+
+        for(String columnName: changes.keySet()){
+            text += columnName + "=" + changes.get(columnName) + ", ";
+        }
+
+        text = text.substring(0, text.length() - 2) + " on project: " + projectDef;
+
+        Log log = new Log();
+        log.setUserId(userId);
+        log.setTime(currentTime);
+        log.setText(text);
+        log.insert();
     }
 }

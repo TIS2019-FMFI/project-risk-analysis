@@ -2,6 +2,8 @@ package app.service;
 
 import app.config.DbContext;
 import app.db.*;
+import app.exception.DatabaseException;
+import org.apache.poi.hssf.record.DBCellRecord;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -37,8 +39,29 @@ public class CustomerService {
         return null;
     }
 
-    public Customer findCustomerByName(String name){
-        return null;
+    public Customer findCustomerByName(String name) throws DatabaseException {
+        Customer customer = new Customer();
+        String sql = "select id from customers where name=?";
+        try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
+            preparedStatement.setString(1, name);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            if(rs.next()){
+                customer.setId(rs.getInt(1));
+                customer.setName(name);
+                if(rs.next()){
+                    throw new DatabaseException("Ambiguous customer name!");//todo nebolo by lepsie mat unique constraint na id,name?
+                }
+            } else{
+                throw new DatabaseException("No such customer with name:"+name+"found in the database");
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return customer;
     }
 
 

@@ -136,8 +136,8 @@ public class ProjectService {
             ResultSet rs = st.executeQuery();
             if(rs.next()){
                 project.setId(rs.getInt(1));
-                project.setProjectName(rs.getString(2));
-                project.setProjectNumber(rs.getString(3));
+                project.setProjectName(rs.getString(3));
+                project.setProjectNumber(rs.getString(2));
                 project.setPartNumber(rs.getString(4));
                 project.setRos(rs.getString(5));
                 project.setRoce(rs.getString(6));
@@ -153,10 +153,6 @@ public class ProjectService {
         }
 
         return project;
-    }
-
-    public ArrayList<Project> findAllCustomerProjects(Customer customer){
-        return null;
     }
 
 
