@@ -27,9 +27,12 @@ public class ProjectTabController{
 
         instance = this;
 
-        ArrayList<String> projectNames = ProjectService.getProjectService().getAllProjectNames();
-        for(String name : projectNames) {
-            projectListView.getItems().add(new Label(name));
+        ArrayList<String> projectNumbers = ProjectService.getProjectService().getAllProjectNumbers();
+        for(String number : projectNumbers) {
+            Label label = new Label();
+            label.setId(number);
+            label.setText(number);
+            projectListView.getItems().add(label);
         }
 
         projectListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -38,7 +41,7 @@ public class ProjectTabController{
             public void handle(MouseEvent event) {
                 Label label = projectListView.getSelectionModel().getSelectedItem();
                 try {
-                    showProjectDetails(label.getId());
+                    showProjectDetails(label.getText());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -48,17 +51,20 @@ public class ProjectTabController{
         projectListView.setPrefHeight(App.getScene().getHeight() - 80);
     }
 
-    private void showProjectDetails(String item) throws IOException {
-        TabController.getInstance().selectProjectDetailsTab();
+    private void showProjectDetails(String projectDef) throws IOException {
+        TabController.getInstance().selectProjectDetailsTab(projectDef);
     }
 
 
     public void reloadList(){
-        ArrayList<String> projectNames = ProjectService.getProjectService().findProjectsByCriteria();
+        ArrayList<String> projectNumbers = ProjectService.getProjectService().findProjectsByCriteria();
         projectListView.getItems().clear();
-        for(String name : projectNames) {
-            projectListView.getItems().add(new Label(name));
-            System.out.println(name);
+        for(String number : projectNumbers) {
+            Label label = new Label();
+            label.setId(number);
+            label.setText(number);
+            projectListView.getItems().add(label);
+            System.out.println(number);
         }
     }
 }

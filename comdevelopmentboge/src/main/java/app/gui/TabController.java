@@ -1,6 +1,8 @@
 package app.gui;
 
 import app.App;
+import app.config.SignedUser;
+import app.gui.project.ProjectController;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +12,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 
 public class TabController {
@@ -26,7 +29,11 @@ public class TabController {
 
         instance = this;
 
-        mainBox.getChildren().add(loadFXML("bar/main-page-menu-bar"));
+        if(SignedUser.getUser().getUserType().equals("ADMIN")){
+            mainBox.getChildren().add(loadFXML("bar/admin-main-page-menu-bar"));
+        } else{
+            mainBox.getChildren().add(loadFXML("bar/main-page-menu-bar"));
+        }
         mainTabPane = (TabPane) loadFXML("tab-pane");
         mainBox.getChildren().add(mainTabPane);
 
@@ -83,7 +90,7 @@ public class TabController {
         }
     }
 
-    public void selectProjectDetailsTab() throws IOException {
+    public void selectProjectDetailsTab(String projectDef) throws IOException{
         setMenuBar("bar/project-details-menu-bar.fxml");
 
         ObservableList<Tab> tabs = mainTabPane.getTabs();
@@ -91,7 +98,10 @@ public class TabController {
             if (tab.getId().equals("projectTab")) {
                 try {
                     tab.setContent(loadFXML("project/project-details-board"));
+                    ProjectController.getProjectController().displayProjectData(projectDef);
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
@@ -99,7 +109,12 @@ public class TabController {
     }
 
     public void selectMainPageTab() throws IOException {
-        setMenuBar("bar/main-page-menu-bar.fxml");
+
+        if(SignedUser.getUser().getUserType().equals("ADMIN")){
+            setMenuBar("bar/admin-main-page-menu-bar.fxml");
+        } else{
+            setMenuBar("bar/main-page-menu-bar.fxml");
+        }
     }
 
     public void setMenuBar(String fxml) throws IOException {
@@ -107,6 +122,4 @@ public class TabController {
         mainBox.getChildren().add(0, FXMLLoader.load(TabController.class.getResource(fxml)));
 
     }
-
-
 }

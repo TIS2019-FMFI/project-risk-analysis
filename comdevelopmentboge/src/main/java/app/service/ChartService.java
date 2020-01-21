@@ -55,7 +55,7 @@ public class ChartService {
 
     public LinkedHashMap<Period, BigDecimal> getPrototypeCosts(String projectCode)  {
         LinkedHashMap<Period, BigDecimal> costs = new LinkedHashMap<>();
-        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and Objektbezeichnung='Samples + Revenues Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' group by Periode, Jahr order by Jahr, Periode";
+        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and Objektbezeichnung='Samples + Revenues Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and WertKWahr>0 group by Periode, Jahr order by Jahr, Periode";
         try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
             preparedStatement.setString(1,projectCode);
 
@@ -89,6 +89,48 @@ public class ChartService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return costs;
+    }
+
+    public LinkedHashMap<String, BigDecimal> getRevenuesPerForm(String projektDef){
+        LinkedHashMap<String, BigDecimal> revenues = new LinkedHashMap<>();
+
+        String sql = "select Objektbezeichnung, sum(WertKWahr) from sap where Projektdef=? and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and WertKWahr<=0 group by Objektbezeichnung";
+        try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
+
+            preparedStatement.setString(1, projektDef);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                BigDecimal amount = rs.getBigDecimal(2);
+                amount = amount.multiply(BigDecimal.valueOf(-1));
+                revenues.put(rs.getString(1),amount);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return revenues;
+    }
+
+    public LinkedHashMap<String, BigDecimal> getCostsPerForm(String projektDef){
+        LinkedHashMap<String, BigDecimal> costs = new LinkedHashMap<>();
+
+        String sql = "select Objektbezeichnung, sum(WertKWahr) from sap where Projektdef=? and  Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and WertKWahr>0 group by Objektbezeichnung";
+        try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
+
+            preparedStatement.setString(1, projektDef);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                costs.put(rs.getString(1),rs.getBigDecimal(2));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return costs;
     }
 }

@@ -1,13 +1,20 @@
 package app.db;
 
+import app.config.DbContext;
+
+import javax.swing.*;
 import java.math.BigDecimal;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
-public class Projects {
+public class Project {
     private Integer id;
     private String projectNumber;
     private String projectName;
-    private String customer;
+    private Integer customerId;
+    private String customerName;
     private String partNumber;
     private String ros;
     private String roce;
@@ -88,12 +95,12 @@ public class Projects {
         this.prototypeCost = prototypeCost;
     }
 
-    public String getCustomer() {
-        return customer;
+    public Integer getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer(String customer) {
-        this.customer = customer;
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 
     public Date getLastUpdated() {
@@ -102,5 +109,39 @@ public class Projects {
 
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public void update(){
+        String sql = "update projects set projectName=?, projectNumber=?, partNumber=?, ROS=?, ROCE=?, volumes=?, DDCost=?, prototypeCosts=?, " +
+                "lastUpdate=?, customer_id =? where  id=?";
+        try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
+            preparedStatement.setString(1, projectName);
+            preparedStatement.setString(2, projectNumber);
+            preparedStatement.setString(3, partNumber);
+            preparedStatement.setString(4, ros);
+            preparedStatement.setString(5, roce);
+            preparedStatement.setBigDecimal(6, volumes);
+            preparedStatement.setBigDecimal(7, ddCost);
+            preparedStatement.setBigDecimal(8, prototypeCost);
+            if(lastUpdated!=null){
+                preparedStatement.setDate(9, new java.sql.Date(lastUpdated.getTime()));
+            } else{
+                preparedStatement.setDate(9, null);
+            }
+            preparedStatement.setInt(10, customerId);
+            preparedStatement.setInt(11, id);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

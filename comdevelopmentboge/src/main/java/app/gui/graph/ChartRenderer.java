@@ -1,17 +1,13 @@
 package app.gui.graph;
 
 import app.service.ChartService;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.CategoryAxis;
-import org.jfree.chart.axis.CategoryLabelPositions;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.DatasetRenderingOrder;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.BarRenderer;
-import org.jfree.chart.renderer.category.CategoryItemRenderer;
-import org.jfree.data.category.DefaultCategoryDataset;
+import javafx.beans.binding.Bindings;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.PieChart;
+import javafx.scene.layout.StackPane;
+import javafx.scene.chart.XYChart;
+
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -23,73 +19,145 @@ public class ChartRenderer {
 
      static Logger logger = Logger.getLogger(ChartRenderer.class.toString());
 
-    public static ChartPanel createRDCostsChart(String projectCode) throws IOException {
+    public static StackPane createRDCostsChart(String projektDef) throws IOException {
 
-        LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getRDCostsData(projectCode);
+        LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getRDCostsData(projektDef);
 
-        return createBarChart(monthlyCostsData, "Project "+projectCode+" R&D costs");
+        return createBarChart(monthlyCostsData, "Project "+projektDef+" R&D costs");
     }
 
-    public static ChartPanel createProjectCostsChart(String projectCode){
+    public static StackPane createProjectCostsChart(String projektDef) throws IOException {
 
-        LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getCostsData(projectCode);
+        LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getCostsData(projektDef);
         logger.info(monthlyCostsData.entrySet().size()+" size of data");
 
-        return createBarChart(monthlyCostsData, "Project "+projectCode+" costs");
+        return createBarChart(monthlyCostsData, "Project "+projektDef+" costs");
     }
 
-    public static ChartPanel createProjectPrototypeChart(String projectCode){
-        LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getPrototypeCosts(projectCode);
+    public static StackPane createProjectPrototypeChart(String projektDef) throws IOException {
+        LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getPrototypeCosts(projektDef);
 
-        return createBarChart(monthlyCostsData, "Project "+projectCode+" prototype costs");
+        return createBarChart(monthlyCostsData, "Project "+projektDef+" prototype costs");
     }
 
-    public static ChartPanel createPrototypeRevenuesChart(String projectCode){
-        LinkedHashMap<Period, BigDecimal> monthlyRevenuesData = ChartService.getChartService().getPrototypeRevenues(projectCode);
+    public static StackPane createPrototypeRevenuesChart(String projektDef) throws IOException {
+        LinkedHashMap<Period, BigDecimal> monthlyRevenuesData = ChartService.getChartService().getPrototypeRevenues(projektDef);
 
-        return createBarChart(monthlyRevenuesData, "Project "+projectCode+" prototype revenues");
+        return createBarChart(monthlyRevenuesData, "Project "+projektDef+" prototype revenues");
     }
 
-    private static ChartPanel createBarChart(LinkedHashMap<Period, BigDecimal> data, String title){
+    public static StackPane createSummaryProjectRevenues(String projektDef){
+        LinkedHashMap<String, BigDecimal> revenues = ChartService.getChartService().getRevenuesPerForm(projektDef);
 
-        //todo cumulative curve
+        return createPieChart(revenues, "Project "+projektDef+" revenues");
+    }
 
-        DefaultCategoryDataset monthlyCostsChart = new DefaultCategoryDataset();
+    public static StackPane createSummaryProjectCosts(String projektDef){
+        LinkedHashMap<String, BigDecimal> revenues = ChartService.getChartService().getCostsPerForm(projektDef);
 
-        for(Period period : data.keySet()){
-            monthlyCostsChart.addValue(data.get(period).doubleValue(), "costs", period.toString());
+        return createPieChart(revenues, "Project "+projektDef+" costs");
+    }
+
+
+    public static StackPane createBarChart(LinkedHashMap<Period, BigDecimal> data, String title ) throws IOException {
+
+        StackPane pane = new StackPane();
+
+        // x-axis and y-axis  for both charts:
+        final javafx.scene.chart.CategoryAxis xAxis = new javafx.scene.chart.CategoryAxis();
+        xAxis.setLabel("period");
+        final javafx.scene.chart.NumberAxis yAxis1 = new javafx.scene.chart.NumberAxis();
+        yAxis1.setLabel("costs");
+
+        // first chart:
+        final BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis1);
+        barChart.setLegendVisible(false);
+        barChart.setAnimated(false);
+        barChart.getStylesheets().addAll(ChartRenderer.class.getResource("bar-chart-style.css").toExternalForm());
+
+        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
+        for(Period p:data.keySet()){
+            series1.getData().add(new XYChart.Data<>(p.toString(), data.get(p)));
+        }
+
+        LinkedHashMap<Period, BigDecimal> cumulativeData = getCumulativeData(data);
+
+        // second chart (overlaid):
+        final LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis1);
+        lineChart.setLegendVisible(false);
+        lineChart.setTitle(title);
+        lineChart.setAnimated(false);
+        lineChart.setAlternativeRowFillVisible(false);
+        lineChart.setAlternativeColumnFillVisible(false);
+        lineChart.setHorizontalGridLinesVisible(false);
+        lineChart.setVerticalGridLinesVisible(false);
+        lineChart.getXAxis().setVisible(false);
+        lineChart.getYAxis().setVisible(false);
+        lineChart.getStylesheets().addAll(ChartRenderer.class.getResource("line-chart-style.css").toExternalForm());
+        XYChart.Series<String, Number> series2 = new XYChart.Series<>();
+        for(Period p:cumulativeData.keySet()){
+            series2.getData().add(new XYChart.Data<>(p.toString(), cumulativeData.get(p)));
+        }
+        barChart.getData().add(series1);
+        lineChart.getData().add(series2);
+
+        pane.getChildren().clear();
+        pane.getChildren().addAll(barChart, lineChart);
+
+        return pane;
+    }
+
+    public static StackPane createPieChart(LinkedHashMap<String, BigDecimal> data, String title){
+
+        StackPane pane = new StackPane();
+
+        PieChart pieChart = new PieChart();
+        pieChart.setTitle(title);
+
+        for(String form:data.keySet()){
+            System.out.println(form);
+            PieChart.Data pieChartData = new PieChart.Data(form, data.get(form).doubleValue());
+            pieChart.getData().add(pieChartData);
+        }
+        pieChart.getData().forEach(d ->
+                d.nameProperty().bind(
+                        Bindings.concat(
+                                d.getName(), " ", d.pieValueProperty(), " €"
+                        )
+                )
+        );
+        pieChart.setLabelLineLength(50);
+        pane.getChildren().add(pieChart);
+        return pane;
+    }
+
+
+    public static LinkedHashMap<Period, BigDecimal> getCumulativeData(LinkedHashMap<Period, BigDecimal> data){
+
+        LinkedHashMap<Period, BigDecimal> cumulativeData = new LinkedHashMap<>();
+
+        Period currentPeriod = null;
+        BigDecimal sum = BigDecimal.ZERO;
+        int count = 0;
+        for(Period p: data.keySet()){
+            count ++;
+            if(currentPeriod==null) {
+                currentPeriod = p;
+                cumulativeData.put(currentPeriod, sum);
+
+            } else if(!p.equals(currentPeriod)){
+                cumulativeData.put(currentPeriod, sum);
+                currentPeriod = p;
+            }
+            sum = sum.add(data.get(p));
+
+            if(count == data.size()){
+                cumulativeData.put(currentPeriod, sum);
+            }
 
         }
 
-        final CategoryPlot plot = new CategoryPlot();
-        plot.setDataset(0,monthlyCostsChart);
-
-        final CategoryItemRenderer renderer = new BarRenderer();
-        plot.setRenderer(0,renderer);
-
-        plot.mapDatasetToRangeAxis(1,1);
-
-        CategoryAxis categoryAxis = new CategoryAxis("Period");
-        plot.setDomainAxis(categoryAxis);
-        plot.setRangeAxis(new NumberAxis("Costs"));
-        plot.getDomainAxis().setCategoryMargin(0.001);
-
-
-        plot.setOrientation(PlotOrientation.VERTICAL);
-        plot.setRangeGridlinesVisible(true);
-
-        plot.setWeight(10);
-
-        plot.setDatasetRenderingOrder(DatasetRenderingOrder.FORWARD);
-
-        plot.getDomainAxis().setCategoryLabelPositions(CategoryLabelPositions.UP_45);
-        final JFreeChart chart = new JFreeChart(plot);
-        chart.setTitle(title);
-        chart.removeLegend();
-
-        final ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-
-        return chartPanel;
+        return cumulativeData;
     }
+
 }
