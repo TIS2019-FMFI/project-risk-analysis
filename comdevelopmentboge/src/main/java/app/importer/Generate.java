@@ -32,7 +32,7 @@ public class Generate {
                 "Periode varchar(50)," +
                 "Jahr varchar(50)," +
                 "Belegnr varchar(50)," +
-                "BuchDatum varchar(50)," +
+                "BuchDatum date," +
                 "WertKWahr double," +
                 "KWahr varchar(50)," +
                 "MengeErf varchar(50)," +

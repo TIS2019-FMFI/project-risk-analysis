@@ -71,6 +71,8 @@ public class ProjectController {
     //editing table changes
     private HashMap<String, String> changes;
 
+    private String projectDef;
+
     @FXML
     public void initialize(){
         projectController = this;
@@ -82,6 +84,7 @@ public class ProjectController {
                 saveChangesToDatabase(project);
             }
         });
+
     }
 
     public void displayProjectData(String projectDef) throws ParseException, IOException {
@@ -93,13 +96,20 @@ public class ProjectController {
         }else{
             editPane.setVisible(false);
         }
+        this.projectDef = projectDef;
+        java.sql.Date initialDate = SAPService.getSapService().getFirstRecordsDate(projectDef);
+        ProjectFilter.getInstance().setInitialDate(initialDate);
 
-        createProjectTable(projectDef);
-        createSapTable(projectDef);
-        createCharts(projectDef);
+        createProjectTable();
+        createSapTable();
+        createCharts();
+
     }
 
-    private void createSapTable(String projectDef) throws ParseException {
+    private void createSapTable() throws ParseException {
+        TableColumn<SAP, String> ProjektDef = new TableColumn<>("ProjektDef");
+        ProjektDef.setCellValueFactory(new PropertyValueFactory<SAP, String>("ProjektDef"));
+
         TableColumn<SAP, String> PSPElement = new TableColumn<>("PSPElement");
         PSPElement.setCellValueFactory(new PropertyValueFactory<SAP, String>("PSPElement"));
 
@@ -112,8 +122,11 @@ public class ProjectController {
         TableColumn<SAP, String> KostenartenBez = new TableColumn<>("KostenartenBez");
         KostenartenBez.setCellValueFactory(new PropertyValueFactory<>("KostenartenBez"));
 
-        TableColumn<SAP, String> Partnerojekt = new TableColumn<>("Partnerojekt");
-        Partnerojekt.setCellValueFactory(new PropertyValueFactory<>("Partnerojekt"));
+        TableColumn<SAP, String> Bezeichnung = new TableColumn<>("Bezeichnung");
+        Bezeichnung.setCellValueFactory(new PropertyValueFactory<>("Bezeichnung"));
+
+        TableColumn<SAP, String> Partnerojekt = new TableColumn<>("Partnerobjekt");
+        Partnerojekt.setCellValueFactory(new PropertyValueFactory<>("Partnerobjekt"));
 
         TableColumn<SAP, String> Periode = new TableColumn<>("Periode");
         Periode.setCellValueFactory(new PropertyValueFactory<>("Periode"));
@@ -121,26 +134,35 @@ public class ProjectController {
         TableColumn<SAP, String> Jahr = new TableColumn<>("Jahr");
         Jahr.setCellValueFactory(new PropertyValueFactory<>("Jahr"));
 
+        TableColumn<SAP, String> Belegnr = new TableColumn<>("Belegnr");
+        Belegnr.setCellValueFactory(new PropertyValueFactory<>("Belegnr"));
+
         TableColumn<SAP, Date> BuchDatum = new TableColumn<>("BuchDatum");
         BuchDatum.setCellValueFactory(new PropertyValueFactory<>("BuchDatum"));
 
-        TableColumn<SAP, BigDecimal> Wert = new TableColumn<>("Wert");
-        Wert.setCellValueFactory(new PropertyValueFactory<>("Wert"));
+        TableColumn<SAP, BigDecimal> WertKWahr = new TableColumn<>("WertKWahr");
+        WertKWahr.setCellValueFactory(new PropertyValueFactory<>("WertKWahr"));
 
-        TableColumn<SAP, Double> Menge = new TableColumn<>("Menge");
-        Menge.setCellValueFactory(new PropertyValueFactory<>("Menge"));
+        TableColumn<SAP, BigDecimal> KWahr = new TableColumn<>("KWahr");
+        KWahr.setCellValueFactory(new PropertyValueFactory<>("KWahr"));
+
+        TableColumn<SAP, Double> MengeErf = new TableColumn<>("MengeErf");
+        MengeErf.setCellValueFactory(new PropertyValueFactory<>("MengeErf"));
 
         TableColumn<SAP, String> GME = new TableColumn<>("GME");
         GME.setCellValueFactory(new PropertyValueFactory<>("GME"));
 
-        List<SAP> data = SAPService.getSapService().getSapData(projectDef);
+        List<SAP> data = SAPService.getSapService().getSapDataInInterval(projectDef,
+                ProjectFilter.getInstance().getFrom(),
+                ProjectFilter.getInstance().getTo()
+                );
 
         sapDetailsTable.getItems().clear();
         sapDetailsTable.getItems().addAll(data);
 
         sapDetailsTable.getColumns().clear();
-        sapDetailsTable.getColumns().addAll(PSPElement,Objektbezeichnung,Kostenart, KostenartenBez,Partnerojekt
-        ,Periode, Jahr, BuchDatum, Wert, Menge, GME );
+        sapDetailsTable.getColumns().addAll(ProjektDef, PSPElement,Objektbezeichnung,Kostenart, KostenartenBez,Bezeichnung, Partnerojekt
+        ,Periode, Jahr, Belegnr, BuchDatum, WertKWahr, KWahr, MengeErf, GME );
 
         sapDetailsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -149,7 +171,7 @@ public class ProjectController {
         sapDetailsTable.prefHeight(50);
     }
 
-    private void createProjectTable(String projectDef) {
+    private void createProjectTable() {
 
         projectNumber = new TableColumn<>("Project Nr.");
         projectNumber.setCellValueFactory(new PropertyValueFactory<Project, String>("projectNumber"));
@@ -197,19 +219,22 @@ public class ProjectController {
         projectDetailsTable.prefWidthProperty().bind(App.getScene().widthProperty());
     }
 
-    private void createCharts(String projectDef) throws IOException {
+    public void createCharts() throws IOException {
 
-        StackPane projectCostsPane = ChartRenderer.createProjectCostsChart(projectDef);
-        StackPane prototypeCostsPane = ChartRenderer.createProjectPrototypeChart(projectDef);
-        StackPane prototypeRevenuesPane = ChartRenderer.createPrototypeRevenuesChart(projectDef);
-        StackPane rdCostsPane = ChartRenderer.createRDCostsChart(projectDef);
-        StackPane projectSummaryRevenues = ChartRenderer.createSummaryProjectRevenues(projectDef);
-        StackPane projectSummaryCosts = ChartRenderer.createSummaryProjectCosts(projectDef);
+        ProjectFilter projectFilter = ProjectFilter.getInstance();
+
+        StackPane projectCostsPane = ChartRenderer.createProjectCostsChart(projectDef, projectFilter.getFrom(), projectFilter.getTo());
+        StackPane prototypeCostsPane = ChartRenderer.createProjectPrototypeChart(projectDef, projectFilter.getFrom(), projectFilter.getTo());
+        StackPane prototypeRevenuesPane = ChartRenderer.createPrototypeRevenuesChart(projectDef, projectFilter.getFrom(), projectFilter.getTo());
+        StackPane rdCostsPane = ChartRenderer.createRDCostsChart(projectDef, projectFilter.getFrom(), projectFilter.getTo());
+        StackPane projectSummaryRevenues = ChartRenderer.createSummaryProjectRevenues(projectDef, projectFilter.getFrom(), projectFilter.getTo());
+        StackPane projectSummaryCosts = ChartRenderer.createSummaryProjectCosts(projectDef, projectFilter.getFrom(), projectFilter.getTo());
 
         firstChartGroup.getChildren().clear();
         firstChartGroup.getChildren().addAll(projectCostsPane, prototypeCostsPane);
         secondChartGroup.getChildren().clear();
         secondChartGroup.getChildren().addAll(prototypeRevenuesPane, rdCostsPane);
+        thirdChartGroup.getChildren().clear();
         thirdChartGroup.getChildren().addAll(projectSummaryRevenues, projectSummaryCosts);
     }
 
@@ -373,5 +398,11 @@ public class ProjectController {
         log.setTime(currentTime);
         log.setText(text);
         log.insert();
+    }
+
+    public void filterSapData(java.sql.Date from, java.sql.Date to) throws ParseException {
+        List<SAP> sapData = SAPService.getSapService().getSapDataInInterval(projectDef, from, to);
+        sapDetailsTable.getItems().clear();
+        sapDetailsTable.getItems().addAll(sapData);
     }
 }

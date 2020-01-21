@@ -19,41 +19,41 @@ public class ChartRenderer {
 
      static Logger logger = Logger.getLogger(ChartRenderer.class.toString());
 
-    public static StackPane createRDCostsChart(String projektDef) throws IOException {
+    public static StackPane createRDCostsChart(String projektDef, java.sql.Date from, java.sql.Date to) throws IOException {
 
-        LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getRDCostsData(projektDef);
+        LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getRDCostsData(projektDef, from, to);
 
         return createBarChart(monthlyCostsData, "Project "+projektDef+" R&D costs");
     }
 
-    public static StackPane createProjectCostsChart(String projektDef) throws IOException {
+    public static StackPane createProjectCostsChart(String projektDef,java.sql.Date from, java.sql.Date to) throws IOException {
 
-        LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getCostsData(projektDef);
+        LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getCostsData(projektDef, from, to);
         logger.info(monthlyCostsData.entrySet().size()+" size of data");
 
         return createBarChart(monthlyCostsData, "Project "+projektDef+" costs");
     }
 
-    public static StackPane createProjectPrototypeChart(String projektDef) throws IOException {
-        LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getPrototypeCosts(projektDef);
+    public static StackPane createProjectPrototypeChart(String projektDef,java.sql.Date from, java.sql.Date to) throws IOException {
+        LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getPrototypeCosts(projektDef, from, to);
 
         return createBarChart(monthlyCostsData, "Project "+projektDef+" prototype costs");
     }
 
-    public static StackPane createPrototypeRevenuesChart(String projektDef) throws IOException {
-        LinkedHashMap<Period, BigDecimal> monthlyRevenuesData = ChartService.getChartService().getPrototypeRevenues(projektDef);
+    public static StackPane createPrototypeRevenuesChart(String projektDef, java.sql.Date from, java.sql.Date to) throws IOException {
+        LinkedHashMap<Period, BigDecimal> monthlyRevenuesData = ChartService.getChartService().getPrototypeRevenues(projektDef, from, to);
 
         return createBarChart(monthlyRevenuesData, "Project "+projektDef+" prototype revenues");
     }
 
-    public static StackPane createSummaryProjectRevenues(String projektDef){
-        LinkedHashMap<String, BigDecimal> revenues = ChartService.getChartService().getRevenuesPerForm(projektDef);
+    public static StackPane createSummaryProjectRevenues(String projektDef, java.sql.Date from, java.sql.Date to){
+        LinkedHashMap<String, BigDecimal> revenues = ChartService.getChartService().getRevenuesPerForm(projektDef, from, to);
 
         return createPieChart(revenues, "Project "+projektDef+" revenues");
     }
 
-    public static StackPane createSummaryProjectCosts(String projektDef){
-        LinkedHashMap<String, BigDecimal> revenues = ChartService.getChartService().getCostsPerForm(projektDef);
+    public static StackPane createSummaryProjectCosts(String projektDef, java.sql.Date from, java.sql.Date to){
+        LinkedHashMap<String, BigDecimal> revenues = ChartService.getChartService().getCostsPerForm(projektDef, from, to);
 
         return createPieChart(revenues, "Project "+projektDef+" costs");
     }
