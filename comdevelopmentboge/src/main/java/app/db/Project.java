@@ -7,7 +7,9 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Project {
     private Integer id;
@@ -117,6 +119,14 @@ public class Project {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    //for purpose of creating pdf tables
+    //returns array of all attributes of a project in given order
+    public List<String> getAllAttributes(){
+        List<String>  attributes = new ArrayList<>();
+        attributes.addAll(List.of(projectNumber, customerName, projectName, partNumber, ros, roce, String.valueOf(volumes), String.valueOf(ddCost), String.valueOf(prototypeCost)));
+        return attributes;
     }
 
     public void update(){

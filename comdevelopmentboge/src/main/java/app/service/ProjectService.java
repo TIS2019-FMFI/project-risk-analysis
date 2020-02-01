@@ -3,7 +3,11 @@ package app.service;
 import app.config.DbContext;
 import app.db.*;
 import app.gui.project.ProjectListFilter;
+import org.apache.poi.hssf.record.DBCellRecord;
 
+import javax.xml.transform.Result;
+import java.awt.image.DataBuffer;
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -155,5 +159,36 @@ public class ProjectService {
         return project;
     }
 
+    public BigDecimal getPlanedDDCosts(String projektDef){
+        BigDecimal plannedDDCosts = BigDecimal.ZERO;
+        try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement("select DDCost from projects where projectNumber = ?")){
+            preparedStatement.setString(1, projektDef);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if(rs.next()){
+                plannedDDCosts = rs.getBigDecimal(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return plannedDDCosts;
+    }
+
+    public BigDecimal getPrototypeCosts(String projektDef){
+        BigDecimal plannedPrototypeCosts = BigDecimal.ZERO;
+        try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement("select prototypeCosts from projects where projectNumber = ?")){
+            preparedStatement.setString(1, projektDef);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if(rs.next()){
+                plannedPrototypeCosts = rs.getBigDecimal(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return plannedPrototypeCosts;
+    }
 
 }

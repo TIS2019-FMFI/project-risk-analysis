@@ -3,23 +3,35 @@ package app.gui.project;
 import app.App;
 import app.config.SignedUser;
 import app.exception.DatabaseException;
+import app.exporter.PdfExporter;
 import app.gui.graph.ChartRenderer;
 import app.service.ProjectAdministrationService;
 import app.service.CustomerService;
 import app.service.ProjectService;
 import app.service.SAPService;
+import com.itextpdf.text.DocumentException;
 import javafx.beans.binding.Bindings;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import app.db.*;
+import javafx.scene.paint.Color;
 import javafx.util.converter.BigDecimalStringConverter;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -230,9 +242,14 @@ public class ProjectController {
         StackPane projectSummaryRevenues = ChartRenderer.createSummaryProjectRevenues(projectDef, projectFilter.getFrom(), projectFilter.getTo());
         StackPane projectSummaryCosts = ChartRenderer.createSummaryProjectCosts(projectDef, projectFilter.getFrom(), projectFilter.getTo());
 
+        WritableImage writableProjectCostsPane = projectCostsPane.snapshot(new SnapshotParameters(), null);
+        File file = new File("C:/tmp/image");
+        ImageIO.write(SwingFXUtils.fromFXImage(writableProjectCostsPane, null), "png",file);
         firstChartGroup.getChildren().clear();
+        projectCostsPane.setPadding(new Insets(0, 50, 0, 0));
         firstChartGroup.getChildren().addAll(projectCostsPane, prototypeCostsPane);
         secondChartGroup.getChildren().clear();
+        prototypeRevenuesPane.setPadding(new Insets(0, 50, 0, 0));
         secondChartGroup.getChildren().addAll(prototypeRevenuesPane, rdCostsPane);
         thirdChartGroup.getChildren().clear();
         thirdChartGroup.getChildren().addAll(projectSummaryRevenues, projectSummaryCosts);
@@ -404,5 +421,10 @@ public class ProjectController {
         List<SAP> sapData = SAPService.getSapService().getSapDataInInterval(projectDef, from, to);
         sapDetailsTable.getItems().clear();
         sapDetailsTable.getItems().addAll(sapData);
+    }
+
+    @FXML
+    public void exportProjectToPDf() throws IOException, DocumentException {
+        PdfExporter.exportPdf(projectDetailsTable.getItems(), sapDetailsTable.getItems());
     }
 }

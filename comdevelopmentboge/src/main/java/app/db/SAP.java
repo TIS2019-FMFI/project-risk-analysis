@@ -2,6 +2,8 @@ package app.db;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SAP {
 
@@ -140,5 +142,19 @@ public class SAP {
 
     public void setProjektDef(String projektDef) {
         ProjektDef = projektDef;
+    }
+
+    //for pdf table purpose
+    public List<String> getAllAttributesValues(){
+        List<String> attributes = new ArrayList<>();
+        attributes.addAll(List.of(ProjektDef, PSPElement, Objektbezeichnung, Kostenart, KostenartenBez,
+                Bezeichnung, Partnerobjekt, Periode, Jahr, Belegnr, BuchDatum.toString(), String.valueOf(WertKWahr), KWahr, String.valueOf(MengeErf), GME));
+        return attributes;
+    }
+
+    public List<String> getAllAttributesNames(){
+        List<String> attributes = new ArrayList<>();
+        attributes.addAll(List.of("ProjektDef","PSPElement","Objektbezeichnung","Kostenart","KostenartenBez","Bezeichnung","Partnerobjekt","Periode","Jahr","Belegnr","BuchDatum","WertKWahr","KWahr","MengeErf","GME"));
+        return attributes;
     }
 }

@@ -1,10 +1,14 @@
 package app.gui.graph;
 
 import app.service.ChartService;
+import app.service.ProjectService;
 import javafx.beans.binding.Bindings;
+import javafx.geometry.Side;
+import javafx.scene.Group;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.StackPane;
 import javafx.scene.chart.XYChart;
 
@@ -22,28 +26,28 @@ public class ChartRenderer {
     public static StackPane createRDCostsChart(String projektDef, java.sql.Date from, java.sql.Date to) throws IOException {
 
         LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getRDCostsData(projektDef, from, to);
+        BigDecimal planned = ProjectService.getProjectService().getPlanedDDCosts(projektDef);
 
-        return createBarChart(monthlyCostsData, "Project "+projektDef+" R&D costs");
+        return createBarChart(monthlyCostsData, "Project "+projektDef+" R&D costs", planned);
     }
 
     public static StackPane createProjectCostsChart(String projektDef,java.sql.Date from, java.sql.Date to) throws IOException {
 
         LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getCostsData(projektDef, from, to);
-        logger.info(monthlyCostsData.entrySet().size()+" size of data");
 
-        return createBarChart(monthlyCostsData, "Project "+projektDef+" costs");
+        return createBarChart(monthlyCostsData, "Project "+projektDef+" costs", BigDecimal.ZERO);
     }
 
     public static StackPane createProjectPrototypeChart(String projektDef,java.sql.Date from, java.sql.Date to) throws IOException {
         LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getPrototypeCosts(projektDef, from, to);
-
-        return createBarChart(monthlyCostsData, "Project "+projektDef+" prototype costs");
+        BigDecimal planned = ProjectService.getProjectService().getPrototypeCosts(projektDef);
+        return createBarChart(monthlyCostsData, "Project "+projektDef+" prototype costs", planned);
     }
 
     public static StackPane createPrototypeRevenuesChart(String projektDef, java.sql.Date from, java.sql.Date to) throws IOException {
         LinkedHashMap<Period, BigDecimal> monthlyRevenuesData = ChartService.getChartService().getPrototypeRevenues(projektDef, from, to);
 
-        return createBarChart(monthlyRevenuesData, "Project "+projektDef+" prototype revenues");
+        return createBarChart(monthlyRevenuesData, "Project "+projektDef+" prototype revenues", BigDecimal.ZERO);
     }
 
     public static StackPane createSummaryProjectRevenues(String projektDef, java.sql.Date from, java.sql.Date to){
@@ -59,7 +63,7 @@ public class ChartRenderer {
     }
 
 
-    public static StackPane createBarChart(LinkedHashMap<Period, BigDecimal> data, String title ) throws IOException {
+    public static StackPane createBarChart(LinkedHashMap<Period, BigDecimal> data, String title, BigDecimal planned) throws IOException {
 
         StackPane pane = new StackPane();
 
@@ -69,12 +73,16 @@ public class ChartRenderer {
         final javafx.scene.chart.NumberAxis yAxis1 = new javafx.scene.chart.NumberAxis();
         yAxis1.setLabel("costs");
 
+        final javafx.scene.chart.NumberAxis cumulativeYAxis = new javafx.scene.chart.NumberAxis();
+        cumulativeYAxis.setLabel("cumulative");
+
         // first chart:
         final BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis1);
         barChart.setLegendVisible(false);
         barChart.setAnimated(false);
         barChart.getStylesheets().addAll(ChartRenderer.class.getResource("bar-chart-style.css").toExternalForm());
-
+        barChart.getYAxis().setVisible(true);
+        barChart.getYAxis().setSide(Side.LEFT);
         XYChart.Series<String, Number> series1 = new XYChart.Series<>();
         for(Period p:data.keySet()){
             series1.getData().add(new XYChart.Data<>(p.toString(), data.get(p)));
@@ -83,7 +91,7 @@ public class ChartRenderer {
         LinkedHashMap<Period, BigDecimal> cumulativeData = getCumulativeData(data);
 
         // second chart (overlaid):
-        final LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis1);
+        final LineChart<String, Number> lineChart = new LineChart<>(xAxis, cumulativeYAxis);
         lineChart.setLegendVisible(false);
         lineChart.setTitle(title);
         lineChart.setAnimated(false);
@@ -92,7 +100,13 @@ public class ChartRenderer {
         lineChart.setHorizontalGridLinesVisible(false);
         lineChart.setVerticalGridLinesVisible(false);
         lineChart.getXAxis().setVisible(false);
-        lineChart.getYAxis().setVisible(false);
+        lineChart.getYAxis().setVisible(true);
+        lineChart.getYAxis().setSide(Side.RIGHT);
+        lineChart.translateXProperty().bind(
+                lineChart.getYAxis().widthProperty().subtract(lineChart.getYAxis().tickLengthProperty())
+        );
+        lineChart.setCreateSymbols(false);
+
         lineChart.getStylesheets().addAll(ChartRenderer.class.getResource("line-chart-style.css").toExternalForm());
         XYChart.Series<String, Number> series2 = new XYChart.Series<>();
         for(Period p:cumulativeData.keySet()){
@@ -101,8 +115,20 @@ public class ChartRenderer {
         barChart.getData().add(series1);
         lineChart.getData().add(series2);
 
+        if(planned.compareTo(BigDecimal.ZERO) > 0){
+            XYChart.Series<String, Number> limit = new XYChart.Series<>();
+            for(Period p:data.keySet()){
+                limit.getData().add(new XYChart.Data<>(p.toString(), planned));
+            }
+            //either RD or Prototype costs, have its planned limit, show a line
+            lineChart.getData().add(limit);
+
+
+        }
+
         pane.getChildren().clear();
         pane.getChildren().addAll(barChart, lineChart);
+
 
         return pane;
     }
@@ -127,7 +153,10 @@ public class ChartRenderer {
                 )
         );
         pieChart.setLabelLineLength(50);
-        pane.getChildren().add(pieChart);
+        pieChart.setLegendVisible(true);
+        pieChart.setLegendSide(Side.BOTTOM);
+        Group group  = new Group(pieChart);
+        pane.getChildren().add(group);
         return pane;
     }
 

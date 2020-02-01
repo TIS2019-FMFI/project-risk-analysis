@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
@@ -9,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <ScrollPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.gui.project.ProjectController">
-    <VBox fx:id="projectDetailsBoard" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+    <VBox fx:id="projectDetailsBoard" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
     <children>
          <FlowPane fx:id="editPane" columnHalignment="RIGHT" prefHeight="21.0" prefWidth="861.0">
             <children>
@@ -27,9 +29,13 @@
          </FlowPane>
         <TableView fx:id="projectDetailsTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="861.0" stylesheets="@table-style.css">
         </TableView>
+         <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#exportProjectToPDf" style="-fx-background-color: #ff0000; -fx-background-radius: 30;" text="Exportovať projekt do PDF" textFill="WHITE">
+            <VBox.margin>
+               <Insets bottom="3.0" top="3.0" />
+            </VBox.margin></Button>
          <HBox fx:id="firstChartGroup" alignment="CENTER" prefHeight="300.0" />
          <HBox fx:id="secondChartGroup" alignment="CENTER" prefHeight="300.0" />
-         <HBox fx:id="thirdChartGroup" alignment="CENTER" prefHeight="300.0" />
+         <HBox fx:id="thirdChartGroup" alignment="CENTER" />
 
         <TableView fx:id="sapDetailsTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="861.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
         </TableView>
