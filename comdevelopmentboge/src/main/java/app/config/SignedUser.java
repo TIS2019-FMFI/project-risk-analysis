@@ -13,10 +13,6 @@ public class SignedUser {
     }
 
     public static void setUser(final User user0) {
-        if (user0 == null) {
-            throw new IllegalStateException("user must be set before calling this method");
-        }
-
         user = user0;
     }
 

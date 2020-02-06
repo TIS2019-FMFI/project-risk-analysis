@@ -18,19 +18,9 @@ fx:controller="app.gui.project.ProjectFilter">
                 <Image url="@/app/images/back.png" />
             </image>
         </ImageView>
-        <DatePicker layoutY="9.0" promptText="Od" AnchorPane.leftAnchor="50.0" />
-        <DatePicker layoutX="193.0" layoutY="9.0" promptText="Do" AnchorPane.leftAnchor="230.0" />
-        <ImageView  fitHeight="30.0" fitWidth="40.0" layoutX="515.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@/app/images/confirm.png" />
-            </image>
-        </ImageView>
-        <ImageView fitHeight="30.0" fitWidth="40.0" layoutX="465.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@/app/images/cancel.png" />
-            </image>
-        </ImageView>
-        <ImageView fitHeight="30.0" fitWidth="40.0" layoutX="415.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+        <DatePicker fx:id="fromDatepicker" layoutY="9.0" promptText="Od" AnchorPane.leftAnchor="50.0" />
+        <DatePicker fx:id="toDatepicker" layoutX="193.0" layoutY="9.0" promptText="Do" AnchorPane.leftAnchor="230.0" />
+        <ImageView onMouseClicked="#refreshFilter" fitHeight="30.0" fitWidth="40.0" layoutX="415.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@/app/images/refresh.png" />
             </image>

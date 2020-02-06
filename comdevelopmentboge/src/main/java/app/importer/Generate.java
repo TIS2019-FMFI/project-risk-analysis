@@ -239,6 +239,7 @@ public class Generate {
 //REGISTRATION REQUESTS
 
         sqlCreate = "CREATE TABLE registration_requests (" +
+                "user_id int references users(id),"+
                 "text varchar(150) NOT NULL)";
 
         try( Statement s = DbContext.getConnection().createStatement()) {

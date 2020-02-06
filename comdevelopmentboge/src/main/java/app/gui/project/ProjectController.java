@@ -242,9 +242,9 @@ public class ProjectController {
         StackPane projectSummaryRevenues = ChartRenderer.createSummaryProjectRevenues(projectDef, projectFilter.getFrom(), projectFilter.getTo());
         StackPane projectSummaryCosts = ChartRenderer.createSummaryProjectCosts(projectDef, projectFilter.getFrom(), projectFilter.getTo());
 
-        WritableImage writableProjectCostsPane = projectCostsPane.snapshot(new SnapshotParameters(), null);
-        File file = new File("C:/tmp/image");
-        ImageIO.write(SwingFXUtils.fromFXImage(writableProjectCostsPane, null), "png",file);
+       // WritableImage writableProjectCostsPane = projectCostsPane.snapshot(new SnapshotParameters(), null);
+        //File file = new File("C:/tmp/image");
+        //ImageIO.write(SwingFXUtils.fromFXImage(writableProjectCostsPane, null), "png",file);
         firstChartGroup.getChildren().clear();
         projectCostsPane.setPadding(new Insets(0, 50, 0, 0));
         firstChartGroup.getChildren().addAll(projectCostsPane, prototypeCostsPane);

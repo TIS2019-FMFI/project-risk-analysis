@@ -10,5 +10,6 @@
         <Button fx:id="reportExportButton" layoutX="233.0" layoutY="12.0" mnemonicParsing="false" style="-fx-background-color: #ffffff; -fx-background-radius: 20;" text="Exportovať report" textFill="RED" />
         <fx:include source="/app/gui/administration/users-button-view.fxml"/>
         <fx:include source="/app/gui/profile/profile-button-view.fxml"/>
+
     </children>
 </AnchorPane>

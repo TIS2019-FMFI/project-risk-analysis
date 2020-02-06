@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -21,7 +22,7 @@ public class HomeController {
 
     private List<Reminder> reminders = new ArrayList<>();
     private int rows;
-    private int cols = 2;
+    private int cols = 3;
 
     private static HomeController homeController = new HomeController();
     public static HomeController getHomeController() { return homeController;}
@@ -30,6 +31,7 @@ public class HomeController {
     @FXML private Label welcome;
     @FXML private Label FEM_hidden;
     @FXML private Label project_hidden;
+    @FXML private Button project_button;
 
 
     public void initialize() throws IOException {
@@ -37,6 +39,7 @@ public class HomeController {
         generatedString();
         setWelcome();
         setNotificationScene(reminders);
+
     }
 
     public static void setScene() throws IOException {
@@ -60,29 +63,40 @@ public class HomeController {
 
 
     private void setNotificationScene(List<Reminder> reminders) throws IOException {
-        int i = 0;
-        int j = 0;
+        int row = 0;
+        int col = 0;
         for(Reminder reminder : reminders) {
-            AnchorPane notification = new AnchorPane(loadFXMLreminder("reminder", reminder, j, i, this));
-            gridPane.add(notification, j, i);
-            j += 1;
-            if(j > cols) {
-                j = 0;
-                i += 1;
+            AnchorPane notification = new AnchorPane(loadFXMLreminder("reminder", reminder, col, row, this));
+            gridPane.add(notification, col, row);
+            col += 1;
+            if(col > cols) {
+                col = 0;
+                row += 1;
             }
         }
     }
 
     private void generatedString() {
-        String text = "Prekročenie povoleného limitu simulácií (5) pre súčiastku 373 100 013 015 za obdobie 3 týždňov";
-        Reminder r1 = new FEMReminder(1, text);
 
-        String project = "Projekt CH-060020";
-        text = "Náklady na projekte sa blížia k stanovenej hranici 20 000 €";
-        Reminder r2 = new ProjectReminder(2, text, project);
+        for(int i = 0;i < 10;i++) {
+            String project = "Projekt" + i;
+            String text = "Náklady na projekte sa blížia k stanovenej hranici 20 000 €";
+            Reminder r = new ProjectReminder(2, text, project);
+            reminders.add(r);
 
-        reminders.add(r1);
-        reminders.add(r2);
+        }
+
+    }
+    @FXML
+    public void showProjectReminders() throws IOException {
+        //prechadzam minimalizovane remindre a zobrazujem ich
+        for(Reminder reminder : reminders) {
+            if (reminder.getIsMinimized() && reminder instanceof ProjectReminder) {
+                reminder.setIsMinimized(false);
+            }
+        }
+        project_hidden.setText("0");
+        rearrangeGridPane();
     }
 
     private void setWelcome() {
@@ -130,17 +144,17 @@ public class HomeController {
 
     private void rearrangeGridPane() throws IOException {
         gridPane.getChildren().clear();
-        int i = 0;
-        int j = 0;
+        int row = 0;
+        int col = 0;
         for(Reminder reminder : reminders) {
             if(!reminder.getIsClosed() && !reminder.getIsMinimized()) {
-                AnchorPane notification = new AnchorPane(loadFXMLreminder("reminder", reminder, j, i, this));
-                gridPane.add(notification, j, i);
+                AnchorPane notification = new AnchorPane(loadFXMLreminder("reminder", reminder, col, row, this));
+                gridPane.add(notification, col, row);
 
-                j += 1;
-                if(j > cols) {
-                    j = 0;
-                    i += 1;
+                col += 1;
+                if(col > cols) {
+                    col = 0;
+                    row += 1;
                 }
             }
 
