@@ -2,19 +2,25 @@ package app.db;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SAP {
 
+    private String ProjektDef;
     private String PSPElement;
     private String Objektbezeichnung;
     private String Kostenart;
     private String KostenartenBez;
-    private String Partnerojekt;
+    private String Bezeichnung;
+    private String Partnerobjekt;
     private String Periode;
     private String Jahr;
+    private String Belegnr;
     private Date BuchDatum;
-    private BigDecimal Wert; // KWahr
-    private Double Menge;
+    private BigDecimal WertKWahr;
+    private String KWahr;
+    private Double MengeErf;
     private String GME;
 
     public String getPSPElement() {
@@ -49,12 +55,12 @@ public class SAP {
         KostenartenBez = kostenartenBez;
     }
 
-    public String getPartnerojekt() {
-        return Partnerojekt;
+    public String getPartnerobjekt() {
+        return Partnerobjekt;
     }
 
-    public void setPartnerojekt(String partnerojekt) {
-        Partnerojekt = partnerojekt;
+    public void setPartnerobjekt(String partnerobjekt) {
+        Partnerobjekt = partnerobjekt;
     }
 
     public String getPeriode() {
@@ -81,20 +87,20 @@ public class SAP {
         BuchDatum = buchDatum;
     }
 
-    public BigDecimal getWert() {
-        return Wert;
+    public BigDecimal getWertKWahr() {
+        return WertKWahr;
     }
 
-    public void setWert(BigDecimal wert) {
-        Wert = wert;
+    public void setWertKWahr(BigDecimal wertKWahr) {
+        WertKWahr = wertKWahr;
     }
 
-    public Double getMenge() {
-        return Menge;
+    public Double getMengeErf() {
+        return MengeErf;
     }
 
-    public void setMenge(Double menge) {
-        Menge = menge;
+    public void setMengeErf(Double mengeErf) {
+        MengeErf = mengeErf;
     }
 
     public String getGME() {
@@ -106,4 +112,49 @@ public class SAP {
     }
 
 
+    public String getKWahr() {
+        return KWahr;
+    }
+
+    public void setKWahr(String KWahr) {
+        this.KWahr = KWahr;
+    }
+
+    public String getBelegnr() {
+        return Belegnr;
+    }
+
+    public void setBelegnr(String belegnr) {
+        Belegnr = belegnr;
+    }
+
+    public String getBezeichnung() {
+        return Bezeichnung;
+    }
+
+    public void setBezeichnung(String bezeichnung) {
+        Bezeichnung = bezeichnung;
+    }
+
+    public String getProjektDef() {
+        return ProjektDef;
+    }
+
+    public void setProjektDef(String projektDef) {
+        ProjektDef = projektDef;
+    }
+
+    //for pdf table purpose
+    public List<String> getAllAttributesValues(){
+        List<String> attributes = new ArrayList<>();
+        attributes.addAll(List.of(ProjektDef, PSPElement, Objektbezeichnung, Kostenart, KostenartenBez,
+                Bezeichnung, Partnerobjekt, Periode, Jahr, Belegnr, BuchDatum.toString(), String.valueOf(WertKWahr), KWahr, String.valueOf(MengeErf), GME));
+        return attributes;
+    }
+
+    public List<String> getAllAttributesNames(){
+        List<String> attributes = new ArrayList<>();
+        attributes.addAll(List.of("ProjektDef","PSPElement","Objektbezeichnung","Kostenart","KostenartenBez","Bezeichnung","Partnerobjekt","Periode","Jahr","Belegnr","BuchDatum","WertKWahr","KWahr","MengeErf","GME"));
+        return attributes;
+    }
 }

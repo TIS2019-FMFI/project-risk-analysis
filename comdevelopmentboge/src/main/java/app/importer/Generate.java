@@ -32,7 +32,7 @@ public class Generate {
                 "Periode varchar(50)," +
                 "Jahr varchar(50)," +
                 "Belegnr varchar(50)," +
-                "BuchDatum varchar(50)," +
+                "BuchDatum date," +
                 "WertKWahr double," +
                 "KWahr varchar(50)," +
                 "MengeErf varchar(50)," +
@@ -239,6 +239,7 @@ public class Generate {
 //REGISTRATION REQUESTS
 
         sqlCreate = "CREATE TABLE registration_requests (" +
+                "user_id int references users(id),"+
                 "text varchar(150) NOT NULL)";
 
         try( Statement s = DbContext.getConnection().createStatement()) {

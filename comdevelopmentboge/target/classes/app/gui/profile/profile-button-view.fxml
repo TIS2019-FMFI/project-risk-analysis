@@ -11,7 +11,7 @@
 <ImageView xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="app.gui.profile.ProfileController"
-           fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true"  onMouseClicked="#init" AnchorPane.rightAnchor="0.0">
+           fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true"  onMouseClicked="#init" AnchorPane.rightAnchor="0.0">
     <image>
         <Image url="@/app/images/user.png" />
     </image>

@@ -5,6 +5,7 @@ import app.gui.TabController;
 import app.gui.home.HomeController;
 import app.transactions.LoginTransaction;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
@@ -73,6 +74,7 @@ public class LoginController {
             showAlert(e.getMessage());
         } catch (SQLException e) {
             showAlert("Nepodarilo sa spojenie s databázou. Vyskúšajte ešte raz");
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -11,6 +11,7 @@ module app {
     requires poi.ooxml;
     requires commons.codec;
     requires com.jfoenix;
+    requires itextpdf;
 
 
     opens app to javafx.fxml;

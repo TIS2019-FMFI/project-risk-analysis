@@ -86,6 +86,7 @@ public class RegistrationController {
             showAlert(e.getMessage());
         } catch (SQLException e) {
             showAlert("Nepodarilo sa spojenie s databázou. Vyskúšajte ešte raz");
+            e.printStackTrace();
         }
     }
     private void openWaitingPage() throws IOException {
@@ -100,8 +101,8 @@ public class RegistrationController {
         }
     }
     @FXML
-    private void cancelRegistration(MouseEvent event) {
-        //TODO zavolat login stranku
+    private void cancelRegistration(MouseEvent event) throws IOException {
+        App.setRoot("gui/auth/login");
 
     }
     @FXML
@@ -109,7 +110,9 @@ public class RegistrationController {
         //tato metoda sa da zavolat len ak sa uspesne zaregistroval, preto bude nastaveny SignedUser
         try {
             if (Registration.isRegistrationApproved(SignedUser.getUser())) {
-                FXMLLoader.load(TabController.class.getResource("main-box.fxml"));
+                SignedUser.setUser(null);
+                App.setRoot("gui/auth/login");
+                //FXMLLoader.load(TabController.class.getResource("main-box.fxml"));
 
             }
         } catch (SQLException  e) {

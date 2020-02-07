@@ -3,23 +3,35 @@ package app.gui.project;
 import app.App;
 import app.config.SignedUser;
 import app.exception.DatabaseException;
+import app.exporter.PdfExporter;
 import app.gui.graph.ChartRenderer;
 import app.service.ProjectAdministrationService;
 import app.service.CustomerService;
 import app.service.ProjectService;
 import app.service.SAPService;
+import com.itextpdf.text.DocumentException;
 import javafx.beans.binding.Bindings;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import app.db.*;
+import javafx.scene.paint.Color;
 import javafx.util.converter.BigDecimalStringConverter;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -71,6 +83,8 @@ public class ProjectController {
     //editing table changes
     private HashMap<String, String> changes;
 
+    private String projectDef;
+
     @FXML
     public void initialize(){
         projectController = this;
@@ -82,6 +96,7 @@ public class ProjectController {
                 saveChangesToDatabase(project);
             }
         });
+
     }
 
     public void displayProjectData(String projectDef) throws ParseException, IOException {
@@ -93,13 +108,20 @@ public class ProjectController {
         }else{
             editPane.setVisible(false);
         }
+        this.projectDef = projectDef;
+        java.sql.Date initialDate = SAPService.getSapService().getFirstRecordsDate(projectDef);
+        ProjectFilter.getInstance().setInitialDate(initialDate);
 
-        createProjectTable(projectDef);
-        createSapTable(projectDef);
-        createCharts(projectDef);
+        createProjectTable();
+        createSapTable();
+        createCharts();
+
     }
 
-    private void createSapTable(String projectDef) throws ParseException {
+    private void createSapTable() throws ParseException {
+        TableColumn<SAP, String> ProjektDef = new TableColumn<>("ProjektDef");
+        ProjektDef.setCellValueFactory(new PropertyValueFactory<SAP, String>("ProjektDef"));
+
         TableColumn<SAP, String> PSPElement = new TableColumn<>("PSPElement");
         PSPElement.setCellValueFactory(new PropertyValueFactory<SAP, String>("PSPElement"));
 
@@ -112,8 +134,11 @@ public class ProjectController {
         TableColumn<SAP, String> KostenartenBez = new TableColumn<>("KostenartenBez");
         KostenartenBez.setCellValueFactory(new PropertyValueFactory<>("KostenartenBez"));
 
-        TableColumn<SAP, String> Partnerojekt = new TableColumn<>("Partnerojekt");
-        Partnerojekt.setCellValueFactory(new PropertyValueFactory<>("Partnerojekt"));
+        TableColumn<SAP, String> Bezeichnung = new TableColumn<>("Bezeichnung");
+        Bezeichnung.setCellValueFactory(new PropertyValueFactory<>("Bezeichnung"));
+
+        TableColumn<SAP, String> Partnerojekt = new TableColumn<>("Partnerobjekt");
+        Partnerojekt.setCellValueFactory(new PropertyValueFactory<>("Partnerobjekt"));
 
         TableColumn<SAP, String> Periode = new TableColumn<>("Periode");
         Periode.setCellValueFactory(new PropertyValueFactory<>("Periode"));
@@ -121,26 +146,35 @@ public class ProjectController {
         TableColumn<SAP, String> Jahr = new TableColumn<>("Jahr");
         Jahr.setCellValueFactory(new PropertyValueFactory<>("Jahr"));
 
+        TableColumn<SAP, String> Belegnr = new TableColumn<>("Belegnr");
+        Belegnr.setCellValueFactory(new PropertyValueFactory<>("Belegnr"));
+
         TableColumn<SAP, Date> BuchDatum = new TableColumn<>("BuchDatum");
         BuchDatum.setCellValueFactory(new PropertyValueFactory<>("BuchDatum"));
 
-        TableColumn<SAP, BigDecimal> Wert = new TableColumn<>("Wert");
-        Wert.setCellValueFactory(new PropertyValueFactory<>("Wert"));
+        TableColumn<SAP, BigDecimal> WertKWahr = new TableColumn<>("WertKWahr");
+        WertKWahr.setCellValueFactory(new PropertyValueFactory<>("WertKWahr"));
 
-        TableColumn<SAP, Double> Menge = new TableColumn<>("Menge");
-        Menge.setCellValueFactory(new PropertyValueFactory<>("Menge"));
+        TableColumn<SAP, BigDecimal> KWahr = new TableColumn<>("KWahr");
+        KWahr.setCellValueFactory(new PropertyValueFactory<>("KWahr"));
+
+        TableColumn<SAP, Double> MengeErf = new TableColumn<>("MengeErf");
+        MengeErf.setCellValueFactory(new PropertyValueFactory<>("MengeErf"));
 
         TableColumn<SAP, String> GME = new TableColumn<>("GME");
         GME.setCellValueFactory(new PropertyValueFactory<>("GME"));
 
-        List<SAP> data = SAPService.getSapService().getSapData(projectDef);
+        List<SAP> data = SAPService.getSapService().getSapDataInInterval(projectDef,
+                ProjectFilter.getInstance().getFrom(),
+                ProjectFilter.getInstance().getTo()
+                );
 
         sapDetailsTable.getItems().clear();
         sapDetailsTable.getItems().addAll(data);
 
         sapDetailsTable.getColumns().clear();
-        sapDetailsTable.getColumns().addAll(PSPElement,Objektbezeichnung,Kostenart, KostenartenBez,Partnerojekt
-        ,Periode, Jahr, BuchDatum, Wert, Menge, GME );
+        sapDetailsTable.getColumns().addAll(ProjektDef, PSPElement,Objektbezeichnung,Kostenart, KostenartenBez,Bezeichnung, Partnerojekt
+        ,Periode, Jahr, Belegnr, BuchDatum, WertKWahr, KWahr, MengeErf, GME );
 
         sapDetailsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -149,7 +183,7 @@ public class ProjectController {
         sapDetailsTable.prefHeight(50);
     }
 
-    private void createProjectTable(String projectDef) {
+    private void createProjectTable() {
 
         projectNumber = new TableColumn<>("Project Nr.");
         projectNumber.setCellValueFactory(new PropertyValueFactory<Project, String>("projectNumber"));
@@ -197,19 +231,27 @@ public class ProjectController {
         projectDetailsTable.prefWidthProperty().bind(App.getScene().widthProperty());
     }
 
-    private void createCharts(String projectDef) throws IOException {
+    public void createCharts() throws IOException {
 
-        StackPane projectCostsPane = ChartRenderer.createProjectCostsChart(projectDef);
-        StackPane prototypeCostsPane = ChartRenderer.createProjectPrototypeChart(projectDef);
-        StackPane prototypeRevenuesPane = ChartRenderer.createPrototypeRevenuesChart(projectDef);
-        StackPane rdCostsPane = ChartRenderer.createRDCostsChart(projectDef);
-        StackPane projectSummaryRevenues = ChartRenderer.createSummaryProjectRevenues(projectDef);
-        StackPane projectSummaryCosts = ChartRenderer.createSummaryProjectCosts(projectDef);
+        ProjectFilter projectFilter = ProjectFilter.getInstance();
 
+        StackPane projectCostsPane = ChartRenderer.createProjectCostsChart(projectDef, projectFilter.getFrom(), projectFilter.getTo());
+        StackPane prototypeCostsPane = ChartRenderer.createProjectPrototypeChart(projectDef, projectFilter.getFrom(), projectFilter.getTo());
+        StackPane prototypeRevenuesPane = ChartRenderer.createPrototypeRevenuesChart(projectDef, projectFilter.getFrom(), projectFilter.getTo());
+        StackPane rdCostsPane = ChartRenderer.createRDCostsChart(projectDef, projectFilter.getFrom(), projectFilter.getTo());
+        StackPane projectSummaryRevenues = ChartRenderer.createSummaryProjectRevenues(projectDef, projectFilter.getFrom(), projectFilter.getTo());
+        StackPane projectSummaryCosts = ChartRenderer.createSummaryProjectCosts(projectDef, projectFilter.getFrom(), projectFilter.getTo());
+
+       // WritableImage writableProjectCostsPane = projectCostsPane.snapshot(new SnapshotParameters(), null);
+        //File file = new File("C:/tmp/image");
+        //ImageIO.write(SwingFXUtils.fromFXImage(writableProjectCostsPane, null), "png",file);
         firstChartGroup.getChildren().clear();
+        projectCostsPane.setPadding(new Insets(0, 50, 0, 0));
         firstChartGroup.getChildren().addAll(projectCostsPane, prototypeCostsPane);
         secondChartGroup.getChildren().clear();
+        prototypeRevenuesPane.setPadding(new Insets(0, 50, 0, 0));
         secondChartGroup.getChildren().addAll(prototypeRevenuesPane, rdCostsPane);
+        thirdChartGroup.getChildren().clear();
         thirdChartGroup.getChildren().addAll(projectSummaryRevenues, projectSummaryCosts);
     }
 
@@ -373,5 +415,16 @@ public class ProjectController {
         log.setTime(currentTime);
         log.setText(text);
         log.insert();
+    }
+
+    public void filterSapData(java.sql.Date from, java.sql.Date to) throws ParseException {
+        List<SAP> sapData = SAPService.getSapService().getSapDataInInterval(projectDef, from, to);
+        sapDetailsTable.getItems().clear();
+        sapDetailsTable.getItems().addAll(sapData);
+    }
+
+    @FXML
+    public void exportProjectToPDf() throws IOException, DocumentException {
+        PdfExporter.exportPdf(projectDetailsTable.getItems(), sapDetailsTable.getItems());
     }
 }

@@ -12,7 +12,7 @@
             <fx:include source="home/main-page.fxml"/>
         </Tab >
         <Tab fx:id="projectTab" text="Prehľad projektov">
-            <fx:include fx:id="projectTabBoard" source="project/project-list-board.fxml"/>
+            <fx:include fx:id="projectTabBoard" source="project/project-board.fxml"/>
         </Tab>
     </tabs>
 </TabPane>
