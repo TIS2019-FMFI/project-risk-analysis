@@ -147,7 +147,7 @@ public class TabController {
 
     public void selectMainPageTab() throws IOException {
 
-        if(SignedUser.getUser().getUserType().equals("ADMIN")){
+        if(SignedUser.getUser().getUserType().equals("CENTRAL_ADMIN")){
             setMenuBar("bar/admin-main-page-menu-bar.fxml");
         } else{
             setMenuBar("bar/main-page-menu-bar.fxml");

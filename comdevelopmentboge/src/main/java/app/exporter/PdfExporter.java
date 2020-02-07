@@ -1,42 +1,42 @@
 package app.exporter;
 
-import app.App;
 import app.db.Project;
 import app.db.SAP;
 
 import java.awt.*;
 
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import app.gui.graph.ChartRenderer;
 import app.gui.graph.Period;
 import app.gui.project.ProjectFilter;
 import app.service.ChartService;
 import app.service.ProjectService;
-import com.itextpdf.awt.DefaultFontMapper;
 import com.itextpdf.text.*;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.*;
+import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.DatasetRenderingOrder;
-import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.*;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
 
 
 import javax.imageio.ImageIO;
@@ -45,9 +45,17 @@ public class PdfExporter {
 
     public static void exportPdf(List<Project> projectData, List<SAP> sapData) throws IOException, DocumentException {
 
-        String dest = "C:/tmp/samp.pdf";
+        String directoryName = "C:/pdf";
+        String fileName = new SimpleDateFormat("yyyy-MM-dd@HH-mm-ss'.pdf'").format(new Date());
+
+        //if directory does not exist, create one
+        File directory = new File(directoryName);
+        if (! directory.exists()){
+            directory.mkdir();
+        }
+
         Document document = new Document();
-        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(dest));
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(directoryName+"/"+fileName));
         document.open();
 
         //project projectTable
@@ -102,19 +110,41 @@ public class PdfExporter {
                 projectTable.addCell(cell);
             }
         }
+        projectTable.setSpacingAfter(72f);
         document.add(projectTable);
-/* adding chart - not good approach, resolution is baad
-        LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getRDCostsData(projectData.get(0).getProjectNumber(), ProjectFilter.getInstance().getFrom(), ProjectFilter.getInstance().getTo());
+// adding charts
+
+        //R&D costs chart
+        LinkedHashMap<Period, BigDecimal> data = ChartService.getChartService().getRDCostsData(projectData.get(0).getProjectNumber(), ProjectFilter.getInstance().getFrom(), ProjectFilter.getInstance().getTo());
         BigDecimal planned = ProjectService.getProjectService().getPlanedDDCosts(projectData.get(0).getProjectNumber());
-        JFreeChart ch = getBarLineChart(monthlyCostsData, "Project "+projectData.get(0).getProjectNumber()+" R&D costs", planned);
+        Image RDCostsChartImage = createLineBarChartImage(data, "Project "+projectData.get(0).getProjectNumber() + " R&D Costs", planned);
+        document.add(RDCostsChartImage);
 
-        BufferedImage chartImage = ch.createBufferedImage( 300, 200, null);
+        //Prototype costs chart
+        data = ChartService.getChartService().getPrototypeCosts(projectData.get(0).getProjectNumber(), ProjectFilter.getInstance().getFrom(), ProjectFilter.getInstance().getTo());
+        planned = ProjectService.getProjectService().getPrototypeCosts(projectData.get(0).getProjectNumber());
+        Image prototypeCostsChartImage = createLineBarChartImage(data, "Project "+projectData.get(0).getProjectNumber() + " prototype costs", planned);
+        document.add(prototypeCostsChartImage);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(chartImage, "png", baos);
-        Image iTextImage = Image.getInstance(baos.toByteArray());
-        document.add(iTextImage);
-*/
+        //project costs
+        data = ChartService.getChartService().getCostsData(projectData.get(0).getProjectNumber(), ProjectFilter.getInstance().getFrom(), ProjectFilter.getInstance().getTo());
+        Image projectCostsChartImage = createLineBarChartImage(data, "Project "+projectData.get(0).getProjectNumber() +" project costs", BigDecimal.ZERO);
+        document.add(projectCostsChartImage);
+
+        //prototype revenues
+        data = ChartService.getChartService().getPrototypeRevenues(projectData.get(0).getProjectNumber(), ProjectFilter.getInstance().getFrom(), ProjectFilter.getInstance().getTo());
+        Image prototypeRevenuesChart = createLineBarChartImage(data, "Project "+projectData.get(0).getProjectNumber() + " revenues", BigDecimal.ZERO);
+        document.add(prototypeRevenuesChart);
+
+        //pie chart costs
+        LinkedHashMap<String, BigDecimal> pieChartData = ChartService.getChartService().getCostsPerForm(projectData.get(0).getProjectNumber(), ProjectFilter.getInstance().getFrom(), ProjectFilter.getInstance().getTo());
+        Image revenuesPieChartImage = createPieChartImage(pieChartData, "Project "+projectData.get(0).getProjectNumber() + " costs");
+        document.add(revenuesPieChartImage);
+
+        pieChartData = ChartService.getChartService().getRevenuesPerForm(projectData.get(0).getProjectNumber(), ProjectFilter.getInstance().getFrom(), ProjectFilter.getInstance().getTo());
+        Image costsPieChartImage = createPieChartImage(pieChartData, "Project "+projectData.get(0).getProjectNumber() + " revenues");
+        document.add(costsPieChartImage);
+
         //sap projectTable
         PdfPTable sapTable = new PdfPTable(15);
         sapTable.setWidthPercentage(100);
@@ -140,19 +170,23 @@ public class PdfExporter {
                 sapTable.addCell(cell);
             }
         }
-
+        sapTable.setSpacingBefore(72f);
         document.add(sapTable);
         document.close();
     }
 
-    public static JFreeChart getBarLineChart(LinkedHashMap<Period, BigDecimal> data, String title, BigDecimal planned){
+    public static JFreeChart getBarLineChart(LinkedHashMap<Period, BigDecimal> data, String title, BigDecimal costsLimit){
 
         DefaultCategoryDataset barDataset = new DefaultCategoryDataset();
         DefaultCategoryDataset lineDataset = new DefaultCategoryDataset();
+        DefaultCategoryDataset limit = new DefaultCategoryDataset();
+
+        LinkedHashMap<Period, BigDecimal> cumulativeData = ChartRenderer.getCumulativeData(data);
 
         for(Period p : data.keySet()){
-            barDataset.addValue(data.get(p).doubleValue(), "bar", p.toString());
-            lineDataset.addValue(data.get(p).doubleValue(), "bar", p.toString());
+            barDataset.addValue(data.get(p).doubleValue(), "monthly costs", p.toString());
+            lineDataset.addValue(cumulativeData.get(p).doubleValue(), "cumulative costs", p.toString());
+            limit.addValue(costsLimit.doubleValue(), "planned costs", p.toString());
         }
 
         final CategoryItemRenderer barRenderer = new BarRenderer();
@@ -162,26 +196,93 @@ public class PdfExporter {
         plot.setRenderer( barRenderer);
 
         plot.setDomainAxis(new CategoryAxis("period"));
-        plot.setRangeAxis(new NumberAxis("costs"));
+        plot.setRangeAxis(0,new NumberAxis("costs"));
 
         plot.setOrientation(PlotOrientation.VERTICAL);
         plot.setRangeGridlinesVisible(true);
         plot.setDomainGridlinesVisible(true);
 
-        final ValueAxis cumulativeAxis = new NumberAxis("cumulative");
-        plot.setRangeAxis(1, cumulativeAxis);
 
         final CategoryItemRenderer lineRenderer = new LineAndShapeRenderer();
         plot.setDataset(1, lineDataset);
         plot.setRenderer(1, lineRenderer);
 
-        plot.setDatasetRenderingOrder(DatasetRenderingOrder.FORWARD);
+        final LineAndShapeRenderer limitLineRenderer = new LineAndShapeRenderer();
+        limitLineRenderer.setSeriesStroke(
+                0, new BasicStroke(
+                        2.0f, BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND,
+                        1.0f, new float[] {10.0f, 6.0f}, 0.0f
+                )
+        );
 
+        final ValueAxis cumulativeAxis = new NumberAxis("cumulative");
+        plot.setRangeAxis(1, cumulativeAxis);
+
+        plot.mapDatasetToRangeAxis(0, 0);
+        plot.mapDatasetToRangeAxis(1, 1);
+        if(costsLimit.compareTo(BigDecimal.ZERO) > 0){
+            plot.setDataset(2, limit);
+            plot.setRenderer(2,limitLineRenderer);
+            plot.mapDatasetToRangeAxis(2, 1);
+            plot.getRendererForDataset(plot.getDataset(2)).setSeriesPaint(0, Color.orange);
+
+        }
+
+        plot.setDatasetRenderingOrder(DatasetRenderingOrder.FORWARD);
         plot.getDomainAxis().setCategoryLabelPositions(CategoryLabelPositions.UP_45);
 
         final JFreeChart chart = new JFreeChart(plot);
         chart.setTitle(title);
 
         return chart;
+    }
+
+    private static JFreeChart getPieChart(LinkedHashMap<String, BigDecimal> data, String title){
+
+        DefaultPieDataset dataset = new DefaultPieDataset( );
+
+        for(String form:data.keySet()) {
+            dataset.setValue(form + " " + String.format("%.2f", data.get(form)) + "€", data.get(form));
+        }
+
+        JFreeChart chart = ChartFactory.createPieChart(
+                title,   // chart title
+                dataset, // data
+                true,
+                true,
+                false);
+
+        return chart;
+    }
+
+
+    private static Image createLineBarChartImage(LinkedHashMap<Period, BigDecimal> data, String title, BigDecimal planned) throws IOException, BadElementException {
+        JFreeChart ch = getBarLineChart(data, title, planned);
+
+        BufferedImage chartImage = ch.createBufferedImage( 800, 500, null);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(chartImage, "png", baos);
+        Image iTextImage = Image.getInstance(baos.toByteArray());
+        iTextImage.scaleAbsolute(500f, 300f);
+
+        iTextImage.setAlignment(Element.ALIGN_CENTER);
+
+        return iTextImage;
+    }
+
+    private static Image createPieChartImage(LinkedHashMap<String, BigDecimal> data, String title) throws IOException, BadElementException {
+        JFreeChart ch = getPieChart(data, title);
+
+        BufferedImage chartImage = ch.createBufferedImage( 800, 500, null);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(chartImage, "png", baos);
+        Image iTextImage = Image.getInstance(baos.toByteArray());
+        iTextImage.scaleAbsolute(500f, 300f);
+
+        iTextImage.setAlignment(Element.ALIGN_CENTER);
+
+        return iTextImage;
     }
 }

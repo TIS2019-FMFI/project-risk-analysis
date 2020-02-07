@@ -13,6 +13,7 @@ module app {
     requires com.jfoenix;
     requires itextpdf;
     requires mail;
+    requires jcommon;
 
 
     opens app to javafx.fxml;
