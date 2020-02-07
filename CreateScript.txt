@@ -1,0 +1,86 @@
+DROP TABLE IF EXISTS sap;
+
+CREATE TABLE sap (
+Projektdef varchar(50),
+PSPElement varchar(50),
+Objektbezeichnung varchar(50),
+Kostenart varchar(50),
+KostenartenBez varchar(50),
+Bezeichnung varchar(50),
+Partnerobjekt varchar(50),
+Periode varchar(50),
+Jahr varchar(50),
+Belegnr varchar(50),
+BuchDatum date,
+WertKWahr double,
+KWahr varchar(50),
+MengeErf varchar(50),
+GME varchar(50));
+
+
+DROP TABLE IF EXISTS customers;
+
+CREATE TABLE customers (
+id int primary key AUTO_INCREMENT,
+name varchar(50) UNIQUE NOT NULL);
+
+
+DROP TABLE IF EXISTS projects;
+
+CREATE TABLE projects (
+id int primary key auto_increment,
+projectNumber varchar(50) UNIQUE NOT NULL,
+projectName varchar(50) NOT NULL,
+partNumber varchar(50),
+ROS varchar(50),
+ROCE varchar(50),
+volumes varchar(50),
+DDCost double,
+prototypeCosts double,
+lastUpdate date,
+customer_id int references customers(id));
+
+
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+id integer primary key AUTO_INCREMENT,
+name varchar(50) NOT NULL,
+surname varchar(50) NOT NULL,
+email varchar(50),
+password varchar(50),
+userType varchar(50),
+approved boolean,
+deleted boolean NOT NULL);
+
+
+DROP TABLE IF EXISTS administration;
+
+CREATE TABLE administration(
+user_id int references users(id),
+project_id int references projects(id));
+
+
+DROP TABLE IF EXISTS reminders;
+
+CREATE TABLE reminders (
+text varchar(150) NOT NULL,
+partNumber varchar(50),
+timePeriod varchar(50),
+isFEM BOOLEAN NOT NULL);
+
+
+DROP TABLE IF EXISTS registration_requests;
+
+CREATE TABLE registration_requests (
+user_id int references users(id),
+text varchar(150) NOT NULL);
+
+
+DROP TABLE IF EXISTS logs;
+
+CREATE TABLE logs (
+id int primary key AUTO_INCREMENT,
+user_id int references users(id),
+text longtext NOT NULL,
+time timestamp NOT NULL);
