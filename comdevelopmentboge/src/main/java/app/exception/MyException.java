@@ -1,7 +1,7 @@
 package app.exception;
 
 public class MyException extends Exception {
-    MyException(String message) {
+    public MyException(String message) {
         super(message);
     }
 }

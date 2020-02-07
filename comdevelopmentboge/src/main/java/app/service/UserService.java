@@ -4,6 +4,7 @@ import app.db.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class UserService extends Service<User> {
 
@@ -34,6 +35,17 @@ public class UserService extends Service<User> {
 
     public User findUserById(Integer id) throws SQLException{
         return super.findById(id,"SELECT * FROM users WHERE id = ?");
+    }
+
+    public User findUserByFullName(String fullName) throws SQLException {
+        String[] nameSurname = fullName.split(" ");
+        String name = nameSurname[0];
+        String surname = nameSurname[1];
+        return super.findByAttributes(name, surname, "SELECT * FROM users WHERE name = ? AND surname = ?");
+    }
+
+    public List<User> findAllUsers() throws SQLException {
+        return super.findAll("SELECT * FROM users");
     }
 
 

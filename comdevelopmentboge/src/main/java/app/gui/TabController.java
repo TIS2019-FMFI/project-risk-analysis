@@ -90,6 +90,43 @@ public class TabController {
         }
     }
 
+    public void selectUsersAdministration() throws IOException {
+        ObservableList<Tab> tabs = mainTabPane.getTabs();
+        for (Tab tab : tabs) {
+            if (tab.isSelected()) {
+                try {
+                    tab.setContent(loadFXML("administration/users-administration-board"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void closeUsersAdministration() {
+        System.out.println("closing admin.");
+        ObservableList<Tab> tabs = mainTabPane.getTabs();
+        for (Tab tab : tabs) {
+            if (tab.isSelected()) {
+                if (tab.getId().equals("projectTab")) {
+                    try {
+                        selectProjectTab();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    try {
+                        selectMainPageTab();
+                        tab.setContent(loadFXML("home/admin-main"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
     public void selectProjectDetailsTab(String projectDef) throws IOException{
         setMenuBar("bar/project-details-menu-bar.fxml");
 

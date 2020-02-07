@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class User {
     public enum USERTYPE {
-        ADMIN,PROJECT_ADMIN,USER,FEM
+        CENTRAL_ADMIN,PROJECT_ADMIN,USER,FEM
     }
     private Integer id;
     private String name;
@@ -78,6 +78,8 @@ public class User {
         return userType.toString();
     }
 
+    public USERTYPE getUserTypeU() {return userType;}
+
     public void setUserType(USERTYPE userType) {
         this.userType = userType;
     }
@@ -121,6 +123,26 @@ public class User {
 
         }
     }
+
+    public void update() throws SQLException {
+        String sql = "UPDATE users SET name = ?, surname = ?, email = ?, password = ?, userType = ?, approved = ?, deleted = ? WHERE id = ?;";
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
+
+            s.setString(1, name);
+            s.setString(2, surname);
+            s.setString(3, email);
+            s.setString(4, password);
+            s.setString(5, userType.toString());
+            s.setBoolean(6,approved);
+            s.setBoolean(7,deleted);
+            s.setInt(8, id);
+
+
+            s.executeUpdate();
+        }
+
+    }
+
     private Integer getLastInsertedID() throws SQLException {
         String sql = "SELECT LAST_INSERT_ID();";
         try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {

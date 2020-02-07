@@ -52,11 +52,6 @@
             <version>1.0.19</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>3.17</version>
-        </dependency>
-        <dependency>
             <groupId>org.jfree</groupId>
             <artifactId>jfreechart-fx</artifactId>
             <version>1.0.0</version>
@@ -95,6 +90,12 @@
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
             <version>5.5.13</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.5.0-b01</version>
         </dependency>
 
     </dependencies>

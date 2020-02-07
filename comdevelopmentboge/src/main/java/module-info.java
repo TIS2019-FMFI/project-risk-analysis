@@ -12,6 +12,7 @@ module app {
     requires commons.codec;
     requires com.jfoenix;
     requires itextpdf;
+    requires mail;
 
 
     opens app to javafx.fxml;

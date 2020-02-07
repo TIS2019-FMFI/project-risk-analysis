@@ -1,11 +1,13 @@
 package app.service;
 
 import app.config.DbContext;
+import app.config.SignedUser;
 import app.db.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -40,5 +42,14 @@ public class LogService {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public static void createLog(String text) {
+        Log l = new Log();
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+        l.setUserId(SignedUser.getUser().getId());
+        l.setText(text);
+        l.setTime(currentTime);
+        l.insert();
     }
 }
