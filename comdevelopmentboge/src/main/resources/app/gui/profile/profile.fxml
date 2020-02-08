@@ -13,7 +13,7 @@
 
 <VBox style="-fx-background-color: #f7f5f6;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.gui.profile.ProfileEditController">
     <children>
-        <AnchorPane maxHeight="-Infinity" prefHeight="800.0" style="-fx-background-color: #c9c9c9;">
+        <AnchorPane maxHeight="-Infinity" prefHeight="800.0" style="-fx-background-color: whitesmoke;">
             <children>
                 <VBox alignment="TOP_RIGHT" prefHeight="70.0" prefWidth="1013.0" AnchorPane.bottomAnchor="720.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>

@@ -2,6 +2,7 @@ package app.gui.registration;
 
 import app.App;
 import app.config.SignedUser;
+import app.exception.DatabaseException;
 import app.exception.MyException;
 import app.exception.RegistrationException;
 import app.gui.TabController;
@@ -115,7 +116,7 @@ public class RegistrationController {
                 //FXMLLoader.load(TabController.class.getResource("main-box.fxml"));
 
             }
-        } catch (SQLException  e) {
+        } catch (SQLException e) {
             showAlert("Nepodarilo sa spojenie s databázou. Vyskúšajte ešte raz");
         }
     }

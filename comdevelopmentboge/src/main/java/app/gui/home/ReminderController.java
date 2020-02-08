@@ -1,8 +1,6 @@
 package app.gui.home;
 
-import app.db.FEMReminder;
 import app.db.ProjectReminder;
-import app.db.Reminder;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -14,7 +12,7 @@ import java.io.IOException;
 public class ReminderController {
 
     private HomeController homeController;
-    private Reminder reminder;
+    private ProjectReminder reminder;
     private int col;
     private int row;
     @FXML private Label name;
@@ -24,14 +22,12 @@ public class ReminderController {
 
     }
 
-    public void set(Reminder reminder, int col, int row, HomeController homeCon) {
-        if(reminder instanceof FEMReminder) {
-            name.setText(((FEMReminder) reminder).getType());
-        }
-        else if(reminder instanceof ProjectReminder) {
-            name.setText(((ProjectReminder) reminder).getProjectNumber());
-        }
-        text.setText((reminder).getText());
+    public void set(ProjectReminder reminder, int col, int row, HomeController homeCon) {
+
+
+        name.setText(reminder.getProjectNumber());
+
+        text.setText(reminder.getText());
 
         this.col = col;
         this.row = row;

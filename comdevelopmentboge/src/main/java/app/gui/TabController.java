@@ -118,7 +118,7 @@ public class TabController {
                 else {
                     try {
                         selectMainPageTab();
-                        tab.setContent(loadFXML("home/admin-main"));
+                        tab.setContent(loadFXML("home/main-page"));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

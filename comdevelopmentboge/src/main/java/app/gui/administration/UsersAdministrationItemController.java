@@ -133,7 +133,10 @@ public class UsersAdministrationItemController {
      */
     @FXML
     public void generatePassword() {
-        showQuestionDialog("Prajete si vygenerovať nové heslo?");
+
+        if(MyAlert.showConfirmationDialog("Prajete si vygenerovať nové heslo?")) {
+            generate();
+        }
     }
 
     /**
@@ -157,20 +160,6 @@ public class UsersAdministrationItemController {
         }
     }
 
-    /**
-     * Kontrolný dialóg pre vygenerovanie nového hesla
-     * @param text
-     */
-    public void showQuestionDialog(String text) {
-        Alert alert = new Alert(Alert.AlertType.WARNING, text, ButtonType.OK, ButtonType.CANCEL);
-        alert.showAndWait();
-        if (alert.getResult() == ButtonType.OK) {
-            generate();
-        }
-        if (alert.getResult() == ButtonType.CLOSE) {
-            alert.close();
-        }
-    }
 
     /**
      * Vygenerovanie náhodného hesla

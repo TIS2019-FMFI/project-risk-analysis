@@ -63,6 +63,22 @@ public class MyAlert {
         return td.getEditor().getText();
     }
 
+    /**
+     * Zobrazenie dialogu pre potvrdenie vykonanej akcie
+     * @param text
+     * @return true ak uzivatel potvrdi dialog inak false
+     */
+    public static Boolean showConfirmationDialog(String text) {
+        Alert alert = new Alert(Alert.AlertType.WARNING, text, ButtonType.OK, ButtonType.CANCEL);
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+            return true;
+        }
+        alert.close();
+        return false;
+
+    }
+
 
 
 }

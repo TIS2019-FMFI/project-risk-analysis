@@ -105,6 +105,20 @@ public abstract class Service<T> {
             }
         }
     }
+    public List<T> findAll(PreparedStatement statement) throws SQLException {
+
+            try (ResultSet r = statement.executeQuery()) {
+
+                List<T> elements = new ArrayList<>();
+
+                while (r.next()) {
+                    elements.add(Objekt(r));
+                }
+
+                return elements;
+            }
+
+    }
 
     public List<T> findAllExcept(String sql, Integer id) throws SQLException {
 

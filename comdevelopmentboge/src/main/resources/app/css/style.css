@@ -429,7 +429,7 @@
 
 .jfx-list-cell {
     -fx-background-insets: 0.0;
-    -fx-text-fill: BLACK;
+    -fx-text-fill: white;
 }
 
 .jfx-list-cell:odd,
@@ -439,7 +439,7 @@
 
 .jfx-list-cell:filled:hover,
 .jfx-list-cell:selected .label {
-    -fx-text-fill: black;
+    -fx-text-fill: white;
 }
 
 .jfx-list-cell .jfx-rippler {
@@ -988,3 +988,35 @@
 }
 
 
+/*******************************************************************************
+*                                                                              *
+* Main Page                                                                    *
+*                                                                              *
+*******************************************************************************/
+
+.main-page-list {
+    -fx-background-insets: 0.0;
+    -jfx-cell-horizontal-margin: 0.0;
+    -jfx-cell-vertical-margin: 0.0;
+    -fx-padding: 0.0;
+    -fx-background-color: TRANSPARENT;
+    -fx-text-fill: white;
+}
+.main-page-list:selected, .main-page-list:selected:focused {
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+}
+
+.main-page-list .jfx-list-cell {
+    -fx-padding: 1.0 0.0 1.0 0.0;
+    -fx-background-color: TRANSPARENT;
+}
+.main-page-list .jfx-list-cell:filled:hover .label, .main-page-list .jfx-list-cell:selected  .label,
+.main-page-list .jfx-list-cell:filled:selected .label, .main-page-list .jfx-list-cell:filled:cell-selection  .label,
+.main-page-list .jfx-list-cell:cell-selection .label{
+    -fx-text-fill: white;
+    -jfx-rippler-fill: WHITESMOKE;
+}
+.main-page-list .jfx-list-cell .jfx-rippler {
+    -jfx-rippler-fill: WHITESMOKE;
+}

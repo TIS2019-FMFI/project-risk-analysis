@@ -1,11 +1,14 @@
 package app.gui.auth;
 
 import app.App;
+import app.config.SignedUser;
 import app.gui.TabController;
 import app.gui.home.HomeController;
+import app.gui.registration.RegistrationController;
 import app.transactions.LoginTransaction;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
@@ -69,7 +72,13 @@ public class LoginController {
     private void login(MouseEvent event) {
         try {
             LoginTransaction.login(email.getText(),getPasswordText());
-            FXMLLoader.load(TabController.class.getResource("main-box.fxml"));
+            //udaje su spravne ale nie je este schvaleny
+            if (!SignedUser.getUser().getApproved()) {
+                openWaitingPage();
+            } else {
+                FXMLLoader.load(TabController.class.getResource("main-box.fxml"));
+            }
+
         } catch (LoginException e) {
             showAlert(e.getMessage());
         } catch (SQLException e) {
@@ -78,6 +87,10 @@ public class LoginController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    private void openWaitingPage() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(RegistrationController.class.getResource("registration-waiting.fxml"));
+        App.setRoot((Parent) fxmlLoader.load());
     }
 
     private void showAlert(String text) {
