@@ -15,7 +15,7 @@
         </Label>
       <ImageView fitHeight="23.0" fitWidth="20.0" layoutX="166.0" layoutY="10.0" onMouseClicked="#deleteProject" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../../../../../project-risk-analysis-master/comdevelopmentboge/src/main/resources/app/images/closeCircle.png" />
+            <Image url="@/app/images/closeCircle.png" />
          </image>
       </ImageView>
     </children>

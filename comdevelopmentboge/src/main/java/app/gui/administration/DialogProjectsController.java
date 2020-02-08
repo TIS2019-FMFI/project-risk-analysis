@@ -4,19 +4,25 @@ import app.App;
 import app.db.Project;
 import app.db.User;
 import app.exception.DatabaseException;
+import app.gui.MyAlert;
 import app.service.AdministrationService;
+import app.service.ProjectService;
+import app.transactions.UserTypeChangeTransaction;
 import com.jfoenix.controls.JFXListView;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -30,6 +36,7 @@ public class DialogProjectsController {
     private static DialogProjectsController instance;
     public static DialogProjectsController getInstance(){return instance;}
 
+
     /**
      * projectsListView - grafický komponent, ktorý zobrazuje zoznam projektov, ktorých je užívateľ adminom
      * projectsListView - grafický komponent, ktorý zobrazuje zoznam projektov, ktorých už užívateľ nebude adminom
@@ -38,7 +45,8 @@ public class DialogProjectsController {
 
     @FXML private JFXListView<Pane> projectsListView;
     @FXML private JFXListView<Pane> deleteProjectsListView;
-    @FXML private TextField projectNumber;
+    @FXML ComboBox projectsBox;
+
 
     /**
      * user - užívateľ, ktorého rolu chceme zmeniť
@@ -47,7 +55,7 @@ public class DialogProjectsController {
      */
     private User user;
     private List<Project> projects;
-    Stage thisStage;
+    List<Stage> stages;
 
     /**
      * Nastavenie grafického komentu - získanie projektov, ktorých adminom je užívateľ
@@ -65,18 +73,19 @@ public class DialogProjectsController {
         }
         projectsListView.setPrefWidth(App.getScene().getWidth());
         projectsListView.setPrefHeight(App.getScene().getHeight() - 80);
+
     }
 
     /**
      * Nastavenie dialógového okna pre zmenu projektov užívateľa
-     * @param thisStage
+     * @param stages
      * @param user
      * @throws DatabaseException
      * @throws SQLException
      * @throws IOException
      */
-    public void setProjectAdminDialog(Stage thisStage, User user) throws DatabaseException, SQLException, IOException {
-        this.thisStage = thisStage;
+    public void setProjectAdminDialog(List<Stage> stages, User user) throws DatabaseException, SQLException, IOException {
+        this.stages = stages;
         this.user = user;
         instance = this;
         this.projects = AdministrationService.getAdministrationService().findProjectsByAdmin(user.getFullName());
@@ -85,6 +94,9 @@ public class DialogProjectsController {
         }
         deleteProjectsListView.setPrefWidth(App.getScene().getWidth());
         deleteProjectsListView.setPrefHeight(App.getScene().getHeight() - 80);
+
+        projectsBox.getItems().addAll(FXCollections.observableArrayList(ProjectService.getProjectService().getFreeProjectsNums()));
+        projectsBox.getItems().add(0,null);
     }
 
     /**
@@ -133,7 +145,13 @@ public class DialogProjectsController {
      */
     @FXML
     private void close(MouseEvent event) {
-        thisStage.close();
+        stages.get(0).close();
+    }
+
+
+    @FXML
+    private void closeProjects(MouseEvent event) {
+        ((Node)(event.getSource())).getScene().getWindow().hide();
     }
 
     /**
@@ -161,38 +179,46 @@ public class DialogProjectsController {
 
         Scene scene = new Scene(parent, 300, 400);
         Stage stage = new Stage();
-        dialogController.setDialog(stage, user, projects);
+        stages.add(stage);
+        UsersAdministrationItemController.getInstance().onCloseHandler(stages.get(stages.size()-1), this.stages);
+        dialogController.setDialog(stages, user, projects);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();
     }
 
 
-    /**
-     * Vymazanie projektu zo zoznamu projektov
-     * @param projectNumber
-     * @throws IOException
-     */
-    public void deleteProject(String projectNumber) throws IOException {
-        deleteProjectsListView.getItems().clear();
-        Project delObj = new Project();
-        for(Project project : projects) {
-            if(!project.getProjectNumber().equals(projectNumber)) {
-                deleteProjectsListView.getItems().add(setProjectAdminPane(project.getProjectNumber()));
+
+
+    @FXML
+    public void addProject(MouseEvent event) throws DatabaseException, SQLException {
+        if(projectsBox.getValue() != null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Chceš prideliť projekt " +  projectsBox.getValue().toString() +
+                    " užívateľovi " + user.getFullName() + "?", ButtonType.OK, ButtonType.CANCEL);
+            alert.showAndWait();
+            if (alert.getResult() == ButtonType.OK) {
+                UserTypeChangeTransaction.addProject(user, projectsBox.getValue().toString());
             }
-            else {
-                delObj = project;
+            if (alert.getResult() == ButtonType.CANCEL) {
+                alert.close();
             }
         }
-        projects.remove(delObj);
     }
 
-    //TODO
-    @FXML
-    void onEnter(ActionEvent event) {
-        String projectNum = projectNumber.getText();
-
-        System.out.println("enter");
+    public void reloadAddProjects() {
+        projectsBox.getItems().clear();
+        projectsBox.getItems().addAll(FXCollections.observableArrayList(ProjectService.getProjectService().getFreeProjectsNums()));
+        projectsBox.getItems().add(0,null);
     }
+
+    public void reloadProjectsDelete() throws SQLException, IOException {
+        deleteProjectsListView.getItems().clear();
+        this.projects = AdministrationService.getAdministrationService().findProjectsByAdmin(user.getFullName());
+        for(Project project : projects) {
+            deleteProjectsListView.getItems().add(setProjectAdminPane(project.getProjectNumber()));
+        }
+    }
+
+
 
 }

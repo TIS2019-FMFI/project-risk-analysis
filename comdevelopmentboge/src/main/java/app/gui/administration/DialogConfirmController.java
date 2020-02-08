@@ -48,21 +48,21 @@ public class DialogConfirmController {
     private User user;
     private List<Project> projectsToSave;
     private User.USERTYPE newType;
-    private Stage thisStage;
+    private List<Stage> stages;
 
 
     /**
      * Nastavenie dialógového okna - grafických komponentov
-     * @param thisStage - nastavenie aktuálneho dialógového okna
+     * @param stages - nastavenie aktuálneho dialógového okna
      * @param user - používateľ, ktorého rolu chceme zmeniť
      * @param projects - všetky projekty užívateľa
      * @throws DatabaseException
      * @throws SQLException
      * @throws IOException
      */
-    public void setDialog(Stage thisStage, User user, List<Project> projects) throws DatabaseException, SQLException, IOException {
+    public void setDialog(List<Stage> stages, User user, List<Project> projects) throws IOException {
         instance = this;
-        this.thisStage = thisStage;
+        this.stages = stages;
         this.user = user;
         this.projectsToSave = projects;
         this.newType = User.USERTYPE.PROJECT_ADMIN;
@@ -107,7 +107,7 @@ public class DialogConfirmController {
      */
     @FXML
     private void close(MouseEvent event) {
-        thisStage.close();
+        stages.get(0).close();
     }
 
     /**
@@ -121,8 +121,7 @@ public class DialogConfirmController {
         if(!newType.equals(user.getUserType())) {
             UserTypeChangeTransaction.changeProjects(user, difference());
         }
-        close(event);
-        closeAllDialogs();
+        UsersAdministrationItemController.getInstance().closeAllDialogs(stages);
     }
 
     /**
@@ -144,12 +143,4 @@ public class DialogConfirmController {
         return projectsToDelete;
     }
 
-    /**
-     * Zatvorenie dialógov
-     */
-    private void closeAllDialogs() {
-        ChangeUserTypeAdminController.getInstance().thisStage.close();
-        ChangeUserTypeController.getInstance().thisStage.close();
-        DialogProjectsController.getInstance().thisStage.close();
-    }
 }

@@ -8,15 +8,18 @@ import app.db.User.USERTYPE;
 import app.exception.DatabaseException;
 import app.exception.MyException;
 import app.gui.MyAlert;
+import app.gui.administration.DialogProjectsController;
 import app.service.AdministrationService;
 import app.service.LogService;
 import app.service.ProjectService;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 public class UserTypeChangeTransaction {
+
 
     /**
      * Transakcia zmeny roly užívateľa
@@ -79,25 +82,29 @@ public class UserTypeChangeTransaction {
     }
 
     //TODO
-    public static void insertProject(User user, String projectNum) throws DatabaseException, SQLException {
+    public static void addProject(User user, String projectNum) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);
         DbContext.getConnection().setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
         try {
-            Project project = ProjectService.getProjectService().findProjectByProjectNumber(projectNum);
+            System.out.println("projectNum " + projectNum);
+            Project project = ProjectService.getProjectService().findProjectByNum(projectNum);
             if(project == null) {
                 throw new MyException("Projekt sa nepodarilo vložiť");
             }
-            Administration a = AdministrationService.getAdministrationService().findAdministrationByProjectId(project.getId());
-            if(a.getUserId().equals(user.getId())) {
-                throw new MyException("Projekt má už užívateľ pridelený");
-            }
-            if(a.getUserId() != null) {
-                throw new MyException("Projekt má iného admina");
-            }
-
+            System.out.println(project);
+            System.out.println("pr" + project.getProjectNumber());
+            Administration a = new Administration();
             a.setUserId(user.getId());
+            System.out.println("UI" + user.getId());
+            System.out.println("PI" + project.getId());
+            a.setProjectId(project.getId());
+            a.insert();
+
 
             DbContext.getConnection().commit();
+
+            DialogProjectsController.getInstance().reloadProjectsDelete();
+            DialogProjectsController.getInstance().reloadAddProjects();
 
         } catch (SQLException e) {
             MyAlert.showError("Projekt sa nepodarilo vložiť");
@@ -105,6 +112,37 @@ public class UserTypeChangeTransaction {
             throw e;
         } catch (MyException e) {
             MyAlert.showError(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            DbContext.getConnection().setAutoCommit(true);
+        }
+
+    }
+
+    public static void deleteProject(String projectNum) throws SQLException {
+        DbContext.getConnection().setAutoCommit(false);
+        DbContext.getConnection().setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+        try {
+            System.out.println("projectNum " + projectNum);
+            Administration a = AdministrationService.getAdministrationService().findAdministrationByProjectNum(projectNum);
+            if(a == null) {
+                throw new MyException("Projekt sa nepodarilo vymazať");
+            }
+
+            a.delete();
+            DbContext.getConnection().commit();
+
+            DialogProjectsController.getInstance().reloadProjectsDelete();
+
+        } catch (SQLException e) {
+            MyAlert.showError("Projekt sa nepodarilo vymazať");
+            DbContext.getConnection().rollback();
+            throw e;
+        } catch (MyException e) {
+            MyAlert.showError(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             DbContext.getConnection().setAutoCommit(true);
         }

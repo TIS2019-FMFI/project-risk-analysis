@@ -12,6 +12,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -121,8 +123,8 @@ public class UsersAdministrationBoardController {
      * @param event
      */
     @FXML
-    private void close(MouseEvent event) {
-        TabController.getInstance().closeUsersAdministration();
+    private void close(MouseEvent event) throws IOException {
+        FXMLLoader.load(TabController.class.getResource("main-box.fxml"));
     }
 
     /**
@@ -144,6 +146,7 @@ public class UsersAdministrationBoardController {
             }
         }
     }
+
 
 
 }

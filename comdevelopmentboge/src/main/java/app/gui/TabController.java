@@ -2,6 +2,7 @@ package app.gui;
 
 import app.App;
 import app.config.SignedUser;
+import app.db.User;
 import app.gui.project.ProjectController;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -29,7 +30,7 @@ public class TabController {
 
         instance = this;
 
-        if(SignedUser.getUser().getUserType().equals("ADMIN")){
+        if(SignedUser.getUser().getUserType().equals("CENTRAL_ADMIN")){
             mainBox.getChildren().add(loadFXML("bar/admin-main-page-menu-bar"));
         } else{
             mainBox.getChildren().add(loadFXML("bar/main-page-menu-bar"));
@@ -104,7 +105,6 @@ public class TabController {
     }
 
     public void closeUsersAdministration() {
-        System.out.println("closing admin.");
         ObservableList<Tab> tabs = mainTabPane.getTabs();
         for (Tab tab : tabs) {
             if (tab.isSelected()) {

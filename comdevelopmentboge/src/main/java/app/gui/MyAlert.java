@@ -5,6 +5,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 
+import java.util.concurrent.Callable;
+import java.util.function.Function;
+
 public class MyAlert {
 
     /**
@@ -25,7 +28,10 @@ public class MyAlert {
      */
     public static void showSuccess(String text) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, text, ButtonType.OK);
-        alert.getDialogPane().setGraphic(new ImageView("app/images/conf.png"));
+        ImageView imageView = new ImageView("app/images/conf.png");
+        imageView.setFitHeight(50);
+        imageView.setFitWidth(50);
+        alert.getDialogPane().setGraphic(imageView);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.OK) {
             alert.close();
@@ -56,5 +62,7 @@ public class MyAlert {
         td.showAndWait();
         return td.getEditor().getText();
     }
+
+
 
 }

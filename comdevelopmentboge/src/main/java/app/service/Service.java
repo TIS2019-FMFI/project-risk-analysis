@@ -53,6 +53,24 @@ public abstract class Service<T> {
         }
     }
 
+    public T findByName(String name, String sql) throws SQLException {
+
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
+            s.setString(1, name);
+            try (ResultSet r = s.executeQuery()) {
+                if (r.next()) {
+                    T v = Objekt(r);
+                    if (r.next()) {
+                        throw new RuntimeException("Too many lines");
+                    }
+                    return v;
+                } else {
+                    return null;
+                }
+            }
+        }
+    }
+
     public T findByAttributes(String a1, String a2, String sql) throws SQLException {
 
         try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
@@ -75,6 +93,23 @@ public abstract class Service<T> {
     public List<T> findAll(String sql) throws SQLException {
 
         try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
+            try (ResultSet r = s.executeQuery()) {
+
+                List<T> elements = new ArrayList<>();
+
+                while (r.next()) {
+                    elements.add(Objekt(r));
+                }
+
+                return elements;
+            }
+        }
+    }
+
+    public List<T> findAllExcept(String sql, Integer id) throws SQLException {
+
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
+            s.setInt(1, id);
             try (ResultSet r = s.executeQuery()) {
 
                 List<T> elements = new ArrayList<>();

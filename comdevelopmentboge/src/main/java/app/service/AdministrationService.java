@@ -49,8 +49,11 @@ public class AdministrationService extends Service<Administration>{
     }
 
     public Administration findAdministrationByProjectId(Integer projectId) throws DatabaseException, SQLException {
-        System.out.println("AS find by id" + projectId);
         return super.findById(projectId,"SELECT * FROM administration WHERE project_id = ?");
+    }
+
+    public Administration findAdministrationByProjectNum(String projectNum) throws DatabaseException, SQLException {
+        return super.findByName(projectNum,"SELECT * FROM administration as a join projects as p on a.project_id = p.id WHERE p.projectNumber = ?");
     }
 
 }

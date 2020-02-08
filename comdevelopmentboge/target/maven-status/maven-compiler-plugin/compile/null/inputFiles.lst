@@ -1,52 +1,67 @@
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\fem\FEMController.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\exception\DatabaseException.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\Service.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\project\ProjectListFilterController.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\Log.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\App.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\config\SignedUser.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\exception\LoginException.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\exception\MyException.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\administration\UserAdministrationController.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\project\ProjectListFilter.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\transactions\LoginTransaction.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\ProjectReminder.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\exception\RegistrationException.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\profile\ProfileController.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\project\ProjectFilter.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\ChartService.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\graph\ChartRenderer.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\FEMReminder.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\project\ProjectTabController.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\FEM.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\home\ReminderController.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\Reminder.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\graph\Period.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\CustomerService.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\notification\NotificationService.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\User.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\TabsController.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\ProjectAdministrationService.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\Customer.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\exporter\PdfExporter.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\SAP.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\SAPService.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\module-info.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\importer\ExcellParser.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\TabController.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\project\ProjectController.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\config\DbContext.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\importer\Generate.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\importer\ExcelRow.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\Project.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\registration\RegistrationController.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\ProjectService.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\transactions\Registration.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\config\Configuration.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\RegistrationRequest.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\auth\LoginController.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\UserService.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\LogService.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\administration\FilesAdministrationController.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\logger\LoggerService.java
-C:\Users\Admin\OneDrive\SKOLA\4.semester\TIS\app\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\home\HomeController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\project\ProjectTabController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\User.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\ProjectAdministrationService.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\administration\ChangeUserTypeAdminController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\administration\FilesAdministrationController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\profile\ProfileEditController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\ChartService.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\administration\DialogConfirmController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\importer\Generate.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\home\ReminderController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\project\ProjectFilter.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\module-info.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\RegistrationRequest.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\transactions\Registration.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\AdministrationService.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\FEMReminder.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\auth\LoginController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\project\ProjectController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\transactions\UserTypeChangeTransaction.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\Project.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\config\SignedUser.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\Crud.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\profile\ProfileController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\SAP.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\administration\UsersAdministrationBoardController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\config\SendMail.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\project\ProjectListFilterController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\UserService.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\home\HomeController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\CustomerService.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\Administration.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\Log.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\exporter\PdfExporter.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\importer\ExcelRow.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\administration\DialogProjectsController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\TabController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\MyAlert.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\Customer.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\LogService.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\transactions\LoginTransaction.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\ProjectReminder.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\fem\FEMController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\exception\MyException.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\administration\ChangeUserTypeController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\config\DbContext.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\ReminderService.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\FEM.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\db\Reminder.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\administration\DialogProjectsItemController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\graph\ChartRenderer.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\Service.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\exception\DatabaseException.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\graph\Period.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\administration\UsersAdministrationTabController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\SAPService.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\transactions\ProfileEditTransaction.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\exception\RegistrationException.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\importer\ExcellParser.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\administration\UsersAdministrationItemController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\project\ProjectListFilter.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\config\Configuration.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\App.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\logger\LoggerService.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\gui\registration\RegistrationController.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\exception\ProfileChangeException.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\exception\LoginException.java
+C:\Users\Andrea\Desktop\BOGE 2\project-risk-analysis\comdevelopmentboge\src\main\java\app\service\ProjectService.java

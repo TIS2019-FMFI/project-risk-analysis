@@ -1,5 +1,6 @@
 package app.service;
 
+import app.config.SignedUser;
 import app.db.User;
 
 import java.sql.ResultSet;
@@ -45,7 +46,8 @@ public class UserService extends Service<User> {
     }
 
     public List<User> findAllUsers() throws SQLException {
-        return super.findAll("SELECT * FROM users");
+        Integer id = SignedUser.getUser().getId();
+        return super.findAllExcept("SELECT * FROM users where id != ?", id);
     }
 
 

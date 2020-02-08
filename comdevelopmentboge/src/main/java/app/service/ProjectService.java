@@ -136,6 +136,33 @@ public class ProjectService {
         return project;
     }
 
+    public Project findProjectByNum(String projectNumber){
+        Project project = new Project();
+        String sql = "select * from projects where projectNumber=?";
+        try(PreparedStatement st = DbContext.getConnection().prepareStatement(sql)){
+            st.setString(1, projectNumber);
+
+            ResultSet rs = st.executeQuery();
+            if(rs.next()){
+                project.setId(rs.getInt(1));
+                project.setProjectName(rs.getString(3));
+                project.setProjectNumber(rs.getString(2));
+                project.setPartNumber(rs.getString(4));
+                project.setRos(rs.getString(5));
+                project.setRoce(rs.getString(6));
+                project.setVolumes(rs.getBigDecimal(7));
+                project.setDdCost(rs.getBigDecimal(8));
+                project.setPrototypeCost(rs.getBigDecimal(9));
+                project.setLastUpdated(rs.getDate(10));
+                project.setCustomerId(rs.getInt(11));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return project;
+    }
+
     public BigDecimal getPlanedDDCosts(String projektDef){
         BigDecimal plannedDDCosts = BigDecimal.ZERO;
         try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement("select DDCost from projects where projectNumber = ?")){
@@ -195,4 +222,23 @@ public class ProjectService {
         return project;
     }
 
+    public ArrayList<String> getFreeProjectsNums()  {
+
+        ArrayList<String> result = new ArrayList<>();
+
+        String sql = "select projectNumber from projects as p left join administration as a on p.id = a.project_id where a.id is null";
+        try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                result.add(rs.getString(1));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+
+    }
 }

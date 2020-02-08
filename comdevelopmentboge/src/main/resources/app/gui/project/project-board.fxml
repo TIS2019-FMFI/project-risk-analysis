@@ -4,5 +4,5 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane fx:id="projectBoard" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.gui.project.ProjectTabController">
-        <JFXListView fx:id="projectListView" styleClass="custom-jfx-list-view" stylesheets="@../../css/style.css" />
+        <JFXListView fx:id="projectListView" styleClass="custom-jfx-list-view" stylesheets="@/app/css/style.css" />
 </AnchorPane>

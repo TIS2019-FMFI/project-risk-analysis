@@ -40,10 +40,12 @@ public class ProjectTabController{
             @Override
             public void handle(MouseEvent event) {
                 Label label = projectListView.getSelectionModel().getSelectedItem();
-                try {
-                    showProjectDetails(label.getText());
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if(label != null) {
+                    try {
+                        showProjectDetails(label.getText());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

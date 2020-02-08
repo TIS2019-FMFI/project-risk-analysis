@@ -32,7 +32,6 @@ public class ProfileEditTransaction {
 
             //commitne zmeny do databazy
             DbContext.getConnection().commit();
-            System.out.println("commit");
 
 
         } catch (SQLException | ProfileChangeException e) {

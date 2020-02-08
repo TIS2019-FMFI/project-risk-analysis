@@ -1,6 +1,7 @@
 package app.gui.home;
 
 import app.App;
+import app.config.SignedUser;
 import app.db.FEMReminder;
 import app.db.ProjectReminder;
 import app.db.Reminder;
@@ -100,12 +101,11 @@ public class HomeController {
     }
 
     private void setWelcome() {
-        // welcome.setText("Vitaj " + SignedUser.getSignedUser().getName() + "!");
+        welcome.setText("Vitaj " + SignedUser.getUser().getName() + "!");
     }
 
     public void minimizeReminder(Reminder reminder, int col, int row) throws IOException {
         if(reminder instanceof FEMReminder) {
-            System.out.println(FEM_hidden);
             String count = Integer.toString(Integer.valueOf(FEM_hidden.getText()) + 1);
             FEM_hidden.setText(count);
         }

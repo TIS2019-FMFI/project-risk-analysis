@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 
 public class ChangeUserTypeController {
@@ -37,7 +38,7 @@ public class ChangeUserTypeController {
     /**
      * thisStage - aktuálne otvorené dialógové okno
      */
-    Stage thisStage;
+    List<Stage> stages;
     /**
      * user - používateľ, ktorého rolu chceme zmeniť
      */
@@ -45,13 +46,13 @@ public class ChangeUserTypeController {
 
     /**
      * Funkcia nastaví radiobutton ako aktívny, podľa aktuálnej roly užívateľa
-     * @param thisStage - nastavenie aktuálneho dialógového okna
+     * @param stages - nastavenie aktuálneho dialógového okna
      * @param user - nastavenie používateľa, ktorého rolu chceme zmeniť
      *
      */
-    public void setSelected(Stage thisStage, User user) {
+    public void setSelected(List<Stage> stages, User user) {
         instance = this;
-        this.thisStage = thisStage;
+        this.stages = stages;
         this.user = user;
         User.USERTYPE userType = user.getUserTypeU();
 
@@ -72,7 +73,7 @@ public class ChangeUserTypeController {
      */
     @FXML
     private void close(MouseEvent event) {
-        thisStage.close();
+        stages.get(0).close();
     }
 
     /**
@@ -89,11 +90,11 @@ public class ChangeUserTypeController {
         }
         else if (femButton.isSelected()) {
             changeUserType(User.USERTYPE.FEM);
-            close(event);
+            UsersAdministrationItemController.getInstance().closeAllDialogs(this.stages);
         }
         else if (userButton.isSelected()) {
             changeUserType(User.USERTYPE.USER);
-            close(event);
+            UsersAdministrationItemController.getInstance().closeAllDialogs(this.stages);
         }
         else {
             MyAlert.showWarning("Zvoľ typ užívateľa");
@@ -123,7 +124,9 @@ public class ChangeUserTypeController {
 
         Scene scene = new Scene(parent, 300, 400);
         Stage stage = new Stage();
-        dialogController.setSelected(stage, user);
+        stages.add(stage);
+        UsersAdministrationItemController.getInstance().onCloseHandler(stages.get(stages.size()-1), this.stages);
+        dialogController.setSelected(stages, user);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();

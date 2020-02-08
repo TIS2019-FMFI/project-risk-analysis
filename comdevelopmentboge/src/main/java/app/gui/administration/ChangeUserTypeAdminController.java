@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 
 public class ChangeUserTypeAdminController {
@@ -36,7 +37,7 @@ public class ChangeUserTypeAdminController {
     /**
      * thisStage - aktuálne otvorené dialógové okno
      */
-     Stage thisStage;
+     List<Stage> stages;
 
     /**
      * user - používateľ, ktorého rolu chceme zmeniť
@@ -45,14 +46,14 @@ public class ChangeUserTypeAdminController {
 
     /**
      * Funkcia nastaví radiobutton ako aktívny, podľa aktuálnej roly užívateľa
-     * @param thisStage - nastavenie aktuálneho dialógového okna
+     * @param stages - nastavenie aktuálneho dialógového okna
      * @param user - nastavenie používateľa, ktorého rolu chceme zmeniť
      *
      */
-    public void setSelected(Stage thisStage, User user) {
+    public void setSelected(List<Stage> stages, User user) {
         instance = this;
         this.user = user;
-        this.thisStage = thisStage;
+        this.stages = stages;
 
         User.USERTYPE userType = user.getUserTypeU();
         if (userType.equals(User.USERTYPE.PROJECT_ADMIN)) {
@@ -70,7 +71,7 @@ public class ChangeUserTypeAdminController {
      */
     @FXML
     private void close(MouseEvent event) {
-        thisStage.close();
+        stages.get(0).close();
     }
 
     /**
@@ -121,7 +122,9 @@ public class ChangeUserTypeAdminController {
         DialogProjectsController dialogController = fxmlLoader.getController();
         Scene scene = new Scene(parent, 300, 400);
         Stage stage = new Stage();
-        dialogController.setProjectAdminDialog(stage, user);
+        stages.add(stage);
+        UsersAdministrationItemController.getInstance().onCloseHandler(stages.get(stages.size()-1), this.stages);
+        dialogController.setProjectAdminDialog(stages, user);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();

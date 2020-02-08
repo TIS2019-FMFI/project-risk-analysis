@@ -19,6 +19,8 @@ import javafx.stage.Stage;
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class UsersAdministrationItemController {
@@ -39,6 +41,8 @@ public class UsersAdministrationItemController {
     @FXML private Label userType;
 
     private User user;
+
+    List<Stage> stages = new ArrayList<>();
 
     /**
      * Nastavenie konkrétneho používateľa
@@ -98,8 +102,10 @@ public class UsersAdministrationItemController {
         ChangeUserTypeController dialogController = fxmlLoader.<ChangeUserTypeController>getController();
         Scene scene = new Scene(parent, 300, 400);
         Stage stage = new Stage();
+        stages.add(stage);
+        onCloseHandler(stages.get(stages.size()-1), this.stages);
         stage.setScene(scene);
-        dialogController.setSelected(stage, user);
+        dialogController.setSelected(stages, user);
         stage.showAndWait();
     }
 
@@ -190,5 +196,20 @@ public class UsersAdministrationItemController {
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
        return generatedString;
+    }
+
+    /**
+     * Zatvorenie dialógov
+     */
+    void closeAllDialogs(List<Stage> stages) {
+        for(Stage stage : stages) {
+            stage.close();
+        }
+    }
+
+    void onCloseHandler(Stage stage, List<Stage> stages) {
+        stage.setOnCloseRequest(E -> {
+            closeAllDialogs(stages);
+        });
     }
 }

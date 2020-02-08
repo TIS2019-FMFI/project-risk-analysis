@@ -8,12 +8,12 @@
 <?import javafx.scene.layout.HBox?>
 
 <AnchorPane fx:id="usersBoard" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.gui.administration.UsersAdministrationBoardController">
-    <JFXListView fx:id="userListView" layoutY="42.0" prefHeight="358.0" prefWidth="200.0" styleClass="custom-jfx-list-view" stylesheets="@../../../../../../../../project-risk-analysis-master/comdevelopmentboge/src/main/resources/app/css/style.css" />
+    <JFXListView fx:id="userListView" layoutY="42.0" prefHeight="358.0" prefWidth="200.0" styleClass="custom-jfx-list-view" stylesheets="@../../../../../../../../../project-risk-analysis-master/comdevelopmentboge/src/main/resources/app/css/style.css" />
    <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
          <ImageView fx:id="close" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true">
             <image>
-               <Image url="@../../../../../../../../project-risk-analysis-master/comdevelopmentboge/src/main/resources/app/images/close.png" />
+               <Image url="@/app/images/close.png" />
             </image>
             <HBox.margin>
                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
