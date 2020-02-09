@@ -3,9 +3,10 @@ import app.config.DbContext;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 
-public class Log {
+public class Log extends Crud<Log> {
     private Integer id;
     private Integer userId;
     private Timestamp time;
@@ -74,15 +75,23 @@ public class Log {
 
     public void insert(){
         String sql = "insert into logs (user_id, time, text) values (?,?,?)";
-        try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)) {
-
-            preparedStatement.setInt(1,userId);
-            preparedStatement.setTimestamp(2, time);
-            preparedStatement.setString(3, text);
-
-            preparedStatement.execute();
+        try {
+            insert(DbContext.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS), 1);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public PreparedStatement fill(PreparedStatement s) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public PreparedStatement fillInsert(PreparedStatement s) throws SQLException {
+        s.setInt(1,userId);
+        s.setTimestamp(2, time);
+        s.setString(3, text);
+        return s;
     }
 }

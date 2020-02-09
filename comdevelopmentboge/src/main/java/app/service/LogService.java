@@ -44,7 +44,7 @@ public class LogService {
         return result;
     }
 
-    public static void createLog(String text) {
+    public static void createLog(String text) throws SQLException {
         Log l = new Log();
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
         l.setUserId(SignedUser.getUser().getId());

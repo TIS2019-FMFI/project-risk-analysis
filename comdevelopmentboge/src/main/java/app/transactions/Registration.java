@@ -30,7 +30,7 @@ public class Registration {
 
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
-            throw e;
+            throw new DatabaseException();
         } finally {
             DbContext.getConnection().setAutoCommit(true);
         }
@@ -51,7 +51,7 @@ public class Registration {
 
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
-            throw e;
+            throw new DatabaseException();
         } finally {
             DbContext.getConnection().setAutoCommit(true);
         }
@@ -93,7 +93,7 @@ public class Registration {
             SignedUser.setUser(user);
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
-            throw e;
+            throw new DatabaseException();
         } finally {
             DbContext.getConnection().setAutoCommit(true);
         }
@@ -126,7 +126,7 @@ public class Registration {
             throw new RegistrationException("Nesprávny formát e-mailovej adresy");
         }
         if (!isPasswordFormatValid(password)) {
-            throw new RegistrationException("Heslo musí obsahovať aspoň jedno číslo, jedno písmeno a musí mať dĺžku aspoň 6 znakov");
+            throw new RegistrationException("Heslo musí obsahovať aspoň jedno číslo, \n jedno písmeno a musí mať dĺžku aspoň 6 znakov");
         }
 
     }

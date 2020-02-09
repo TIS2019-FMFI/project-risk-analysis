@@ -5,8 +5,10 @@ import app.config.SignedUser;
 import app.exception.DatabaseException;
 import app.exception.MyException;
 import app.exception.RegistrationException;
+import app.gui.MyAlert;
 import app.gui.TabController;
 import app.gui.auth.LoginController;
+import app.service.LogService;
 import app.transactions.Registration;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -84,23 +86,15 @@ public class RegistrationController {
             Registration.register(name.getText(),surname.getText(),email.getText(),getPasswordText());
             openWaitingPage();
         } catch (MyException e) {
-            showAlert(e.getMessage());
+            MyAlert.showError(e.getMessage());
         } catch (SQLException e) {
-            showAlert("Nepodarilo sa spojenie s databázou. Vyskúšajte ešte raz");
-            e.printStackTrace();
+            MyAlert.showError(DatabaseException.ERROR);
         }
     }
     private void openWaitingPage() throws IOException {
         App.setRoot(loadFXML("registration-waiting"));
     }
 
-    private void showAlert(String text) {
-        Alert alert = new Alert(Alert.AlertType.ERROR, text, ButtonType.OK);
-        alert.showAndWait();
-        if (alert.getResult() == ButtonType.OK) {
-            alert.close();
-        }
-    }
     @FXML
     private void cancelRegistration(MouseEvent event) throws IOException {
         App.setRoot("gui/auth/login");
@@ -117,7 +111,7 @@ public class RegistrationController {
 
             }
         } catch (SQLException e) {
-            showAlert("Nepodarilo sa spojenie s databázou. Vyskúšajte ešte raz");
+            MyAlert.showError(DatabaseException.ERROR);
         }
     }
 

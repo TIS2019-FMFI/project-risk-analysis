@@ -6,8 +6,10 @@ import app.config.DbContext;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
-public class User {
+public class User extends Crud<User>{
+
     public enum USERTYPE {
         CENTRAL_ADMIN,PROJECT_ADMIN,USER,FEM
     }
@@ -106,56 +108,39 @@ public class User {
 
     public void insert() throws SQLException {
         String sql = "INSERT INTO users(name,surname,email,password,userType,approved,deleted) VALUES(?,?,?,?,?,?,?);";
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
+        id = insert(DbContext.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS),1);
 
-            s.setString(1, name);
-            s.setString(2, surname);
-            s.setString(3, email);
-            s.setString(4, password);
-            s.setString(5, userType.toString());
-            s.setBoolean(6,approved);
-            s.setBoolean(7,deleted);
-
-
-            if  (s.executeUpdate() > 0) {
-                id = getLastInsertedID();
-            }
-
-        }
     }
 
     public void update() throws SQLException {
         String sql = "UPDATE users SET name = ?, surname = ?, email = ?, password = ?, userType = ?, approved = ?, deleted = ? WHERE id = ?;";
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
-
-            s.setString(1, name);
-            s.setString(2, surname);
-            s.setString(3, email);
-            s.setString(4, password);
-            s.setString(5, userType.toString());
-            s.setBoolean(6,approved);
-            s.setBoolean(7,deleted);
-            s.setInt(8, id);
-
-
-            s.executeUpdate();
-        }
+        update(DbContext.getConnection().prepareStatement(sql));
 
     }
-
-    private Integer getLastInsertedID() throws SQLException {
-        String sql = "SELECT LAST_INSERT_ID();";
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
-
-            try  (ResultSet r = s.executeQuery() ) {
-                if (r.next()) {
-                    return r.getInt(1);
-                }
-                return null;
-            }
-
-        }
+    @Override
+    public PreparedStatement fill(PreparedStatement s) throws SQLException {
+        s = fillBase(s);
+        s.setInt(8, id);
+        return s;
     }
+
+    @Override
+    public PreparedStatement fillInsert(PreparedStatement s) throws SQLException {
+        return fillBase(s);
+    }
+
+    public PreparedStatement fillBase(PreparedStatement s) throws SQLException {
+        s.setString(1, name);
+        s.setString(2, surname);
+        s.setString(3, email);
+        s.setString(4, password);
+        s.setString(5, userType.toString());
+        s.setBoolean(6,approved);
+        s.setBoolean(7,deleted);
+        return s;
+    }
+
+
 
 
 
