@@ -19,6 +19,38 @@ public class ProjectService {
     private static ProjectService projectService = new ProjectService();
     public static ProjectService getProjectService(){ return  projectService;}
 
+    public ArrayList<Project> getAllPRojects(){
+        ArrayList<Project> result = new ArrayList<>();
+
+        String sql = "select p.*,customers.name  from projects p left join customers on customer_id=customers.id";
+        try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                Project project = new Project();
+                project.setId(rs.getInt(1));
+                project.setProjectName(rs.getString(3));
+                project.setProjectNumber(rs.getString(2));
+                project.setPartNumber(rs.getString(4));
+                project.setRos(rs.getString(5));
+                project.setRoce(rs.getString(6));
+                project.setVolumes(rs.getBigDecimal(7));
+                project.setDdCost(rs.getBigDecimal(8));
+                project.setPrototypeCost(rs.getBigDecimal(9));
+                project.setLastUpdated(rs.getDate(10));
+                project.setCustomerId(rs.getInt(11));
+                project.setCustomerName(rs.getString(12));
+
+                result.add(project);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
 
 
     public ArrayList<String> getAllProjectNames()  {
@@ -110,7 +142,7 @@ public class ProjectService {
     // sap-ProjektDef, projects-projectNumber jedinecny identifikator projektu
     public Project findProjectByProjectNumber(String projectNumber){
         Project project = new Project();
-        String sql = "select projects.*, customers.name  from projects inner join customers on projects.customer_id=customers.id where projects.projectNumber=?";
+        String sql = "select projects.*, customers.name  from projects left join customers on projects.customer_id=customers.id where projects.projectNumber=?";
         try(PreparedStatement st = DbContext.getConnection().prepareStatement(sql)){
             st.setString(1, projectNumber);
 
