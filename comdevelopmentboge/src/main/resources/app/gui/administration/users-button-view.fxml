@@ -8,11 +8,16 @@
 
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<ImageView xmlns="http://javafx.com/javafx"
-           xmlns:fx="http://javafx.com/fxml"
-           fx:controller="app.gui.administration.UserAdministrationController"
-           fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="60.0">
-    <image>
-        <Image url="@/app/images/users.png" />
-    </image>
-</ImageView>
+<?import javafx.geometry.Insets?>
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="app.gui.administration.UsersAdministrationTabController"
+      prefHeight="50.0" AnchorPane.rightAnchor="60.0" onMouseClicked="#init">
+    <padding><Insets top="7"/></padding>
+    <ImageView  fitWidth="35.0" fitHeight="35.0" pickOnBounds="true" preserveRatio="true">
+        <image>
+            <Image url="@/app/images/users.png" />
+        </image>
+    </ImageView>
+</HBox>
+

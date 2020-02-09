@@ -148,7 +148,7 @@ public class ChartRenderer {
         pieChart.getData().forEach(d ->
                 d.nameProperty().bind(
                         Bindings.concat(
-                                d.getName(), " ", d.pieValueProperty(), " €"
+                                d.getName(), " ", String.format("%.2f", d.getPieValue()), " €"
                         )
                 )
         );

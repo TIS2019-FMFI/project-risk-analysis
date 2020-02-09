@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXListView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane minHeight="300.0" minWidth="400.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.gui.administration.DialogProjectsController">
+    <children>
+        <VBox alignment="CENTER" layoutX="5.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Napíšte kód projektu" textAlignment="CENTER" wrappingWidth="251.46583557128906">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="10.0" />
+                    </VBox.margin>
+            </Text>
+            <HBox alignment="CENTER" prefHeight="149.0" prefWidth="390.0">
+               <children>
+                   <ComboBox fx:id="projectsBox" prefHeight="32.0" prefWidth="164.0" promptText="Číslo projektu" style="-fx-background-color: white; -fx-border-color: black;" />
+                  <ImageView fx:id="addBtn" fitHeight="25.0" fitWidth="25.0" onMouseClicked="#addProject" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/add.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+               </children>
+               <VBox.margin>
+                  <Insets left="65.0" right="65.0" />
+               </VBox.margin>
+            </HBox>
+            <JFXListView fx:id="deleteProjectsListView" prefHeight="251.0" prefWidth="390.0" />
+                <HBox alignment="CENTER" prefHeight="51.0" prefWidth="390.0">
+                    <children>
+                        <Button fx:id="submit" mnemonicParsing="false" onMouseClicked="#submitAll" prefHeight="30.0" prefWidth="115.0" style="-fx-background-radius: 100; -fx-background-color: red;" text="Potvrdiť" textAlignment="CENTER" textFill="WHITE">
+                            <HBox.margin>
+                                <Insets left="50.0" right="10.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Button>
+                        <Button fx:id="storno" mnemonicParsing="false" onMouseClicked="#close" prefHeight="30.0" prefWidth="115.0" style="-fx-background-radius: 100;" text="Storno" textAlignment="CENTER">
+                            <HBox.margin>
+                                <Insets left="20.0" right="20.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Button>
+                    </children>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                    <padding>
+                        <Insets right="30.0" />
+                    </padding>
+                    <VBox.margin>
+                        <Insets top="15.0" />
+                    </VBox.margin>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

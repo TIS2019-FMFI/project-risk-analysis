@@ -9,10 +9,53 @@ import app.exception.RegistrationException;
 import app.service.UserService;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Calendar;
 
 public class Registration {
+    public static void declineRegistrationRequest(RegistrationRequest request) throws SQLException, DatabaseException {
+        DbContext.getConnection().setAutoCommit(false);
+        DbContext.getConnection().setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+        try {
+            //ziadost sa vymaze
+            request.delete();
 
+            //ziska sa uzivatel a zmeni sa mu deleted na true
+            User user = UserService.getInstance().findUserById(request.getUser_id());
+            user.setDeleted(true);
+
+            //zmeny sa poslu do databazy
+            user.update();
+
+        } catch (SQLException e) {
+            DbContext.getConnection().rollback();
+            throw e;
+        } finally {
+            DbContext.getConnection().setAutoCommit(true);
+        }
+    }
+    public static void approveRegistrationRequest(RegistrationRequest request) throws SQLException, DatabaseException {
+        DbContext.getConnection().setAutoCommit(false);
+        DbContext.getConnection().setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+        try {
+            //ziadost sa vymaze
+            request.delete();
+
+            //ziska sa uzivatel a zmeni sa mu approved na true
+            User user = UserService.getInstance().findUserById(request.getUser_id());
+            user.setApproved(true);
+
+            //zmeny sa poslu do databazy
+            user.update();
+
+        } catch (SQLException e) {
+            DbContext.getConnection().rollback();
+            throw e;
+        } finally {
+            DbContext.getConnection().setAutoCommit(true);
+        }
+    }
     public static boolean isRegistrationApproved(User user0) throws SQLException {
         User user = UserService.getInstance().findUserById(user0.getId());
         return user.getApproved();

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane prefHeight="40.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.gui.administration.DialogProjectsItemController">
+    <children>
+        <Label fx:id="projectNumberLbl" alignment="CENTER" layoutX="42.0" layoutY="5.0" prefHeight="28.0" prefWidth="117.0">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Label>
+    </children>
+</Pane>

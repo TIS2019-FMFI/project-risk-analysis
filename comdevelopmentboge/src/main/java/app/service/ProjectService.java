@@ -19,30 +19,7 @@ public class ProjectService {
     private static ProjectService projectService = new ProjectService();
     public static ProjectService getProjectService(){ return  projectService;}
 
-//    public Project findProjectById(Integer id) {
-//        Project project = new Project();
-//        String sql = "select projectNumber, projectName, partNumber, ROS, ROCE, volumes, DDCost, prototypeCosts, Customers.name from projects cross join Customers on Projects.customer_id=Customers.id where projects.id=?";
-//        try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
-//            preparedStatement.setString(1,String.valueOf(id));
-//
-//            ResultSet rs = preparedStatement.executeQuery();
-//            if(rs.next()) {
-//                project.setId(id);
-//                project.setProjectNumber(rs.getString(2));
-//                project.setProjectName(rs.getString(3));
-//                project.setRos(rs.getString(4));
-//                project.setRoce(rs.getString(5));
-//                project.setVolumes(rs.getBigDecimal(6));
-//                project.setDdCost(rs.getBigDecimal(7));
-//                project.setPrototypeCost(rs.getBigDecimal(8));
-//                project.setCustomerId(rs.getInt(9));
-//
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return project;
-//    }
+
 
     public ArrayList<String> getAllProjectNames()  {
 
@@ -159,6 +136,33 @@ public class ProjectService {
         return project;
     }
 
+    public Project findProjectByNum(String projectNumber){
+        Project project = new Project();
+        String sql = "select * from projects where projectNumber=?";
+        try(PreparedStatement st = DbContext.getConnection().prepareStatement(sql)){
+            st.setString(1, projectNumber);
+
+            ResultSet rs = st.executeQuery();
+            if(rs.next()){
+                project.setId(rs.getInt(1));
+                project.setProjectName(rs.getString(3));
+                project.setProjectNumber(rs.getString(2));
+                project.setPartNumber(rs.getString(4));
+                project.setRos(rs.getString(5));
+                project.setRoce(rs.getString(6));
+                project.setVolumes(rs.getBigDecimal(7));
+                project.setDdCost(rs.getBigDecimal(8));
+                project.setPrototypeCost(rs.getBigDecimal(9));
+                project.setLastUpdated(rs.getDate(10));
+                project.setCustomerId(rs.getInt(11));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return project;
+    }
+
     public BigDecimal getPlanedDDCosts(String projektDef){
         BigDecimal plannedDDCosts = BigDecimal.ZERO;
         try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement("select DDCost from projects where projectNumber = ?")){
@@ -191,4 +195,50 @@ public class ProjectService {
         return plannedPrototypeCosts;
     }
 
+    public Project findProjectById(Integer id){
+        Project project = new Project();
+        String sql = "select * from projects where id=?";
+        try(PreparedStatement st = DbContext.getConnection().prepareStatement(sql)){
+            st.setInt(1, id);
+
+            ResultSet rs = st.executeQuery();
+            if(rs.next()){
+                project.setId(rs.getInt(1));
+                project.setProjectName(rs.getString(3));
+                project.setProjectNumber(rs.getString(2));
+                project.setPartNumber(rs.getString(4));
+                project.setRos(rs.getString(5));
+                project.setRoce(rs.getString(6));
+                project.setVolumes(rs.getBigDecimal(7));
+                project.setDdCost(rs.getBigDecimal(8));
+                project.setPrototypeCost(rs.getBigDecimal(9));
+                project.setLastUpdated(rs.getDate(10));
+                project.setCustomerId(rs.getInt(11));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return project;
+    }
+
+    public ArrayList<String> getFreeProjectsNums()  {
+
+        ArrayList<String> result = new ArrayList<>();
+
+        String sql = "select projectNumber from projects as p left join administration as a on p.id = a.project_id where a.id is null";
+        try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                result.add(rs.getString(1));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+
+    }
 }

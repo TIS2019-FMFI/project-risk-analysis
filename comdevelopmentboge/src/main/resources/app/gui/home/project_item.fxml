@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Font?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="app.gui.home.HiddenProjectItemController"
+      prefHeight="50.0" prefWidth="100.0" alignment="CENTER"
+      style="-fx-background-color: #2b2b2b; -fx-background-radius: 0 100 100 0; -fx-padding: 0px;" >
+    <Label fx:id="project_name" textFill="whitesmoke" styleClass="label" alignment="CENTER">
+        <font>
+            <Font size="16.0" />
+        </font>
+    </Label>
+
+</VBox>

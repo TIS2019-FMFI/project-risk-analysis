@@ -2,6 +2,7 @@ package app.gui;
 
 import app.App;
 import app.config.SignedUser;
+import app.db.User;
 import app.gui.project.ProjectController;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -29,7 +30,7 @@ public class TabController {
 
         instance = this;
 
-        if(SignedUser.getUser().getUserType().equals("ADMIN")){
+        if(SignedUser.getUser().getUserType().equals("CENTRAL_ADMIN")){
             mainBox.getChildren().add(loadFXML("bar/admin-main-page-menu-bar"));
         } else{
             mainBox.getChildren().add(loadFXML("bar/main-page-menu-bar"));
@@ -90,6 +91,42 @@ public class TabController {
         }
     }
 
+    public void selectUsersAdministration() throws IOException {
+        ObservableList<Tab> tabs = mainTabPane.getTabs();
+        for (Tab tab : tabs) {
+            if (tab.isSelected()) {
+                try {
+                    tab.setContent(loadFXML("administration/users-administration-board"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void closeUsersAdministration() {
+        ObservableList<Tab> tabs = mainTabPane.getTabs();
+        for (Tab tab : tabs) {
+            if (tab.isSelected()) {
+                if (tab.getId().equals("projectTab")) {
+                    try {
+                        selectProjectTab();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    try {
+                        selectMainPageTab();
+                        tab.setContent(loadFXML("home/main-page"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
     public void selectProjectDetailsTab(String projectDef) throws IOException{
         setMenuBar("bar/project-details-menu-bar.fxml");
 
@@ -110,7 +147,7 @@ public class TabController {
 
     public void selectMainPageTab() throws IOException {
 
-        if(SignedUser.getUser().getUserType().equals("ADMIN")){
+        if(SignedUser.getUser().getUserType().equals("CENTRAL_ADMIN")){
             setMenuBar("bar/admin-main-page-menu-bar.fxml");
         } else{
             setMenuBar("bar/main-page-menu-bar.fxml");

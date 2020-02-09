@@ -42,4 +42,16 @@ public class RegistrationRequest {
 
         }
     }
+    public void delete() throws SQLException, DatabaseException {
+        String sql = "DELETE FROM registration_requests WHERE user_id = ?";
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
+
+            s.setInt(1, user_id);
+
+            if (s.executeUpdate() < 0) {
+                throw new DatabaseException("Nepodarilo sa odstranit riadok z tabulky");
+            }
+
+        }
+    }
 }

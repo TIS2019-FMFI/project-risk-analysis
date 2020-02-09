@@ -10,8 +10,8 @@
 <?import javafx.scene.image.Image?>
 <ImageView xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
-           fx:controller="app.gui.administration.UserAdministrationController"
-           fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="60.0">
+           fx:controller="app.gui.administration.UsersAdministrationTabController"
+           fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#init" AnchorPane.rightAnchor="60.0">
     <image>
         <Image url="@/app/images/users.png" />
     </image>

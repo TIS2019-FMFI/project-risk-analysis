@@ -158,7 +158,7 @@ public class Generate {
 //USERS
 
         ArrayList<List> users = new ArrayList();
-        users.add(Arrays.asList("Adam","Mrkvicka","adam@boge.com","nenavidimMrkvu","ADMIN",true,false));
+        users.add(Arrays.asList("Adam","Mrkvicka","adam@boge.com","nenavidimMrkvu","CENTRAL_ADMIN",true,false));
         users.add(Arrays.asList("Peter","Zahradka","peter@boge.com","pestujemTravicku","USER",true,false));
         users.add(Arrays.asList("Jozef","Strom","jozef@boge.com","stromySuLaska","PROJECT_ADMIN",true,false));
         users.add(Arrays.asList("Anna","Bobrova","anna@boge.com","boborIbaVMene","FEM",true,false));
@@ -220,11 +220,10 @@ public class Generate {
 
 //REMINDERS
 
-        sqlCreate = "CREATE TABLE reminders (" +
+        sqlCreate = "CREATE TABLE reminders (id int primary key auto_increment, " +
                 "text varchar(150) NOT NULL," +
-                "partNumber varchar(50)," +
-                "timePeriod varchar(50)," +
-                "isFEM BOOLEAN NOT NULL)";
+                "project_id int references projects(id), " +
+                "date date,closed boolean,unique_code varchar(150) UNIQUE)";
 
         try( Statement s = DbContext.getConnection().createStatement()) {
             s.executeUpdate("DROP TABLE IF EXISTS reminders");

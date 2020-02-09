@@ -15,7 +15,7 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.gui.auth.LoginController">
    <children>
-      <HBox alignment="CENTER" prefHeight="755.0" prefWidth="1000.0" style="-fx-background-color: #f9f9f9;">
+      <HBox alignment="CENTER" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #f9f9f9;">
          <children>
             <ImageView fitHeight="133.0" fitWidth="329.0" pickOnBounds="true" preserveRatio="true">
                <image>

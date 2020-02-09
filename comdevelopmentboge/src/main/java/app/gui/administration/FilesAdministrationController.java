@@ -15,6 +15,9 @@ import java.util.Date;
 
 public class FilesAdministrationController {
 
+    /**
+     * Export logov - záznamov používania aplikácie
+     */
     @FXML
     public void exportLogs(){
         String directoryName = "C:\\logs";

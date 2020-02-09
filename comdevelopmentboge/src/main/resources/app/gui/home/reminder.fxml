@@ -9,31 +9,31 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: red;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.gui.home.ReminderController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="250.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.gui.home.ReminderController">
     <children>
-        <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="300.0" style="-fx-background-color: red;">
+        <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="250.0" style="-fx-background-color: lightgray;">
             <children>
-                <FontAwesomeIcon fx:id="minimize" fill="WHITE" glyphName="MINUS" onMouseClicked="#minimize" size="2em" text="">
+                <FontAwesomeIcon fx:id="minimize" fill="black" glyphName="MINUS" onMouseClicked="#minimize" size="1.5em" text="">
                     <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                     </HBox.margin>
                 </FontAwesomeIcon>
-                <FontAwesomeIcon fx:id="close" fill="WHITE" glyphName="CLOSE" onMouseClicked="#close" size="2em">
+                <FontAwesomeIcon fx:id="close" fill="black" glyphName="CLOSE" onMouseClicked="#close" size="1.5em">
                     <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                     </HBox.margin>
                 </FontAwesomeIcon>
             </children>
         </HBox>
-        <Line endX="162.0" endY="-27.0" layoutX="98.0" layoutY="282.0" startX="-96.0" startY="-27.0" stroke="WHITE" strokeWidth="4.0" />
-        <JFXTextArea fx:id="text" editable="false" focusColor="WHITE" layoutX="20.0" layoutY="65.0" style="-fx-background-color: red; -fx-border-color: red; -fx-text-fill: white;" unFocusColor="RED" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="65.0">
+        <Line endX="112.0" endY="-27.0" layoutX="98.0" layoutY="232.0" startX="-96.0" startY="-27.0" stroke="black" strokeWidth="1.0" />
+        <JFXTextArea fx:id="text" editable="false" focusColor="lightgray" unFocusColor="lightgray" layoutX="20.0" layoutY="65.0" style="-fx-background-color: lightgray; -fx-border-color: lightgray; -fx-text-fill: black;"  AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="65.0">
             <font>
-                <Font size="24.0" />
+                <Font size="16.0" />
             </font>
         </JFXTextArea>
-        <Label fx:id="name" layoutY="254.0" prefHeight="50.0" prefWidth="300.0" textFill="WHITE">
+        <Label fx:id="name" layoutY="204.0" prefHeight="50.0" prefWidth="250.0" textFill="black">
             <font>
-                <Font name="System Bold" size="20.0" />
+                <Font size="16.0" />
             </font>
             <padding>
                 <Insets left="15.0" />
