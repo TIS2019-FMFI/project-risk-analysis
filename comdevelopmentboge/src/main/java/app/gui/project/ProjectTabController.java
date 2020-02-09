@@ -1,18 +1,26 @@
 package app.gui.project;
 
 import app.App;
+import app.db.Project;
+import app.db.ProjectCosts;
 import app.gui.TabController;
+import app.service.ProjectCostsService;
 import app.service.ProjectService;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import com.jfoenix.controls.*;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class ProjectTabController{
 
@@ -20,29 +28,23 @@ public class ProjectTabController{
     public static ProjectTabController getInstance(){return instance;}
 
     @FXML
-    private JFXListView<Label> projectListView;
+    private JFXListView<Pane> projectListView;
 
     @FXML
     public void initialize() {
 
         instance = this;
 
-        ArrayList<String> projectNumbers = ProjectService.getProjectService().getAllProjectNumbers();
-        for(String number : projectNumbers) {
-            Label label = new Label();
-            label.setId(number);
-            label.setText(number);
-            projectListView.getItems().add(label);
-        }
+        reloadList();
 
         projectListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(MouseEvent event) {
-                Label label = projectListView.getSelectionModel().getSelectedItem();
-                if(label != null) {
+                Pane pane = projectListView.getSelectionModel().getSelectedItem();
+                if(pane != null) {
                     try {
-                        showProjectDetails(label.getText());
+                        showProjectDetails(pane.getId());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -57,16 +59,64 @@ public class ProjectTabController{
         TabController.getInstance().selectProjectDetailsTab(projectDef);
     }
 
+    private Pane setProject(Project project, HashSet<String> projectsToBeWarned) throws IOException {
+        FXMLLoader loader = loadFXML("project-list-item");
+        Pane pane = loader.load();
+        pane.setId(project.getProjectNumber());
+        Text projectNumberTxt = (Text) pane.lookup("#projectNumber");
+        projectNumberTxt.setText(project.getProjectNumber());
+
+        Text projectNameTxt = (Text) pane.lookup("#projectName");
+        String projectName = project.getProjectName();
+        projectNameTxt.setText((projectName==null)?"":projectName);
+
+        Image image = new Image(App.class.getResourceAsStream("/app/images/warning.png"));
+        if(!projectsToBeWarned.contains(project.getProjectNumber())){
+            image = null;
+        }
+
+        ImageView warningIcon = (ImageView) pane.lookup("#warningIcon");
+        if(image != null){
+            warningIcon.setImage(image);
+        }
+        return pane;
+    }
+
+    private FXMLLoader loadFXML(String fxml) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(ProjectTabController.class.getResource(fxml + ".fxml"));
+        return fxmlLoader;
+    }
+
 
     public void reloadList(){
-        ArrayList<String> projectNumbers = ProjectService.getProjectService().findProjectsByCriteria();
-        projectListView.getItems().clear();
-        for(String number : projectNumbers) {
-            Label label = new Label();
-            label.setId(number);
-            label.setText(number);
-            projectListView.getItems().add(label);
-            System.out.println(number);
+        ArrayList<Project> projects= ProjectService.getProjectService().getAllPRojects();
+        HashSet<String> projectsToBeWarned = getProjectsToBeWarned();
+
+        for(Project project: projects) {
+            try {
+                projectListView.getItems().add(setProject(project, projectsToBeWarned));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    private HashSet<String> getProjectsToBeWarned(){
+        HashSet<ProjectCosts> costsList = new HashSet<>();
+        try {
+            costsList.addAll(ProjectCostsService.getInstance().getDDCosts());
+            costsList.addAll(ProjectCostsService.getInstance().getPrototypeCosts());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        //get numbers of projects that have exceeded the limit in DD and prototype costs respec.
+
+        HashSet<String> projectsToBeWarned = new HashSet<>();
+        for(ProjectCosts projectCosts : costsList){
+            projectsToBeWarned.add(projectCosts.getProjectNumber());
+        }
+
+        return projectsToBeWarned;
     }
 }

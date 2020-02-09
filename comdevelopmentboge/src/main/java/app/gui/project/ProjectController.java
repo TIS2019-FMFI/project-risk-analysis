@@ -103,7 +103,7 @@ public class ProjectController {
 
         //if admin or project admin are signed in, show edit images
         List<Integer> projectAdmins = ProjectAdministrationService.getInstance().getProjectAdminIds(projectDef);
-        if(SignedUser.getUser().getUserType().equals("ADMIN") || projectAdmins.contains(SignedUser.getUser().getId())){
+        if(SignedUser.getUser().getUserType().equals("CENTRAL_ADMIN") || projectAdmins.contains(SignedUser.getUser().getId())){
             editPane.setVisible(true);
         }else{
             editPane.setVisible(false);
