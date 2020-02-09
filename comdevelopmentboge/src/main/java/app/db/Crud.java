@@ -28,8 +28,10 @@ public abstract class Crud<T> {
         s.executeUpdate();
         if (cisloStlpca != null) {
             try(ResultSet r = sql.getGeneratedKeys()) {
-                r.next();
-                return r.getInt(cisloStlpca);
+                if(r.next()) {
+                    return r.getInt(cisloStlpca);
+                }
+
             }
         }
         return null;
