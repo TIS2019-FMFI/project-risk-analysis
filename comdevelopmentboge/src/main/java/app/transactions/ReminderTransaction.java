@@ -43,7 +43,8 @@ public class ReminderTransaction {
 
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
-            throw new DatabaseException();
+            e.printStackTrace();
+            //throw new DatabaseException();
 
         } finally {
             DbContext.getConnection().setAutoCommit(true);

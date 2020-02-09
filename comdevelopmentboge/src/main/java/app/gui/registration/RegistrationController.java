@@ -87,8 +87,10 @@ public class RegistrationController {
             openWaitingPage();
         } catch (MyException e) {
             MyAlert.showError(e.getMessage());
+            e.printStackTrace();
         } catch (SQLException e) {
             MyAlert.showError(DatabaseException.ERROR);
+            e.printStackTrace();
         }
     }
     private void openWaitingPage() throws IOException {
@@ -112,6 +114,7 @@ public class RegistrationController {
             }
         } catch (SQLException e) {
             MyAlert.showError(DatabaseException.ERROR);
+            e.printStackTrace();
         }
     }
 

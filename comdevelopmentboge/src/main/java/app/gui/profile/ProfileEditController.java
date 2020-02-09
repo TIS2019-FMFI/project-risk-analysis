@@ -114,7 +114,7 @@ public class ProfileEditController {
     }
 
     @FXML
-    private void close(MouseEvent event) {
+    private void close(MouseEvent event) throws IOException {
         TabController.getInstance().closeProfile();
     }
 

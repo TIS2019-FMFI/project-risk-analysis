@@ -91,7 +91,8 @@ public class TabController {
             }
         }
     }
-    public void selectProfile() {
+    public void selectProfile() throws IOException {
+        selectMainPageTab();
         ObservableList<Tab> tabs = mainTabPane.getTabs();
         for (Tab tab : tabs) {
             if (tab.getId().equals("profile")) {
@@ -99,7 +100,7 @@ public class TabController {
             }
         }
     }
-    public void closeProfile() {
+    public void closeProfile() throws IOException {
         ObservableList<Tab> tabs = mainTabPane.getTabs();
         for (Tab tab : tabs) {
             if (tab.getId().equals("mainPageTab")) {
@@ -108,7 +109,8 @@ public class TabController {
         }
     }
 
-    public void selectUsersAdministration()  {
+    public void selectUsersAdministration() throws IOException {
+        selectMainPageTab();
         ObservableList<Tab> tabs = mainTabPane.getTabs();
         for (Tab tab : tabs) {
             if (tab.getId().equals("administration")) {
@@ -117,7 +119,7 @@ public class TabController {
         }
     }
 
-    public void closeUsersAdministration() {
+    public void closeUsersAdministration() throws IOException {
         ObservableList<Tab> tabs = mainTabPane.getTabs();
         for (Tab tab : tabs) {
             if (tab.getId().equals("mainPageTab")) {

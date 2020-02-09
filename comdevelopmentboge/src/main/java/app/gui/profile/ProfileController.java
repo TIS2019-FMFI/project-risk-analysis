@@ -19,7 +19,7 @@ public class ProfileController {
      * Nastavenie scény
      * @throws IOException
      */
-    public void init() {
+    public void init() throws IOException {
         TabController.getInstance().selectProfile();
     }
 

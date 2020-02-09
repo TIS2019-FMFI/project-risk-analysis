@@ -30,7 +30,8 @@ public class Registration {
 
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
-            throw new DatabaseException();
+            //throw new DatabaseException();
+            e.printStackTrace();
         } finally {
             DbContext.getConnection().setAutoCommit(true);
         }
@@ -51,7 +52,8 @@ public class Registration {
 
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
-            throw new DatabaseException();
+            //throw new DatabaseException();
+            e.printStackTrace();
         } finally {
             DbContext.getConnection().setAutoCommit(true);
         }
@@ -93,7 +95,8 @@ public class Registration {
             SignedUser.setUser(user);
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
-            throw new DatabaseException();
+            //throw new DatabaseException();
+            e.printStackTrace();
         } finally {
             DbContext.getConnection().setAutoCommit(true);
         }

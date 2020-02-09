@@ -39,6 +39,9 @@ import java.util.stream.Collectors;
 
 public class HomeController {
 
+    /**
+     *
+     */
     private Map<String, List<ProjectReminder>> reminders;
     private List<RegistrationRequest> requests;
     private List<String> hidden_projects_codes = new ArrayList<>();
@@ -169,8 +172,10 @@ public class HomeController {
                     ReminderTransaction.sentReminders();
                 } catch (DatabaseException | GmailMessagingException e ) {
                     MyAlert.showError(e.getMessage());
+                    e.printStackTrace();
                 } catch (SQLException e) {
                     MyAlert.showError(DatabaseException.ERROR);
+                    e.printStackTrace();
                 }
             }
         };
@@ -181,8 +186,10 @@ public class HomeController {
             ReminderTransaction.loadReminders();
         } catch (SQLException e) {
             MyAlert.showError(DatabaseException.ERROR);
+            e.printStackTrace();
         } catch (DatabaseException e) {
             MyAlert.showError(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -202,6 +209,7 @@ public class HomeController {
 
         } catch (SQLException e) {
             MyAlert.showError(DatabaseException.ERROR);
+            e.printStackTrace();
         }
 
     }
@@ -211,6 +219,7 @@ public class HomeController {
             requests = RegistrationRequestService.getInstance().findAll();
         } catch (SQLException e) {
             MyAlert.showError(DatabaseException.ERROR);
+            e.printStackTrace();
         }
     }
 
@@ -255,8 +264,10 @@ public class HomeController {
             MyAlert.showSuccess("Žiadosť užívateľa bola úspešne schválená");
         } catch (SQLException e) {
             MyAlert.showError(DatabaseException.ERROR);
+            e.printStackTrace();
         } catch (DatabaseException e) {
             MyAlert.showError(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -272,8 +283,10 @@ public class HomeController {
                 LogService.createLog("Zrušenie žiadosti o registráciu používateľa " + fullname);
             } catch (SQLException e) {
                 MyAlert.showError(DatabaseException.ERROR);
+                e.printStackTrace();
             } catch (DatabaseException e) {
                 MyAlert.showError(e.getMessage());
+                e.printStackTrace();
             }
         }
 
@@ -314,6 +327,7 @@ public class HomeController {
                 LogService.createLog("Uzavretie notifikácie týkajúcej sa projektu: " + reminder.getProjectNumber());
             } catch (SQLException e) {
                 MyAlert.showError(DatabaseException.ERROR);
+                e.printStackTrace();
             }
         }
 

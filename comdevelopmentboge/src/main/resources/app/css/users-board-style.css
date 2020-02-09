@@ -4,10 +4,10 @@
     -jfx-cell-vertical-margin: 0.0;
     -fx-padding: 0.0;
     -fx-background-color: TRANSPARENT;
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 }
 .users-board-list:selected, .users-board:selected:focused {
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-background-color: transparent;
 }
 
@@ -19,6 +19,9 @@
 
 .users-board-list .label {
     -fx-text-fill: white;
+}
+.users-board-list .username {
+    -fx-text-fill: black;
 }
 .users-board-list .jfx-list-cell .jfx-rippler {
     -jfx-rippler-fill: WHITESMOKE;
