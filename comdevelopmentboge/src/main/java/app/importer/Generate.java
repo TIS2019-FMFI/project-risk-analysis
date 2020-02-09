@@ -206,6 +206,7 @@ public class Generate {
 
 //ADMINISTRATION
         sqlCreate = "CREATE TABLE administration(" +
+                "id int primary key auto_increment, " +
                 "user_id int references users(id),"+
                 "project_id int references projects(id)"+
                 ")";
@@ -237,7 +238,8 @@ public class Generate {
 
 //REGISTRATION REQUESTS
 
-        sqlCreate = "CREATE TABLE registration_requests (" +
+        sqlCreate = "CREATE TABLE registration_requests ( " +
+                "id int primary key auto_increment," +
                 "user_id int references users(id),"+
                 "text varchar(150) NOT NULL)";
 

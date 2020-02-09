@@ -4,22 +4,21 @@ import app.App;
 import app.db.Project;
 import app.db.User;
 import app.exception.DatabaseException;
+import app.gui.MyAlert;
 import app.service.AdministrationService;
 import app.transactions.UserTypeChangeTransaction;
 import com.jfoenix.controls.JFXListView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 public class DialogConfirmController {
@@ -43,10 +42,12 @@ public class DialogConfirmController {
      * user - užívateľ, ktorého rolu chceme zmeniť
      * projectsToSave - projekty, ktoré pridelíme užívateľovi
      * newType - nová rola, ktorú chceme užívateľovi nastaviť
-     * thisStage - aktuálne otvorené dialógové okno
+     * stages - otvorené dialógové okná
      */
     private User user;
-    private List<Project> projectsToSave;
+    private List<Project> projects;
+    private List<String> projectsToAdd;
+    private List<String> projectsToDelete;
     private User.USERTYPE newType;
     private List<Stage> stages;
 
@@ -60,21 +61,24 @@ public class DialogConfirmController {
      * @throws SQLException
      * @throws IOException
      */
-    public void setDialog(List<Stage> stages, User user, List<Project> projects) throws IOException {
+    public void setDialog(List<Stage> stages, User user, List<Project> projects, List<String> projectsToAdd, List<String> projectsToDelete) throws IOException {
         instance = this;
         this.stages = stages;
         this.user = user;
-        this.projectsToSave = projects;
+        this.projects = projects;
+        this.projectsToAdd = projectsToAdd;
+        this.projectsToDelete = projectsToDelete;
         this.newType = User.USERTYPE.PROJECT_ADMIN;
         fullName.setText(user.getFullName());
         userType.setText("Projektový admin");
 
-        for(Project project : projectsToSave) {
+        for(Project project : projects) {
             projectsListView.getItems().add(setPane(project.getProjectNumber()));
         }
         projectsListView.setPrefWidth(App.getScene().getWidth());
         projectsListView.setPrefHeight(App.getScene().getHeight() - 80);
     }
+
 
     /**
      * Nastavenie položky zoznamu projektov, teda konkrétneho projektu
@@ -107,7 +111,7 @@ public class DialogConfirmController {
      */
     @FXML
     private void close(MouseEvent event) {
-        stages.get(0).close();
+        stages.get(stages.size()-1).close();
     }
 
     /**
@@ -118,29 +122,23 @@ public class DialogConfirmController {
      */
     @FXML
     private void submit(MouseEvent event) throws SQLException, DatabaseException {
-        if(!newType.equals(user.getUserType())) {
-            UserTypeChangeTransaction.changeProjects(user, difference());
+        submitDialog("Chcete potvrdiť zmeny používateľa " + user.getFullName() + "?");
+    }
+
+    private void submitDialog(String text) throws DatabaseException, SQLException {
+        Alert alert = new Alert(Alert.AlertType.WARNING, text, ButtonType.OK);
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+            if(!newType.equals(user.getUserType())) {
+                UserTypeChangeTransaction.changeProjects(user, projectsToAdd, projectsToDelete);
+            }
+            UsersAdministrationItemController.getInstance().closeAllDialogs(stages);
         }
-        UsersAdministrationItemController.getInstance().closeAllDialogs(stages);
+        else {
+            alert.close();
+        }
+
     }
 
-    /**
-     * Projekty, ktoré chceme vymazať, teda admin projektu nebude užívateľ
-     * @return
-     * @throws DatabaseException
-     * @throws SQLException
-     */
-    private List<Project> difference() throws DatabaseException, SQLException {
-        List<Project> allProjects = AdministrationService.getAdministrationService().findProjectsByAdmin(user.getFullName());
-
-        Set<String> projectNums = projectsToSave.stream()
-                .map(Project::getProjectNumber)
-                .collect(Collectors.toSet());
-        List<Project> projectsToDelete = allProjects.stream()
-                .filter(project -> !projectNums.contains(project.getProjectNumber()))
-                .collect(Collectors.toList());
-
-        return projectsToDelete;
-    }
 
 }

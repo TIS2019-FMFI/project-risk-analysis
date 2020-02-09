@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Configuration {
-    private static  String url = "jdbc:mysql://localhost:3307/project_risk_analysis?serverTimezone=UTC";
+    private static  String url = "jdbc:mysql://localhost:3307/project_risk_analysis?serverTimezone=GMT%2B1&characterEncoding=utf-8";
     private static  String username = "root";
     private static String password = "usbw";
 

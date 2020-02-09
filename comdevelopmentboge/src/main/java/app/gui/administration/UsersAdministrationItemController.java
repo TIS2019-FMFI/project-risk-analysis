@@ -13,7 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -194,6 +193,11 @@ public class UsersAdministrationItemController {
         }
     }
 
+    /**
+     *
+     * @param stage - nastavíme, čo sa stane po zatvorení (kliknutí na X) tohto okna
+     * @param stages - všetky otvorené dialógové okná
+     */
     void onCloseHandler(Stage stage, List<Stage> stages) {
         stage.setOnCloseRequest(E -> {
             closeAllDialogs(stages);

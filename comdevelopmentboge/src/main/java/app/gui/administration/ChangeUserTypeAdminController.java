@@ -12,7 +12,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -35,7 +34,7 @@ public class ChangeUserTypeAdminController {
 
 
     /**
-     * thisStage - aktuálne otvorené dialógové okno
+     * stages - otvorené dialógové okná
      */
      List<Stage> stages;
 
@@ -71,7 +70,7 @@ public class ChangeUserTypeAdminController {
      */
     @FXML
     private void close(MouseEvent event) {
-        stages.get(0).close();
+        stages.get(stages.size()-1).close();
     }
 
     /**

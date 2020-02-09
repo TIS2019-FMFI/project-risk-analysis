@@ -2,6 +2,7 @@ package app.gui.auth;
 
 import app.App;
 import app.config.SignedUser;
+import app.gui.MyAlert;
 import app.gui.TabController;
 import app.gui.home.HomeController;
 import app.gui.registration.RegistrationController;
@@ -23,16 +24,33 @@ import java.sql.SQLException;
 
 public class LoginController {
 
-    boolean passwordShown;
+    /**
+     * passwordShown - boolovská hodnota zobrazenia hesla
+     */
+    private boolean passwordShown;
 
-    Image eyeOn = new Image("app/images/eyeOn.png");
-    Image eyeOff = new Image("app/images/eyeOff.png");
+    /**
+     * eyeOn - nepreškrtnutý znak oka, heslo je viditeľné
+     * eyeOff - preškrtnutý znak oka, heslo nie je viditeľné
+     */
+    private Image eyeOn = new Image("app/images/eyeOn.png");
+    private Image eyeOff = new Image("app/images/eyeOff.png");
 
+    /**
+     * email - grafický komponent, ktorý zobrazuje email užívateľa
+     * eye - grafický komponent, ktorý zobrazuje obrázok oka, teda preškrtnuté alebo nepreškrtnuté oko
+     * passwordField - grafický komponent, ktorý zobrazuje heslo vo forme bodiek
+     * passwordVisible - grafický komponent, ktorý zobrazuje viditeľné heslo
+     */
     @FXML private TextField email;
     @FXML private ImageView eye;
     @FXML private PasswordField passwordField;
     @FXML private TextField passwordVisible;
 
+    /**
+     * Zobrazenie alebo skrytie hesla
+     * @param event
+     */
     @FXML
     private void showPassword(MouseEvent event) {
         passwordShown = !passwordShown;
@@ -51,7 +69,9 @@ public class LoginController {
 
     }
 
-
+    /**
+     * Nastavenie grafických komponentov pri úvodnej obrazovke
+     */
     public void initialize() {
         passwordShown = false;
         eye.setImage(eyeOff);
@@ -59,15 +79,29 @@ public class LoginController {
         passwordField.setVisible(true);
     }
 
+    /**
+     * Otvorenie registrácie
+     * @param event
+     * @throws IOException
+     */
     public void openRegistration(MouseEvent event) throws  IOException {
         App.setRoot("gui/registration/registration");
     }
 
 
+    /**
+     * Získanie hesla z grafického komponentu
+     * @return
+     */
     private String getPasswordText() {
         return passwordShown ? passwordVisible.getText() : passwordField.getText();
     }
 
+
+    /**
+     * Prihlásenie užívateľa a zobrazenie stránky podľa prihláseného užívateľa
+     * @param event
+     */
     @FXML
     private void login(MouseEvent event) {
         try {
@@ -80,25 +114,23 @@ public class LoginController {
             }
 
         } catch (LoginException e) {
-            showAlert(e.getMessage());
+            MyAlert.showError(e.getMessage());
         } catch (SQLException e) {
-            showAlert("Nepodarilo sa spojenie s databázou. Vyskúšajte ešte raz");
+            MyAlert.showError("Nepodarilo sa spojenie s databázou. Vyskúšajte ešte raz");
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Otvorenie stránky, pokiaľ užívateľ po registrácii ešte nie je schválený
+     * @throws IOException
+     */
     private void openWaitingPage() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(RegistrationController.class.getResource("registration-waiting.fxml"));
         App.setRoot((Parent) fxmlLoader.load());
     }
 
-    private void showAlert(String text) {
-        Alert alert = new Alert(Alert.AlertType.ERROR, text, ButtonType.OK);
-        alert.showAndWait();
-        if (alert.getResult() == ButtonType.OK) {
-            alert.close();
-        }
-    }
 
 }

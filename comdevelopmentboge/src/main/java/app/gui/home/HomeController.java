@@ -156,7 +156,7 @@ public class HomeController {
     }
 
     private void setWelcome() {
-        welcome.setText("Vitaj " + SignedUser.getUser().getFullName() + "!");
+        welcome.setText("Vitaj " + SignedUser.getUser().getName() + "!");
     }
 
     private void setNotificationScene() throws IOException {

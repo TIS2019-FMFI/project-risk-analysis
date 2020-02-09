@@ -26,19 +26,19 @@ public class ProfileEditTransaction {
         try {
             //skontroluje spravny format emailu
             validateEmail(email);
-
             SignedUser.getUser().setEmail(email);
             SignedUser.getUser().update();
 
             //commitne zmeny do databazy
             DbContext.getConnection().commit();
+            MyAlert.showSuccess("Email bol úspešne zmenený");
 
-
-        } catch (SQLException | ProfileChangeException e) {
+        } catch (SQLException e) {
             SignedUser.getUser().setEmail(previousEmail);
-            MyAlert.showError( "Email sa nepodarilo zmeniť");
+            MyAlert.showError("Email sa nepodarilo zmeniť");
             DbContext.getConnection().rollback();
-            throw e;
+        }   catch (ProfileChangeException e) {
+            MyAlert.showError(e.getMessage());
         } finally {
             DbContext.getConnection().setAutoCommit(true);
         }
@@ -57,18 +57,17 @@ public class ProfileEditTransaction {
         try {
             //skontroluje spravny format emailu
             validatePassword(password);
-
             SignedUser.getUser().setPassword(MD5Password(password));
-
             SignedUser.getUser().update();
             //commitne zmeny do databazy
             DbContext.getConnection().commit();
-
-        } catch (SQLException | ProfileChangeException e) {
+            MyAlert.showSuccess("Heslo bolo úspešne zmenené");
+        } catch (SQLException e) {
             SignedUser.getUser().setPassword(previousPassword);
-            MyAlert.showError( "Heslo sa nepodarilo zmeniť");
+            MyAlert.showError("Heslo sa nepodarilo zmeniť");
             DbContext.getConnection().rollback();
-            throw e;
+        } catch (ProfileChangeException e) {
+            MyAlert.showError(e.getMessage());
         } finally {
             DbContext.getConnection().setAutoCommit(true);
         }
@@ -92,7 +91,7 @@ public class ProfileEditTransaction {
      */
     private static void validatePassword(String password) throws ProfileChangeException {
         if (!isPasswordFormatValid(password)) {
-            throw new ProfileChangeException("Heslo musí obsahovať aspoň jedno číslo, jedno písmeno a musí mať dĺžku aspoň 6 znakov");
+            throw new ProfileChangeException("Heslo musí obsahovať aspoň jedno číslo, jedno písmeno\n a musí mať dĺžku aspoň 6 znakov");
         }
     }
 

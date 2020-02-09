@@ -12,7 +12,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -35,8 +34,9 @@ public class ChangeUserTypeController {
     @FXML private RadioButton femButton;
     @FXML private RadioButton userButton;
 
+
     /**
-     * thisStage - aktuálne otvorené dialógové okno
+     * stages - otvorené dialógové okná
      */
     List<Stage> stages;
     /**
@@ -73,7 +73,7 @@ public class ChangeUserTypeController {
      */
     @FXML
     private void close(MouseEvent event) {
-        stages.get(0).close();
+        stages.get(stages.size()-1).close();
     }
 
     /**
@@ -89,12 +89,10 @@ public class ChangeUserTypeController {
             chooseAdminType();
         }
         else if (femButton.isSelected()) {
-            changeUserType(User.USERTYPE.FEM);
-            UsersAdministrationItemController.getInstance().closeAllDialogs(this.stages);
+            showConfirmDialog(User.USERTYPE.FEM);
         }
         else if (userButton.isSelected()) {
-            changeUserType(User.USERTYPE.USER);
-            UsersAdministrationItemController.getInstance().closeAllDialogs(this.stages);
+            showConfirmDialog(User.USERTYPE.USER);
         }
         else {
             MyAlert.showWarning("Zvoľ typ užívateľa");
@@ -111,6 +109,21 @@ public class ChangeUserTypeController {
             UserTypeChangeTransaction.changeUserType(user, userType);
             user.setUserType(userType);
         }
+    }
+
+    private void showConfirmDialog(User.USERTYPE usertype) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("administration-no-projects-confirm-dialog.fxml"));
+        Parent parent = fxmlLoader.load();
+        DialogNoProjectsConfirmDialogController dialogController = fxmlLoader.getController();
+
+        Scene scene = new Scene(parent, 300, 200);
+        Stage stage = new Stage();
+        stages.add(stage);
+        UsersAdministrationItemController.getInstance().onCloseHandler(stages.get(stages.size()-1), this.stages);
+        dialogController.setDialogNoProjects(stages, user, usertype);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 
     /**

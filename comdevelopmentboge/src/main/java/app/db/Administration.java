@@ -36,7 +36,6 @@ public class Administration extends Crud<Administration>{
     }
 
     public void setProjectId(Integer project_id) {
-        System.out.println("setting pr id " + project_id);
         this.project_id = project_id;
     }
 

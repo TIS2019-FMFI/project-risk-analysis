@@ -23,8 +23,6 @@ public class AdministrationService extends Service<Administration>{
         a.setId(r.getInt("id"));
         a.setUserId(r.getInt("user_id"));
         a.setProjectId(r.getInt("project_id"));
-        System.out.println("AS " + a.getProjectId());
-        System.out.println("AS " + a.getUserId());
         return a;
     }
 

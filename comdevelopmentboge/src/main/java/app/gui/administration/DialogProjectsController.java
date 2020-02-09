@@ -4,13 +4,11 @@ import app.App;
 import app.db.Project;
 import app.db.User;
 import app.exception.DatabaseException;
-import app.gui.MyAlert;
 import app.service.AdministrationService;
 import app.service.ProjectService;
 import app.transactions.UserTypeChangeTransaction;
 import com.jfoenix.controls.JFXListView;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -21,11 +19,14 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class DialogProjectsController {
@@ -47,14 +48,19 @@ public class DialogProjectsController {
     @FXML private JFXListView<Pane> deleteProjectsListView;
     @FXML ComboBox projectsBox;
 
+    @FXML Text projectsUser;
+
 
     /**
      * user - užívateľ, ktorého rolu chceme zmeniť
      * projects - projekty, ktorých je užívateľ adminom
-     * thisStage - aktuálne otvorené dialógové okno
+     * stages - otvorené dialógové okná
      */
     private User user;
     private List<Project> projects;
+    private List<String> projectsToAdd = new ArrayList<>();
+    private List<String> projectsToDelete = new ArrayList<>();
+    private ArrayList<String> freeProjects;
     List<Stage> stages;
 
     /**
@@ -67,6 +73,8 @@ public class DialogProjectsController {
     public void init(User user) throws SQLException, IOException {
         this.user = user;
         instance = this;
+        projectsUser.setText("Projekty používateľa " + user.getFullName());
+
         this.projects = AdministrationService.getAdministrationService().findProjectsByAdmin(user.getFullName());
         for(Project project : projects) {
             projectsListView.getItems().add(setPane(project.getProjectNumber()));
@@ -84,10 +92,11 @@ public class DialogProjectsController {
      * @throws SQLException
      * @throws IOException
      */
-    public void setProjectAdminDialog(List<Stage> stages, User user) throws DatabaseException, SQLException, IOException {
+    public void setProjectAdminDialog(List<Stage> stages, User user) throws SQLException, IOException {
         this.stages = stages;
         this.user = user;
         instance = this;
+        this.freeProjects = ProjectService.getProjectService().getFreeProjectsNums();
         this.projects = AdministrationService.getAdministrationService().findProjectsByAdmin(user.getFullName());
         for(Project project : projects) {
             deleteProjectsListView.getItems().add(setProjectAdminPane(project.getProjectNumber()));
@@ -145,10 +154,13 @@ public class DialogProjectsController {
      */
     @FXML
     private void close(MouseEvent event) {
-        stages.get(0).close();
+        stages.get(stages.size()-1).close();
     }
 
-
+    /**
+     * Zatvorenie otvorených dialógových okien
+     * @param event
+     */
     @FXML
     private void closeProjects(MouseEvent event) {
         ((Node)(event.getSource())).getScene().getWindow().hide();
@@ -181,44 +193,62 @@ public class DialogProjectsController {
         Stage stage = new Stage();
         stages.add(stage);
         UsersAdministrationItemController.getInstance().onCloseHandler(stages.get(stages.size()-1), this.stages);
-        dialogController.setDialog(stages, user, projects);
+        dialogController.setDialog(stages, user, projects, projectsToAdd, projectsToDelete);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();
     }
 
 
-
-
+    /**
+     * Pridanie projektu užívateľovi
+     * @param event
+     * @throws DatabaseException
+     * @throws SQLException
+     */
     @FXML
-    public void addProject(MouseEvent event) throws DatabaseException, SQLException {
+    public void addProject(MouseEvent event) throws IOException {
         if(projectsBox.getValue() != null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Chceš prideliť projekt " +  projectsBox.getValue().toString() +
-                    " užívateľovi " + user.getFullName() + "?", ButtonType.OK, ButtonType.CANCEL);
-            alert.showAndWait();
-            if (alert.getResult() == ButtonType.OK) {
-                UserTypeChangeTransaction.addProject(user, projectsBox.getValue().toString());
+            String projectNum = projectsBox.getValue().toString();
+            projectsToAdd.add(projectNum);
+            Project project = ProjectService.getProjectService().findProjectByNum(projectNum);
+            projects.add(project);
+            if(projectsToDelete.contains(projectNum)) {
+                projectsToDelete.remove(projectNum);
             }
-            if (alert.getResult() == ButtonType.CANCEL) {
-                alert.close();
-            }
+            freeProjects.remove(projectNum);
+            reloadDeleteProjectsListView();
+            reloadAddProjects();
         }
     }
 
+    public void deleteProject(String projectNum) throws IOException, SQLException {
+        projects = projects.stream()
+                .filter(i -> !i.getProjectNumber().equals(projectNum))
+                .collect(Collectors.toList());
+        reloadDeleteProjectsListView();
+        projectsToDelete.add(projectNum);
+        if(projectsToAdd.contains(projectNum)) {
+            projectsToAdd.remove(projectNum);
+        }
+        freeProjects.add(projectNum);
+        reloadAddProjects();
+    }
+
+    /**
+     * Opätovné načítanie projektov, ktoré nemajú žiadneho admina v grafickom komponente ComboBox
+     */
     public void reloadAddProjects() {
         projectsBox.getItems().clear();
-        projectsBox.getItems().addAll(FXCollections.observableArrayList(ProjectService.getProjectService().getFreeProjectsNums()));
+        projectsBox.getItems().addAll(FXCollections.observableArrayList(freeProjects));
         projectsBox.getItems().add(0,null);
     }
 
-    public void reloadProjectsDelete() throws SQLException, IOException {
+    private void reloadDeleteProjectsListView() throws IOException {
         deleteProjectsListView.getItems().clear();
-        this.projects = AdministrationService.getAdministrationService().findProjectsByAdmin(user.getFullName());
         for(Project project : projects) {
             deleteProjectsListView.getItems().add(setProjectAdminPane(project.getProjectNumber()));
         }
     }
-
-
 
 }

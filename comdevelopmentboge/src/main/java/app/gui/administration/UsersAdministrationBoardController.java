@@ -3,16 +3,13 @@ package app.gui.administration;
 import app.App;
 import app.db.User;
 import app.gui.TabController;
-import app.service.ProjectService;
 import app.service.UserService;
 import com.jfoenix.controls.JFXListView;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -42,8 +39,6 @@ public class UsersAdministrationBoardController {
     @FXML
     public void initialize() throws IOException, SQLException {
         instance = this;
-        System.out.println(TabController.getInstance());
-
         List<User> users = UserService.getInstance().findAllUsers();
         for(User user : users) {
             userListView.getItems().add(setUser(user));

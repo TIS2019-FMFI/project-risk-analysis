@@ -12,7 +12,13 @@ import java.sql.SQLException;
 
 public class LoginTransaction {
 
-
+    /**
+     * Transakcia prihlásania
+     * @param email
+     * @param password
+     * @throws SQLException
+     * @throws LoginException
+     */
     public static void login(String email, String password) throws SQLException, LoginException {
         try {
             //najde uzivatela v databaze
@@ -35,7 +41,14 @@ public class LoginTransaction {
         }
     }
 
-
+    /**
+     * Overenie hesla
+     * @param user
+     * @param password
+     * @throws NoSuchAlgorithmException
+     * @throws UnsupportedEncodingException
+     * @throws LoginException
+     */
     private static void checkPassword(User user, String password) throws NoSuchAlgorithmException, UnsupportedEncodingException, LoginException {
         String md = org.apache.commons.codec.digest.DigestUtils.md5Hex(password);
         boolean isCorrect = user.getPassword().equals(md);
@@ -48,7 +61,11 @@ public class LoginTransaction {
         }
     }
 
-
+    /**
+     * Overenie, či je používateľ v systéme
+     * @param user
+     * @throws LoginException
+     */
     private static void isInSystem(User user) throws LoginException {
         if (user == null) {
             throw new LoginException("Používateľ neexistuje");
