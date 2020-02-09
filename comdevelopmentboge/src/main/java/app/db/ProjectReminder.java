@@ -6,10 +6,11 @@ import app.exception.DatabaseException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ProjectReminder {
+public class ProjectReminder extends Crud<ProjectReminder> {
 
     private String projectNumber;
     private Integer project_id;
@@ -19,6 +20,7 @@ public class ProjectReminder {
     private Boolean minimized = false;
     private Date date;
     private String unique_code;
+    private Boolean sent;
 
 
     public ProjectReminder() {
@@ -89,54 +91,44 @@ public class ProjectReminder {
         this.unique_code = unique_code;
     }
 
-
-    public void insert() throws SQLException, DatabaseException {
-        String sql = "INSERT INTO reminders(text,project_id,date,closed,unique_code) VALUES(?,?,?,?,?) on duplicate key update unique_code = unique_code ;";
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
-
-            s.setString(1, getText());
-            s.setInt(2, getProject_id());
-            java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-            s.setDate(3, date);
-            s.setBoolean(4, false);
-            s.setString(5,unique_code);
-
-
-            if (s.executeUpdate() > 0) {
-                setId(getLastInsertedID());
-            } else {
-                throw new DatabaseException("Nepodarilo sa vlozit riadok do tabulky");
-            }
-
-        }
+    public Boolean getSent() {
+        return this.sent;
     }
 
-    public void update() throws SQLException, DatabaseException {
-        String sql = "UPDATE reminders set closed = ? where id = ?";
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
-
-            s.setBoolean(1, getIsClosed());
-            s.setInt(2, getId());
-
-            if (s.executeUpdate() < 0) {
-                throw new DatabaseException("Nepodarilo sa upravit riadok v tabulke");
-            }
-
-        }
+    public void setSent(final Boolean sent) {
+        this.sent = sent;
     }
 
-    private Integer getLastInsertedID() throws SQLException {
-        String sql = "SELECT LAST_INSERT_ID();";
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
 
-            try (ResultSet r = s.executeQuery()) {
-                if (r.next()) {
-                    return r.getInt(1);
-                }
-                return null;
-            }
+    public void insert() throws SQLException {
+        String sql = "INSERT INTO reminders(text,project_id,date,closed,unique_code,sent) VALUES(?,?,?,?,?,?) on duplicate key update unique_code = unique_code ;";
+        id = insert(DbContext.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS),1);
 
-        }
     }
 
+    public void update() throws SQLException {
+        String sql = "UPDATE reminders set closed = ? , sent = ? where id = ?";
+        update(DbContext.getConnection().prepareStatement(sql));
+
+    }
+
+    @Override
+    public PreparedStatement fill(PreparedStatement s) throws SQLException {
+        s.setBoolean(1, getIsClosed());
+        s.setBoolean(2,getSent());
+        s.setInt(3, getId());
+        return s;
+    }
+
+    @Override
+    public PreparedStatement fillInsert(PreparedStatement s) throws SQLException {
+        s.setString(1, text);
+        s.setInt(2, project_id);
+        java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+        s.setDate(3, date);
+        s.setBoolean(4, false);
+        s.setString(5, unique_code);
+        s.setBoolean(6,sent);
+        return s;
+    }
 }

@@ -1,11 +1,17 @@
 package app.transactions;
 
 import app.config.DbContext;
+import app.config.SendMail;
+import app.config.SignedUser;
 import app.db.ProjectCosts;
 import app.db.ProjectReminder;
+import app.db.User;
 import app.exception.DatabaseException;
+import app.exception.GmailMessagingException;
 import app.service.ProjectCostsService;
+import app.service.ProjectReminderService;
 
+import javax.mail.MessagingException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -35,11 +41,10 @@ public class ReminderTransaction {
                 r.insert();
             }
 
-
-
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
-            throw e;
+            throw new DatabaseException();
+
         } finally {
             DbContext.getConnection().setAutoCommit(true);
         }
@@ -59,8 +64,31 @@ public class ReminderTransaction {
         reminder.setText(text);
         reminder.setProjectNumber(element.getProjectNumber());
         reminder.setIsClosed(false);
+        reminder.setSent(false);
         reminder.setProject_id(element.getProject_id());
         reminder.setUnique_code(element.getActualCosts().toString()+"/"+element.getPlannedCosts().toString());
         return reminder;
+    }
+    public static void sentReminders() throws SQLException, DatabaseException, GmailMessagingException {
+        DbContext.getConnection().setAutoCommit(false);
+        DbContext.getConnection().setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+        try {
+            List<ProjectReminder> reminders = ProjectReminderService.getInstance().getAllNotSentReminders();
+
+            for (ProjectReminder rem : reminders) {
+                String text = "Projekt: " + rem.getProjectNumber();
+                SendMail.sendReminder("linda.jurkasova@gmail.com",text + "\n" + rem.getText());
+                rem.setSent(true);
+                rem.update();
+            }
+
+        } catch (SQLException  e) {
+            DbContext.getConnection().rollback();
+            throw new DatabaseException();
+        } catch (MessagingException e) {
+            throw new GmailMessagingException();
+        } finally {
+            DbContext.getConnection().setAutoCommit(true);
+        }
     }
 }

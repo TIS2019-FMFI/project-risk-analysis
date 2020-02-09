@@ -124,7 +124,7 @@ public class UsersAdministrationBoardController {
      */
     @FXML
     private void close(MouseEvent event) throws IOException {
-        FXMLLoader.load(TabController.class.getResource("main-box.fxml"));
+        TabController.getInstance().closeUsersAdministration();
     }
 
     /**

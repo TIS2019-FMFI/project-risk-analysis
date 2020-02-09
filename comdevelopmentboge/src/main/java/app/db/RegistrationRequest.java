@@ -6,8 +6,9 @@ import app.exception.DatabaseException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
-public class RegistrationRequest {
+public class RegistrationRequest extends Crud<RegistrationRequest>{
     private String text;
     private Integer user_id;
 
@@ -29,29 +30,26 @@ public class RegistrationRequest {
         this.user_id = user_id;
     }
 
-    public void insert() throws SQLException, DatabaseException {
+    public void insert() throws SQLException {
         String sql = "INSERT INTO registration_requests(user_id,text) VALUES(?,?) ";
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
+        insert(DbContext.getConnection().prepareStatement(sql),null);
 
-            s.setInt(1, user_id);
-            s.setString(2, text);
-
-            if (s.executeUpdate() < 0) {
-                throw new DatabaseException("Nepodarilo sa vlozit riadok do tabulky");
-            }
-
-        }
     }
-    public void delete() throws SQLException, DatabaseException {
+    public void delete() throws SQLException {
         String sql = "DELETE FROM registration_requests WHERE user_id = ?";
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement(sql)) {
+        delete(DbContext.getConnection().prepareStatement(sql), user_id);
 
-            s.setInt(1, user_id);
+    }
 
-            if (s.executeUpdate() < 0) {
-                throw new DatabaseException("Nepodarilo sa odstranit riadok z tabulky");
-            }
+    @Override
+    public PreparedStatement fill(PreparedStatement s)  {
+        return null;
+    }
 
-        }
+    @Override
+    public PreparedStatement fillInsert(PreparedStatement s) throws SQLException {
+        s.setInt(1, user_id);
+        s.setString(2, text);
+        return s;
     }
 }

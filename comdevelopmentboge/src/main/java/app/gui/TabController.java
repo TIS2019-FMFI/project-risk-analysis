@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -90,16 +91,28 @@ public class TabController {
             }
         }
     }
-
-    public void selectUsersAdministration() throws IOException {
+    public void selectProfile() {
         ObservableList<Tab> tabs = mainTabPane.getTabs();
         for (Tab tab : tabs) {
-            if (tab.isSelected()) {
-                try {
-                    tab.setContent(loadFXML("administration/users-administration-board"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            if (tab.getId().equals("profile")) {
+                mainTabPane.getSelectionModel().select(tab);
+            }
+        }
+    }
+    public void closeProfile() {
+        ObservableList<Tab> tabs = mainTabPane.getTabs();
+        for (Tab tab : tabs) {
+            if (tab.getId().equals("mainPageTab")) {
+                mainTabPane.getSelectionModel().select(tab);
+            }
+        }
+    }
+
+    public void selectUsersAdministration()  {
+        ObservableList<Tab> tabs = mainTabPane.getTabs();
+        for (Tab tab : tabs) {
+            if (tab.getId().equals("administration")) {
+                mainTabPane.getSelectionModel().select(tab);
             }
         }
     }
@@ -107,24 +120,11 @@ public class TabController {
     public void closeUsersAdministration() {
         ObservableList<Tab> tabs = mainTabPane.getTabs();
         for (Tab tab : tabs) {
-            if (tab.isSelected()) {
-                if (tab.getId().equals("projectTab")) {
-                    try {
-                        selectProjectTab();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                else {
-                    try {
-                        selectMainPageTab();
-                        tab.setContent(loadFXML("home/main-page"));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+            if (tab.getId().equals("mainPageTab")) {
+                mainTabPane.getSelectionModel().select(tab);
             }
         }
+
     }
 
     public void selectProjectDetailsTab(String projectDef) throws IOException{

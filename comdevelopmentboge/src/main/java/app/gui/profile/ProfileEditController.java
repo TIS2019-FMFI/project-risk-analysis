@@ -145,8 +145,8 @@ public class ProfileEditController {
 
 
     @FXML
-    private void close(MouseEvent event) throws IOException {
-        FXMLLoader.load(TabController.class.getResource("main-box.fxml"));
+    private void close(MouseEvent event) {
+        TabController.getInstance().closeProfile();
     }
 
 }

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Project {
+public class Project extends Crud<Project> {
     private Integer id;
     private String projectNumber;
     private String projectName;
@@ -129,29 +129,40 @@ public class Project {
         return attributes;
     }
 
-    public void update(){
-        String sql = "update projects set projectName=?, projectNumber=?, partNumber=?, ROS=?, ROCE=?, volumes=?, DDCost=?, prototypeCosts=?, " +
-                "lastUpdate=?, customer_id =? where  id=?";
-        try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
-            preparedStatement.setString(1, projectName);
-            preparedStatement.setString(2, projectNumber);
-            preparedStatement.setString(3, partNumber);
-            preparedStatement.setString(4, ros);
-            preparedStatement.setString(5, roce);
-            preparedStatement.setBigDecimal(6, volumes);
-            preparedStatement.setBigDecimal(7, ddCost);
-            preparedStatement.setBigDecimal(8, prototypeCost);
-            if(lastUpdated!=null){
-                preparedStatement.setDate(9, new java.sql.Date(lastUpdated.getTime()));
-            } else{
-                preparedStatement.setDate(9, null);
-            }
-            preparedStatement.setInt(10, customerId);
-            preparedStatement.setInt(11, id);
-
-            preparedStatement.executeUpdate();
+    public void update()  {
+        try {
+            String sql = "update projects set projectName=?, projectNumber=?, partNumber=?, ROS=?, ROCE=?, volumes=?, DDCost=?, prototypeCosts=?, " +
+                    "lastUpdate=?, customer_id =? where  id=?";
+            update(DbContext.getConnection().prepareStatement(sql));
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
+    }
+
+    @Override
+    public PreparedStatement fill(PreparedStatement s) throws SQLException {
+        s.setString(1, projectName);
+        s.setString(2, projectNumber);
+        s.setString(3, partNumber);
+        s.setString(4, ros);
+        s.setString(5, roce);
+        s.setBigDecimal(6, volumes);
+        s.setBigDecimal(7, ddCost);
+        s.setBigDecimal(8, prototypeCost);
+        if(lastUpdated!=null){
+            s.setDate(9, new java.sql.Date(lastUpdated.getTime()));
+        } else{
+            s.setDate(9, null);
+        }
+        s.setInt(10, customerId);
+        s.setInt(11, id);
+        return s;
+    }
+
+    @Override
+    public PreparedStatement fillInsert(PreparedStatement s) throws SQLException {
+        return null;
     }
 }

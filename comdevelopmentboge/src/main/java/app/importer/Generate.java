@@ -223,7 +223,7 @@ public class Generate {
         sqlCreate = "CREATE TABLE reminders (id int primary key auto_increment, " +
                 "text varchar(150) NOT NULL," +
                 "project_id int references projects(id), " +
-                "date date,closed boolean,unique_code varchar(150) UNIQUE)";
+                "date date,closed boolean,unique_code varchar(150) UNIQUE,sent boolean)";
 
         try( Statement s = DbContext.getConnection().createStatement()) {
             s.executeUpdate("DROP TABLE IF EXISTS reminders");

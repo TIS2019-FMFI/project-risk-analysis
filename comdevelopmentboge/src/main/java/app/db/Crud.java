@@ -26,10 +26,14 @@ public abstract class Crud<T> {
     public Integer insert(PreparedStatement sql, Integer cisloStlpca) throws SQLException {
         PreparedStatement s = fillInsert(sql);
         s.executeUpdate();
-        try(ResultSet r = sql.getGeneratedKeys()) {
-            r.next();
-            return r.getInt(cisloStlpca);
+        if (cisloStlpca != null) {
+            try(ResultSet r = sql.getGeneratedKeys()) {
+                r.next();
+                return r.getInt(cisloStlpca);
+            }
         }
+        return null;
+
     }
 
     /**
@@ -45,11 +49,11 @@ public abstract class Crud<T> {
     /**
      * Vymazanie entity z tabulky.
      * @param sql SQL dopyz
-     * @param projectId id entity, ktora sa vymaze
+     * @param id id entity, ktora sa vymaze
      * @throws SQLException
      */
-    public void delete(PreparedStatement sql, Integer projectId) throws SQLException {
-        sql.setInt(1, projectId);
+    public void delete(PreparedStatement sql, Integer id) throws SQLException {
+        sql.setInt(1, id);
         sql.executeUpdate();
     }
 }

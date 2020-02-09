@@ -6,6 +6,7 @@ import app.db.ProjectReminder;
 import app.db.RegistrationRequest;
 import app.db.User;
 import app.exception.DatabaseException;
+import app.exception.GmailMessagingException;
 import app.gui.MyAlert;
 import app.service.LogService;
 import app.service.ProjectReminderService;
@@ -67,6 +68,8 @@ public class HomeController {
     public void initialize() throws IOException {
 
         setWelcome();
+        loadReminders();
+
         switch (SignedUser.getUser().getUserTypeU()) {
             case USER:
                 initUser();
@@ -78,6 +81,7 @@ public class HomeController {
                 initProjectAdmin();
                 break;
         }
+        sendReminders();
 
 
     }
@@ -158,11 +162,33 @@ public class HomeController {
     private void setNotificationScene() throws IOException {
         rearrangeGridPane();
     }
+    private void sendReminders() {
+        Runnable r = new Runnable() {
+            public void run() {
+                try {
+                    ReminderTransaction.sentReminders();
+                } catch (DatabaseException | GmailMessagingException e ) {
+                    MyAlert.showError(e.getMessage());
+                } catch (SQLException e) {
+                    MyAlert.showError(DatabaseException.ERROR);
+                }
+            }
+        };
+        new Thread(r).start();
+    }
+    private void loadReminders()  {
+        try {
+            ReminderTransaction.loadReminders();
+        } catch (SQLException e) {
+            MyAlert.showError(DatabaseException.ERROR);
+        } catch (DatabaseException e) {
+            MyAlert.showError(e.getMessage());
+        }
+    }
 
     private void getReminders() {
 
         try {
-            ReminderTransaction.loadReminders();
             List<ProjectReminder> reminders0;
             if (SignedUser.getUser().getUserTypeU() == User.USERTYPE.CENTRAL_ADMIN) {
                 //ak je centralny admin tak sa ukazu vsetky notifikacie
@@ -174,10 +200,8 @@ public class HomeController {
             reminders = reminders0.stream().collect(Collectors.groupingBy(ProjectReminder::getProjectNumber));
 
 
-        } catch (DatabaseException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
-            e.printStackTrace();
+            MyAlert.showError(DatabaseException.ERROR);
         }
 
     }
@@ -186,7 +210,7 @@ public class HomeController {
         try {
             requests = RegistrationRequestService.getInstance().findAll();
         } catch (SQLException e) {
-            e.printStackTrace();
+            MyAlert.showError(DatabaseException.ERROR);
         }
     }
 
@@ -230,9 +254,9 @@ public class HomeController {
             LogService.createLog("Schválenie žiadosti o registráciu používateľa " + fullname);
             MyAlert.showSuccess("Žiadosť užívateľa bola úspešne schválená");
         } catch (SQLException e) {
-            e.printStackTrace();
+            MyAlert.showError(DatabaseException.ERROR);
         } catch (DatabaseException e) {
-            e.printStackTrace();
+            MyAlert.showError(e.getMessage());
         }
 
     }
@@ -247,9 +271,9 @@ public class HomeController {
                 Registration.declineRegistrationRequest(request);
                 LogService.createLog("Zrušenie žiadosti o registráciu používateľa " + fullname);
             } catch (SQLException e) {
-                e.printStackTrace();
+                MyAlert.showError(DatabaseException.ERROR);
             } catch (DatabaseException e) {
-                e.printStackTrace();
+                MyAlert.showError(e.getMessage());
             }
         }
 
@@ -289,9 +313,7 @@ public class HomeController {
                 reminder.update();
                 LogService.createLog("Uzavretie notifikácie týkajúcej sa projektu: " + reminder.getProjectNumber());
             } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (DatabaseException e) {
-                e.printStackTrace();
+                MyAlert.showError(DatabaseException.ERROR);
             }
         }
 
@@ -299,7 +321,7 @@ public class HomeController {
 
     }
 
-    private void deleteReminder(int col, int row) throws IOException {
+    private void deleteReminder(int col, int row) {
         Node node = getNodeFromGridPane(col, row);
         if (node != null) {
             gridPane.getChildren().remove(node);
