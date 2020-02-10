@@ -13,10 +13,15 @@ import java.util.ArrayList;
 
 public class ExcellParser {
 
-    public static ArrayList<ExcelRow> readFromFile() throws IOException {
-        String path = ExcellParser.class.getResource("SAP_DATA_ver2.xlsx").getPath();
-
-        FileInputStream file = new FileInputStream(new File(path));
+    public static ArrayList<ExcelRow> readFromFile(File inputFile) throws IOException {
+        FileInputStream file = null;
+        if(inputFile == null){
+            String path = ExcellParser.class.getResource("SAP_DATA_ver2.xlsx").getPath();
+            file = new FileInputStream(new File(path));
+        }
+        else{
+            file = new FileInputStream(inputFile);
+        }
         XSSFWorkbook workbook = new XSSFWorkbook(file);
         Sheet sheet = workbook.getSheetAt(0);
         ArrayList<ExcelRow> list = new ArrayList();

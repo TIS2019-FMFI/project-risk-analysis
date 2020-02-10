@@ -54,7 +54,7 @@ public class Generate {
             e.printStackTrace();
         }
 
-        ArrayList<ExcelRow> list = readFromFile();
+        ArrayList<ExcelRow> list = readFromFile(null);
         Set<List> projects = new HashSet<>();
 
 

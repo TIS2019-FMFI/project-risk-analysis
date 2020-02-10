@@ -3,9 +3,13 @@ package app.gui.administration;
 import app.db.Log;
 import app.db.ProjectReminder;
 import app.gui.MyAlert;
+import app.importer.ExcelRow;
+import app.importer.ExcellParser;
 import app.service.LogService;
 import app.service.ProjectReminderService;
+import app.transactions.ImportSAPTransaction;
 import javafx.fxml.FXML;
+import javafx.stage.FileChooser;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -93,5 +97,17 @@ public class FilesAdministrationController {
             MyAlert.showWarning("V systéme nie sú žiadne remindre");
         }
 
+    }
+
+    /**
+     * Import SAP dokumentu
+     */
+    @FXML
+    private void clickImport() throws IOException, SQLException {
+        FileChooser fileChooser = new FileChooser();
+        File selectedFile = fileChooser.showOpenDialog(null);
+        System.out.println("SOM TU DOSIEL");
+        ArrayList<ExcelRow> sap = ExcellParser.readFromFile(selectedFile);
+        ImportSAPTransaction.importSAP(sap);
     }
 }

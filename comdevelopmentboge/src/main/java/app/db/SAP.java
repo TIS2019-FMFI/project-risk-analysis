@@ -1,7 +1,12 @@
 package app.db;
 
+import app.config.DbContext;
+import app.importer.ExcelRow;
+
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -156,5 +161,35 @@ public class SAP {
         List<String> attributes = new ArrayList<>();
         attributes.addAll(List.of("ProjektDef","PSPElement","Objektbezeichnung","Kostenart","KostenartenBez","Bezeichnung","Partnerobjekt","Periode","Jahr","Belegnr","BuchDatum","WertKWahr","KWahr","MengeErf","GME"));
         return attributes;
+    }
+
+    public void insertFromFile(ArrayList<ExcelRow> sap) throws SQLException {
+        String sqlInsert = "INSERT INTO sap " +
+                "(Projektdef,PSPElement,Objektbezeichnung,Kostenart,KostenartenBez,Bezeichnung,Partnerobjekt,Periode,Jahr,Belegnr,BuchDatum,WertKWahr,KWahr,MengeErf,GME)"+
+                "VALUES"+
+                "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        try(PreparedStatement s = DbContext.getConnection().prepareStatement(sqlInsert)){
+            for(ExcelRow tmp : sap){
+                ArrayList<String> data = tmp.getData();
+                java.util.Date date = tmp.getDate();
+
+                for(int i = 0; i < data.size();i++){
+                    if(i == 7 || i == 8){
+                        s.setInt(i+1, Integer.parseInt(data.get(i)));
+                    }else if( i== 11 || i == 13){
+                        s.setBigDecimal(i+1, new BigDecimal(data.get(i)));
+                    }else {
+                        s.setString(i + 1, data.get(i));
+                    }
+                }
+                java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+
+                s.setDate(11,sqlDate);
+                s.executeUpdate();
+            }
+
+        }
+
     }
 }
