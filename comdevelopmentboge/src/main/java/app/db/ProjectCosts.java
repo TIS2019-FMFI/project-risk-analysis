@@ -1,16 +1,43 @@
 package app.db;
 
+/**
+ * Obsahuje dáta o aktuálnych a plánovaných nákladoch
+ * Využíva sa pri vypočítaní notifikácií
+ */
 public class ProjectCosts {
 
+    /**
+     * Rozlišuje typ nákladov
+     */
     public enum projectCostsType {
         PROTOTYPE,DD
     }
 
+    /**
+     * Unikátny kód projektu
+     */
     String projectNumber;
+
+    /**
+     * ID projektu z databázy
+     */
     Integer project_id;
+
+    /**
+     * Aktuálne náklady projektu vypočítané zo SAP tabuľky
+     */
     Double actualCosts;
+
+    /**
+     * Plánované náklady projektu z PROJECTS tabuľky
+     */
     Double plannedCosts;
+
+    /**
+     * Typ nákladov
+     */
     projectCostsType type;
+
 
     public projectCostsType getType() {
         return this.type;

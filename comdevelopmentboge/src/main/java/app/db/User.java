@@ -10,16 +10,52 @@ import java.sql.Statement;
 
 public class User extends Crud<User>{
 
+    /**
+     * Definuje rolu používateľa
+     */
     public enum USERTYPE {
         CENTRAL_ADMIN,PROJECT_ADMIN,USER,FEM
     }
+
+    /**
+     * Unikátne ID užívateľa z databázy
+     */
     private Integer id;
+
+    /**
+     * Meno užívateľa
+     */
     private String name;
+
+    /**
+     * Priezvisko užívateľa
+     */
     private String surname;
+
+    /**
+     * E-mailova adresa užívateľa
+     * Používa sa ako prihlasovacie meno
+     */
     private String email;
+
+    /**
+     * Heslo pre prihlásenie
+     */
     private String password;
+
+    /**
+     * Rola užívateľa
+     */
     private USERTYPE userType;
+
+    /**
+     * Určuje, či je užívateľ vymazaný
+     */
     private Boolean deleted;
+
+    /**
+     * Určuje, či je užívateľova registrácia schválená a môže používať aplikáciu
+     */
     private Boolean approved;
 
 

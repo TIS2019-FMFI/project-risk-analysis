@@ -12,6 +12,9 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 public class SendMail {
+    /**
+     * E-mailova adresa odosielateľa
+     */
     private static final String from = "resetheslaboge@gmail.com";
     private static final String password = "hesloboge";
     private static final String host = "smtp.gmail.com";
@@ -35,13 +38,34 @@ public class SendMail {
                 });
     }
 
+    /**
+     * Pošle e-mailovú správu s vygenerovaným heslom
+     * @param recipient e-mailova adresa príjmateľa (musí byť Gmail)
+     * @param newPassword vygenerované heslo
+     * @throws MessagingException
+     */
     public static void sendNewPassword(String recipient, String newPassword) throws MessagingException {
         sendMessage(recipient,"Nové vygenerované heslo je: " + newPassword,"Reset hesla");
 
     }
+
+    /**
+     * Pošle notifikáciu na e-mailovú adresu
+     * @param recipient e-mailova adresa príjmateľa (musí byť Gmail)
+     * @param text obsah e-mailu
+     * @throws MessagingException
+     */
     public static void sendReminder(String recipient,String text) throws MessagingException {
         sendMessage(recipient,text,"Riziko prekročenia plánovaných nákladov");
     }
+
+    /**
+     * Pošle e-mailovú správu na základe parametrov
+     * @param recipient e-mailova adresa príjmateľa (musí byť Gmail)
+     * @param text obsah e-mailovej správy
+     * @param subject predmet správy
+     * @throws MessagingException
+     */
     private static void sendMessage(String recipient,String text, String subject) throws MessagingException {
         System.out.println("prepare to send");
 

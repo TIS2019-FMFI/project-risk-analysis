@@ -3,7 +3,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<AnchorPane fx:id="mainPageMenuBar" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #ff0000;" AnchorPane.bottomAnchor="750" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.geometry.Insets?>
+<AnchorPane fx:id="mainPageMenuBar" prefHeight="50.0" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #ff0000;" AnchorPane.bottomAnchor="750" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+
     <children>
         <fx:include source="/app/gui/profile/profile-button-view.fxml"/>
     </children>

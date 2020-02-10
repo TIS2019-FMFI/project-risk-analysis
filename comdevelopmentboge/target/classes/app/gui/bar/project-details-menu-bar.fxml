@@ -6,7 +6,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane fx:id="projectDetailsMenuBar"  prefHeight="52.0" prefWidth="784.0" style="-fx-background-color: #ff0000;" AnchorPane.bottomAnchor="750" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.geometry.Insets?>
+<AnchorPane fx:id="projectDetailsMenuBar" prefHeight="52.0" prefWidth="784.0" style="-fx-background-color: #ff0000;" AnchorPane.bottomAnchor="750" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+
     <children>
         <fx:include source="/app/gui/administration/users-button-view.fxml"/>
         <fx:include source="/app/gui/profile/profile-button-view.fxml"/>
