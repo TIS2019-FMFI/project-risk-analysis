@@ -14,7 +14,7 @@ public class User extends Crud<User>{
      * Definuje rolu používateľa
      */
     public enum USERTYPE {
-        CENTRAL_ADMIN,PROJECT_ADMIN,USER,FEM
+        CENTRAL_ADMIN,PROJECT_ADMIN,USER
     }
 
     /**

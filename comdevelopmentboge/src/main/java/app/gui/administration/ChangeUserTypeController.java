@@ -31,7 +31,6 @@ public class ChangeUserTypeController {
      * userButton - radiobutton, ktorý označuje výber roly bežného užívateľa
      */
     @FXML private RadioButton adminButton;
-    @FXML private RadioButton femButton;
     @FXML private RadioButton userButton;
 
 
@@ -59,9 +58,6 @@ public class ChangeUserTypeController {
         if (userType.equals(User.USERTYPE.PROJECT_ADMIN) || userType.equals(User.USERTYPE.CENTRAL_ADMIN)) {
             adminButton.setSelected(true);
         }
-        else if (userType.equals(User.USERTYPE.FEM)) {
-            femButton.setSelected(true);
-        }
         else if (userType.equals(User.USERTYPE.USER)) {
             userButton.setSelected(true);
         }
@@ -88,9 +84,6 @@ public class ChangeUserTypeController {
         if(adminButton.isSelected()) {
             chooseAdminType();
         }
-        else if (femButton.isSelected()) {
-            showConfirmDialog(User.USERTYPE.FEM);
-        }
         else if (userButton.isSelected()) {
             showConfirmDialog(User.USERTYPE.USER);
         }
@@ -100,7 +93,7 @@ public class ChangeUserTypeController {
     }
 
     /**
-     * Spustí sa transakcia na zmenu roly používateľa - FEM-kár alebo bežný užívateľ
+     * Spustí sa transakcia na zmenu roly používateľa
      * @param userType - rola, ktorú chceme nastaviť užívateľovi
      * @throws SQLException
      */
