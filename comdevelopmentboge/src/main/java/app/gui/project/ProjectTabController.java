@@ -14,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import com.jfoenix.controls.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
@@ -28,7 +29,7 @@ public class ProjectTabController{
     public static ProjectTabController getInstance(){return instance;}
 
     @FXML
-    private JFXListView<Pane> projectListView;
+    private JFXListView<HBox> projectListView;
 
     @FXML
     public void initialize() {
@@ -41,7 +42,7 @@ public class ProjectTabController{
 
             @Override
             public void handle(MouseEvent event) {
-                Pane pane = projectListView.getSelectionModel().getSelectedItem();
+                HBox pane = projectListView.getSelectionModel().getSelectedItem();
                 if(pane != null) {
                     try {
                         showProjectDetails(pane.getId());
@@ -59,9 +60,9 @@ public class ProjectTabController{
         TabController.getInstance().selectProjectDetailsTab(projectDef);
     }
 
-    private Pane setProject(Project project, HashSet<String> projectsToBeWarned) throws IOException {
+    private HBox setProject(Project project, HashSet<String> projectsToBeWarned) throws IOException {
         FXMLLoader loader = loadFXML("project-list-item");
-        Pane pane = loader.load();
+        HBox pane = loader.load();
         pane.setId(project.getProjectNumber());
         Text projectNumberTxt = (Text) pane.lookup("#projectNumber");
         projectNumberTxt.setText(project.getProjectNumber());

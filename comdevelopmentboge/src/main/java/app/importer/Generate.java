@@ -161,7 +161,7 @@ public class Generate {
         users.add(Arrays.asList("Adam","Mrkvicka","adam@boge.com","nenavidimMrkvu","CENTRAL_ADMIN",true,false));
         users.add(Arrays.asList("Peter","Zahradka","peter@boge.com","pestujemTravicku","USER",true,false));
         users.add(Arrays.asList("Jozef","Strom","jozef@boge.com","stromySuLaska","PROJECT_ADMIN",true,false));
-        users.add(Arrays.asList("Anna","Bobrova","anna@boge.com","boborIbaVMene","FEM",true,false));
+        users.add(Arrays.asList("Anna","Bobrova","anna@boge.com","boborIbaVMene","USER",true,false));
         users.add(Arrays.asList("Lojzo","Hipster","lojzo@boge.com","rawVeganForLife","USER",false,false));
 
         sqlCreate = "CREATE TABLE users (" +
