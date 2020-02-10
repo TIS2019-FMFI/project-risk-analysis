@@ -35,27 +35,32 @@ public class FilesAdministrationController {
 
         ArrayList<Log> logs = LogService.getInstance().getAllLogs();
 
-        File directory = new File(directoryName);
-        if (! directory.exists()){
-            directory.mkdir();
-        }
-
-        File file = new File(directoryName + "/" + fileName);
-        try{
-            FileWriter fw = new FileWriter(file.getAbsoluteFile());
-            BufferedWriter bw = new BufferedWriter(fw);
-
-            for(Log log: logs){
-                String logRecord = "[" + log.getTime() + "] [" + log.getUserFirstName() + " " + log.getUserLastName() + "] - " + log.getText() + "\n" ;
-                bw.write(logRecord);
+        if(logs.size()>0){
+            File directory = new File(directoryName);
+            if (! directory.exists()){
+                directory.mkdir();
             }
-            bw.close();
-            MyAlert.showSuccess("Logy boli  úspešne uložené do priečinku " + directoryName);
+
+            File file = new File(directoryName + "/" + fileName);
+            try{
+                FileWriter fw = new FileWriter(file.getAbsoluteFile());
+                BufferedWriter bw = new BufferedWriter(fw);
+
+                for(Log log: logs){
+                    String logRecord = "[" + log.getTime() + "] [" + log.getUserFirstName() + " " + log.getUserLastName() + "] - " + log.getText() + "\n" ;
+                    bw.write(logRecord);
+                }
+                bw.close();
+                MyAlert.showSuccess("Logy boli  úspešne uložené do priečinku " + directoryName);
+            }
+            catch (IOException e){
+                e.printStackTrace();
+                System.exit(-1);
+            }
+        } else{
+            MyAlert.showWarning("V systéme sa nenachádzajú žiadne logy.");
         }
-        catch (IOException e){
-            e.printStackTrace();
-            System.exit(-1);
-        }
+
 
     }
 
