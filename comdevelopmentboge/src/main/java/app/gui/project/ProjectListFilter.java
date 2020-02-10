@@ -36,4 +36,10 @@ public class ProjectListFilter {
         this.customerId = customerId;
         ProjectTabController.getInstance().reloadList();
     }
+
+    public void restartValues(){
+        this.projectNumber = null;
+        this.projectName = null;
+        this.customerId = 0;
+    }
 }

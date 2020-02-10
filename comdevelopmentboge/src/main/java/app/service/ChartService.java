@@ -16,7 +16,7 @@ public class ChartService {
 
     public LinkedHashMap<Period, BigDecimal> getRDCostsData(String projectCode, java.sql.Date fromDate, java.sql.Date toDate) {
         LinkedHashMap<Period, BigDecimal> costs = new LinkedHashMap<>();
-        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and BuchDatum between ? and ? and Objektbezeichnung='Research & Development Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and KostenartenBez='Entwicklungskosten' group by Periode, Jahr order by Jahr, Periode";
+        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and BuchDatum between ? and ? and Objektbezeichnung='Research & Development Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and KostenartenBez='Entwicklungskosten' group by Periode, Jahr order by BuchDatum";
         try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
             preparedStatement.setString(1,projectCode);
             preparedStatement.setDate(2,fromDate);
@@ -38,7 +38,7 @@ public class ChartService {
 
     public LinkedHashMap<Period, BigDecimal> getCostsData(String projectCode, java.sql.Date fromDate, java.sql.Date toDate) {
         LinkedHashMap<Period, BigDecimal> costs = new LinkedHashMap<>();
-        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and BuchDatum between ? and ? and Objektbezeichnung='Research & Development Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and KostenartenBez not like '%Entwicklungskosten%' group by Periode, Jahr order by Jahr, Periode";
+        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and BuchDatum between ? and ? and Objektbezeichnung='Research & Development Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and KostenartenBez not like '%Entwicklungskosten%' group by Periode, Jahr order by BuchDatum";
         try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
             preparedStatement.setString(1,projectCode);
             preparedStatement.setDate(2,fromDate);
@@ -60,7 +60,7 @@ public class ChartService {
 
     public LinkedHashMap<Period, BigDecimal> getPrototypeCosts(String projectCode, java.sql.Date fromDate, java.sql.Date toDate)  {
         LinkedHashMap<Period, BigDecimal> costs = new LinkedHashMap<>();
-        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and BuchDatum between ? and ? and Objektbezeichnung='Samples + Revenues Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and WertKWahr>0 group by Periode, Jahr order by Jahr, Periode";
+        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and BuchDatum between ? and ? and Objektbezeichnung='Samples + Revenues Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and WertKWahr>0 group by Periode, Jahr order by BuchDatum";
         try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
             preparedStatement.setString(1,projectCode);
             preparedStatement.setDate(2,fromDate);
@@ -82,7 +82,7 @@ public class ChartService {
 
     public LinkedHashMap<Period, BigDecimal> getPrototypeRevenues(String projectCode, java.sql.Date fromDate, java.sql.Date toDate) {
         LinkedHashMap<Period, BigDecimal> costs = new LinkedHashMap<>();
-        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and BuchDatum between ? and ? and Objektbezeichnung='Samples + Revenues Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and WertKWahr<=0 group by Periode, Jahr order by Jahr, Periode";
+        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and BuchDatum between ? and ? and Objektbezeichnung='Samples + Revenues Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and WertKWahr<=0 group by Periode, Jahr order by BuchDatum";
         try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
             preparedStatement.setString(1,projectCode);
             preparedStatement.setDate(2,fromDate);

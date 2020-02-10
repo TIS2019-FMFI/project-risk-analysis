@@ -29,7 +29,7 @@ public class ProjectTabController{
     public static ProjectTabController getInstance(){return instance;}
 
     @FXML
-    private JFXListView<HBox> projectListView;
+    private JFXListView<Pane> projectListView;
 
     @FXML
     public void initialize() {
@@ -42,7 +42,7 @@ public class ProjectTabController{
 
             @Override
             public void handle(MouseEvent event) {
-                HBox pane = projectListView.getSelectionModel().getSelectedItem();
+                Pane pane = projectListView.getSelectionModel().getSelectedItem();
                 if(pane != null) {
                     try {
                         showProjectDetails(pane.getId());
@@ -60,9 +60,9 @@ public class ProjectTabController{
         TabController.getInstance().selectProjectDetailsTab(projectDef);
     }
 
-    private HBox setProject(Project project, HashSet<String> projectsToBeWarned) throws IOException {
+    private Pane setProject(Project project, HashSet<String> projectsToBeWarned) throws IOException {
         FXMLLoader loader = loadFXML("project-list-item");
-        HBox pane = loader.load();
+        Pane pane = loader.load();
         pane.setId(project.getProjectNumber());
         Text projectNumberTxt = (Text) pane.lookup("#projectNumber");
         projectNumberTxt.setText(project.getProjectNumber());
@@ -90,9 +90,10 @@ public class ProjectTabController{
 
 
     public void reloadList(){
-        ArrayList<Project> projects= ProjectService.getProjectService().getAllPRojects();
+        ArrayList<Project> projects= ProjectService.getProjectService().findProjectsByCriteria();
         HashSet<String> projectsToBeWarned = getProjectsToBeWarned();
 
+        projectListView.getItems().clear();
         for(Project project: projects) {
             try {
                 projectListView.getItems().add(setProject(project, projectsToBeWarned));

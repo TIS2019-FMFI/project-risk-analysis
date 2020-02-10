@@ -57,6 +57,7 @@ public class ProjectFilter {
 
     @FXML
     public void onBackPressed() throws IOException {
+        ProjectListFilter.getProjectListFilter().restartValues();
         TabController.getInstance().selectProjectTab();
     }
 

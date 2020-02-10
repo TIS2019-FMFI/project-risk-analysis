@@ -106,7 +106,6 @@ public class FilesAdministrationController {
     private void clickImport() throws IOException, SQLException {
         FileChooser fileChooser = new FileChooser();
         File selectedFile = fileChooser.showOpenDialog(null);
-        System.out.println("SOM TU DOSIEL");
         ArrayList<ExcelRow> sap = ExcellParser.readFromFile(selectedFile);
         ImportSAPTransaction.importSAP(sap);
     }

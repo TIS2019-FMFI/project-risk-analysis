@@ -39,7 +39,7 @@ public class CustomerService {
         return null;
     }
 
-    public Customer findCustomerByName(String name) throws DatabaseException {
+    public Customer findCustomerByName(String name) {
         Customer customer = new Customer();
         String sql = "select id from customers where name=?";
         try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
@@ -49,11 +49,8 @@ public class CustomerService {
             if(rs.next()){
                 customer.setId(rs.getInt(1));
                 customer.setName(name);
-                if(rs.next()){
-                    throw new DatabaseException("Ambiguous customer name!");//todo nebolo by lepsie mat unique constraint na id,name?
-                }
             } else{
-                throw new DatabaseException("No such customer with name:"+name+"found in the database");
+                return null;
             }
 
 

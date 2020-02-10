@@ -19,7 +19,7 @@ public class ProjectService {
     private static ProjectService projectService = new ProjectService();
     public static ProjectService getProjectService(){ return  projectService;}
 
-    public ArrayList<Project> getAllPRojects(){
+    public ArrayList<Project> getAllProjects(){
         ArrayList<Project> result = new ArrayList<>();
 
         String sql = "select p.*,customers.name  from projects p left join customers on customer_id=customers.id";
@@ -89,23 +89,27 @@ public class ProjectService {
         return result;
     }
 
-    public ArrayList<String> findProjectsByCriteria(){
+    public ArrayList<Project> findProjectsByCriteria(){
 
-        ArrayList<String> result = new ArrayList<>();
+        ArrayList<Project> result = new ArrayList<>();
 
         String projectName = ProjectListFilter.getProjectListFilter().getProjectName();
         String projectNumber = ProjectListFilter.getProjectListFilter().getProjectNumber();
         int customer = ProjectListFilter.getProjectListFilter().getCustomer();
 
-        String sql = "select projectNumber from projects ";
+        String sql = "select p.* from projects p ";
         String criteria1 = "";
         String criteria2 = "";
         String criteria3 = "";
+
+        boolean anyCriteria = false;
         if(projectName != null){
             criteria1 = "projectName='"+projectName+"'";
+            anyCriteria = true;
         }
 
         if(projectNumber != null){
+            anyCriteria = true;
             if(!criteria1.equals("")){
                 criteria2 += "and projectNumber='" + projectNumber+"'";
             } else{
@@ -114,16 +118,33 @@ public class ProjectService {
         }
 
         if(customer != 0){
-            criteria3 = " inner join customers on customers.id="+customer;
+            if(anyCriteria){
+                criteria3 = "and customer_id="+customer;
+            } else{
+                criteria3 = " customer_id=" + customer;
+            }
         }
-        sql+= criteria3 + ((!criteria1.equals("") || !criteria2.equals("") )?" where ":"") + criteria1 + criteria2  + ";";
+        sql+= ((!criteria1.equals("") || !criteria2.equals("") || !criteria3.equals("") )?" where ":"") + criteria1 + criteria2 +criteria3 + ";";
 
         System.out.println(sql);
         try(Statement st = DbContext.getConnection().createStatement()){
 
             ResultSet rs = st.executeQuery(sql);
             while(rs.next()){
-                result.add(rs.getString(1));
+                Project project = new Project();
+                project.setId(rs.getInt(1));
+                project.setProjectName(rs.getString(3));
+                project.setProjectNumber(rs.getString(2));
+                project.setPartNumber(rs.getString(4));
+                project.setRos(rs.getString(5));
+                project.setRoce(rs.getString(6));
+                project.setVolumes(rs.getBigDecimal(7));
+                project.setDdCost(rs.getBigDecimal(8));
+                project.setPrototypeCost(rs.getBigDecimal(9));
+                project.setLastUpdated(rs.getDate(10));
+                project.setCustomerId(rs.getInt(11));
+
+                result.add(project);
             }
 
         } catch (SQLException e) {

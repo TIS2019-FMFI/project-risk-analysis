@@ -125,7 +125,9 @@ public class Project extends Crud<Project> {
     //returns array of all attributes of a project in given order
     public List<String> getAllAttributes(){
         List<String>  attributes = new ArrayList<>();
-        attributes.addAll(List.of(projectNumber, customerName, projectName, partNumber, ros, roce, String.valueOf(volumes), String.valueOf(ddCost), String.valueOf(prototypeCost)));
+        attributes.addAll(List.of((projectNumber!=null)?projectNumber:"", (customerName!=null)?customerName:"", (projectName!=null)?projectName:"",
+                (partNumber!=null)?partNumber:"", (ros!=null)?ros:"", (roce!=null)?roce:"", (volumes!=null)?String.valueOf(volumes):"",
+                (ddCost!=null)?String.valueOf(ddCost):"", (ddCost!=null)?String.valueOf(prototypeCost):""));
         return attributes;
     }
 

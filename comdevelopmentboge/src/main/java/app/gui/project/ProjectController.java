@@ -4,11 +4,13 @@ import app.App;
 import app.config.SignedUser;
 import app.exception.DatabaseException;
 import app.exporter.PdfExporter;
+import app.gui.MyAlert;
 import app.gui.graph.ChartRenderer;
 import app.service.ProjectAdministrationService;
 import app.service.CustomerService;
 import app.service.ProjectService;
 import app.service.SAPService;
+import app.transactions.ProjectEditTransaction;
 import com.itextpdf.text.DocumentException;
 import javafx.beans.binding.Bindings;
 import javafx.embed.swing.SwingFXUtils;
@@ -33,6 +35,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.*;
@@ -371,47 +374,13 @@ public class ProjectController {
 
     @FXML
     public void saveChangesToDatabase(Project project){
-
-        Customer customer = null;
-        if(project.getCustomerName()!=null){
-            try {
-                customer = CustomerService.getCustomerService().findCustomerByName(project.getCustomerName());
-            } catch (DatabaseException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
-                alert.showAndWait();
-                if (alert.getResult() == ButtonType.OK) {
-                    alert.close();
-                    return;
-                }
-            }
-        }
-
         saveButton.setVisible(false);
-
-        if(customer!=null){
-            project.setCustomerId(customer.getId());
-            project.update();
+        try {
+            ProjectEditTransaction.editProject(project, changes);
+        } catch (SQLException e) {
+            MyAlert.showError("Údaje o projekte "+project.getProjectNumber() + " sa nepodarilo zmeniť!");
+            e.printStackTrace();
         }
-        logChanges(project.getProjectNumber());
-
-    }
-
-    private void logChanges(String projectDef){
-        Integer userId = SignedUser.getUser().getId();
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        String text = "updated values:";
-
-        for(String columnName: changes.keySet()){
-            text += columnName + "=" + changes.get(columnName) + ", ";
-        }
-
-        text = text.substring(0, text.length() - 2) + " of project: " + projectDef;
-
-        Log log = new Log();
-        log.setUserId(userId);
-        log.setTime(currentTime);
-        log.setText(text);
-        log.insert();
     }
 
     public void filterSapData(java.sql.Date from, java.sql.Date to) throws ParseException {

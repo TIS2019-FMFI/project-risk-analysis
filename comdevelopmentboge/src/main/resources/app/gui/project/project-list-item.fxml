@@ -3,34 +3,47 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<HBox alignment="CENTER_LEFT" prefHeight="51.0" prefWidth="791.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <VBox prefHeight="40.0" prefWidth="100.0">
+<Pane prefHeight="55.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+      <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0">
          <children>
-              <Text id="projectNumber" fill="#525151" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
-                  <font>
-                      <Font size="24.0" />
-                  </font>
-              </Text>
-            <Text id="projectName" fill="#232323" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Text>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                    <Text id="projectNumber" fill="#525151" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                        <font>
+                            <Font size="24.0" />
+                        </font>
+                    </Text>
+                    <Text id="projectName" fill="#232323" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                        <font>
+                            <Font size="14.0" />
+                        </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                    </Text>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" />
+               </padding>
+            </VBox>
+            <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                    <ImageView id="warningIcon" fitHeight="40.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
+            </VBox>
          </children>
-         <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </HBox.margin>
-      </VBox>
-        <ImageView id="warningIcon" fitHeight="40.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-         <HBox.margin>
-            <Insets bottom="5.0" left="20.0" right="5.0" top="5.0" />
-         </HBox.margin>
-      </ImageView>
-   </children>
-</HBox>
+      </HBox>
+    </children>
+</Pane>
