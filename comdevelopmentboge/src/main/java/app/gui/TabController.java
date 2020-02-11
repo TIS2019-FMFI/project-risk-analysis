@@ -78,7 +78,11 @@ public class TabController {
     }
 
     public void selectProjectTab() throws IOException {
-        setMenuBar("bar/project-list-menu-bar.fxml");
+        if(SignedUser.getUser().getUserType().equals("CENTRAL_ADMIN")){
+            setMenuBar("bar/admin-project-list-menu-bar.fxml");
+        } else{
+            setMenuBar("bar/project-list-menu-bar.fxml");
+        }
 
         ObservableList<Tab> tabs = mainTabPane.getTabs();
         for (Tab tab : tabs) {

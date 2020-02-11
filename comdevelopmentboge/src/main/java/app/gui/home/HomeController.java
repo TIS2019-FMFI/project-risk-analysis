@@ -43,6 +43,7 @@ public class HomeController {
      *
      */
     private Map<String, List<ProjectReminder>> reminders;
+    private List<Integer> reminderIDs = new ArrayList<>();
     private List<RegistrationRequest> requests;
     private List<String> hidden_projects_codes = new ArrayList<>();
     private int rows;
@@ -66,6 +67,8 @@ public class HomeController {
     private Label project_hidden;
     @FXML
     private Button project_button;
+    @FXML
+    private Button refresh;
 
 
     public void initialize() throws IOException {
@@ -133,6 +136,33 @@ public class HomeController {
             }
         });
     }
+    @FXML
+    private void refreshReminders(MouseEvent event) throws IOException {
+        try {
+            loadReminders();
+            List<ProjectReminder> newReminders = getRemindersFromDB();
+
+            for (ProjectReminder rem : newReminders) {
+                if (!reminderIDs.contains(rem.getId())) {
+                    //ak tato notifikacia tam este nie je tak ju prida
+                    if (reminders.containsKey(rem.getProjectNumber())) {
+                        //ak tam je uz cislo projektu
+                        reminders.get(rem.getProjectNumber()).add(rem);
+                    } else {
+                        //ak taketo cislo projektu tam este nie je
+                        reminders.put(rem.getProjectNumber(), List.of(rem));
+                    }
+
+                    reminderIDs.add(rem.getId());
+                }
+            }
+            rearrangeGridPane();
+        } catch (SQLException e) {
+            MyAlert.showError(DatabaseException.ERROR);
+            e.printStackTrace();
+        }
+
+    }
 
     private void setColsByAppSize() {
         cols = Math.floorDiv((int) App.getScene().getWidth() - 200, 270);
@@ -192,20 +222,24 @@ public class HomeController {
             e.printStackTrace();
         }
     }
+    private List<ProjectReminder> getRemindersFromDB() throws SQLException {
+        List<ProjectReminder> reminders0;
+        if (SignedUser.getUser().getUserTypeU() == User.USERTYPE.CENTRAL_ADMIN) {
+            //ak je centralny admin tak sa ukazu vsetky notifikacie
+            reminders0 = ProjectReminderService.getInstance().getActiveReminders();
+        } else {
+            //ak je projektovy tak len tie co su v ramci jeho projektu
+            reminders0 = ProjectReminderService.getInstance().getActiveRemindersByUser(SignedUser.getUser().getId());
+        }
+        return reminders0;
+    }
 
     private void getReminders() {
 
         try {
-            List<ProjectReminder> reminders0;
-            if (SignedUser.getUser().getUserTypeU() == User.USERTYPE.CENTRAL_ADMIN) {
-                //ak je centralny admin tak sa ukazu vsetky notifikacie
-                reminders0 = ProjectReminderService.getInstance().getActiveReminders();
-            } else {
-                //ak je projektovy tak len tie co su v ramci jeho projektu
-                reminders0 = ProjectReminderService.getInstance().getActiveRemindersByUser(SignedUser.getUser().getId());
-            }
+            List<ProjectReminder> reminders0 = getRemindersFromDB();
             reminders = reminders0.stream().collect(Collectors.groupingBy(ProjectReminder::getProjectNumber));
-
+            reminderIDs = reminders0.stream().map(rem -> rem.getId()).collect(Collectors.toList());
 
         } catch (SQLException e) {
             MyAlert.showError(DatabaseException.ERROR);

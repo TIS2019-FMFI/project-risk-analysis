@@ -50,6 +50,7 @@ app\gui\project\ProjectListFilterController.class
 app\importer\ExcellParser.class
 app\exception\GmailMessagingException.class
 app\gui\home\HomeController$3.class
+app\transactions\ProjectEditTransaction.class
 app\gui\administration\DialogProjectsController.class
 app\gui\project\ProjectTabController$1.class
 app\importer\ExcelRow.class
@@ -68,6 +69,7 @@ app\App.class
 app\gui\profile\ProfileEditController.class
 app\gui\auth\LoginController.class
 app\gui\home\HomeController.class
+app\transactions\ImportSAPTransaction.class
 app\config\SignedUser.class
 app\exception\DatabaseException.class
 app\transactions\Registration.class
