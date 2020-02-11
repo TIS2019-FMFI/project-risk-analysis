@@ -47,6 +47,7 @@
             </VBox.margin></Button>
          <HBox fx:id="firstChartGroup" alignment="CENTER" prefHeight="300.0" />
          <HBox fx:id="secondChartGroup" alignment="CENTER" prefHeight="300.0" />
+         <HBox fx:id="singleChart" alignment="CENTER" prefHeight="300.0" />
          <HBox fx:id="thirdChartGroup" alignment="CENTER" />
          <HBox alignment="TOP_RIGHT" prefHeight="32.0">
             <children>

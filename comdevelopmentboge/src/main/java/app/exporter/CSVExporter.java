@@ -16,8 +16,8 @@ public class CSVExporter {
     public static void exportDataToCSV(List<List<String>> data, String fileIdentifier){
         String directoryName = App.getPropertiesManager().getProperty("file.location");
         if(directoryName == null || "".equals(directoryName)){
-            MyAlert.showWarning("Nenastavili ste priečinok na export csv suboru,\n subor bol exportovaný do priečinka C:/file");
-            directoryName="C:/file";
+            MyAlert.showWarning("Nenastavili ste priečinok na export csv suboru,\n subor bol exportovaný do priečinka C:/files");
+            directoryName="C:/files";
         }
         String fileName = fileIdentifier + new SimpleDateFormat("yyyy-MM-dd@HH-mm-ss'.txt'").format(new Date());
 

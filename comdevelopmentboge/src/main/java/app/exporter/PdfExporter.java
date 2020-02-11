@@ -137,6 +137,11 @@ public class PdfExporter {
         Image RDCostsChartImage = createLineBarChartImage(data, "Project "+projectData.get(0).getProjectNumber() + " R&D Costs", planned);
         document.add(RDCostsChartImage);
 
+        //R&D time costs chart
+        data = ChartService.getChartService().getRDTimeCosts(projectData.get(0).getProjectNumber(), ProjectFilter.getInstance().getFrom(), ProjectFilter.getInstance().getTo());
+        Image RDTimeCostsChartImage = createLineBarChartImage(data, "Project "+projectData.get(0).getProjectNumber() + " R&D time Costs", BigDecimal.ZERO);
+        document.add(RDTimeCostsChartImage);
+
         //Prototype costs chart
         data = ChartService.getChartService().getPrototypeCosts(projectData.get(0).getProjectNumber(), ProjectFilter.getInstance().getFrom(), ProjectFilter.getInstance().getTo());
         planned = ProjectService.getProjectService().getPrototypeCosts(projectData.get(0).getProjectNumber());
@@ -296,17 +301,7 @@ public class PdfExporter {
      */
     private static Image createLineBarChartImage(LinkedHashMap<Period, BigDecimal> data, String title, BigDecimal planned) throws IOException, BadElementException {
         JFreeChart ch = getBarLineChart(data, title, planned);
-
-        BufferedImage chartImage = ch.createBufferedImage( 800, 500, null);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(chartImage, "png", baos);
-        Image iTextImage = Image.getInstance(baos.toByteArray());
-        iTextImage.scaleAbsolute(500f, 300f);
-
-        iTextImage.setAlignment(Element.ALIGN_CENTER);
-
-        return iTextImage;
+        return getImage(ch);
     }
     /**
      * z grafu vytvorí obraázok, ktorý možno použiť pri vytváraní PDF
@@ -318,8 +313,18 @@ public class PdfExporter {
      */
     private static Image createPieChartImage(LinkedHashMap<String, BigDecimal> data, String title) throws IOException, BadElementException {
         JFreeChart ch = getPieChart(data, title);
+        return getImage(ch);
+    }
 
-        BufferedImage chartImage = ch.createBufferedImage( 800, 500, null);
+    /**
+     * vráti itext image vytvorený z JFreeChart objektu
+     * @param ch
+     * @return
+     * @throws IOException
+     * @throws BadElementException
+     */
+    private static Image getImage(JFreeChart ch) throws IOException, BadElementException {
+        BufferedImage chartImage = ch.createBufferedImage(800, 500, null);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(chartImage, "png", baos);

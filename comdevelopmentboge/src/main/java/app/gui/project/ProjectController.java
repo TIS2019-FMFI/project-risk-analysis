@@ -15,6 +15,7 @@ import javafx.beans.binding.Bindings;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.chart.Chart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -33,6 +34,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * controller je zodpovedný za vytvorenie scény s detailom projektu, odchytávanie eventov a zmenu dát
+ */
 public class ProjectController {
 
     private static ProjectController projectController;
@@ -54,6 +58,9 @@ public class ProjectController {
 
     @FXML
     private HBox thirdChartGroup;
+
+    @FXML
+    private HBox singleChart;
 
     @FXML
     private ImageView saveButton;
@@ -250,15 +257,21 @@ public class ProjectController {
         StackPane prototypeCostsPane = ChartRenderer.createProjectPrototypeChart(projectDef, projectFilter.getFrom(), projectFilter.getTo());
         StackPane prototypeRevenuesPane = ChartRenderer.createPrototypeRevenuesChart(projectDef, projectFilter.getFrom(), projectFilter.getTo());
         StackPane rdCostsPane = ChartRenderer.createRDCostsChart(projectDef, projectFilter.getFrom(), projectFilter.getTo());
+        StackPane rdTimeCostsPane = ChartRenderer.createRDTimeCostsChart(projectDef, projectFilter.getFrom(), projectFilter.getTo());
         StackPane projectSummaryRevenues = ChartRenderer.createSummaryProjectRevenues(projectDef, projectFilter.getFrom(), projectFilter.getTo());
         StackPane projectSummaryCosts = ChartRenderer.createSummaryProjectCosts(projectDef, projectFilter.getFrom(), projectFilter.getTo());
 
         firstChartGroup.getChildren().clear();
         projectCostsPane.setPadding(new Insets(0, 50, 0, 0));
         firstChartGroup.getChildren().addAll(projectCostsPane, prototypeCostsPane);
+
         secondChartGroup.getChildren().clear();
         prototypeRevenuesPane.setPadding(new Insets(0, 50, 0, 0));
         secondChartGroup.getChildren().addAll(prototypeRevenuesPane, rdCostsPane);
+
+        singleChart.getChildren().clear();
+        singleChart.getChildren().add(rdTimeCostsPane);
+
         thirdChartGroup.getChildren().clear();
         thirdChartGroup.getChildren().addAll(projectSummaryRevenues, projectSummaryCosts);
     }
