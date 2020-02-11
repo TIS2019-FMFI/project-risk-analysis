@@ -15,7 +15,7 @@
     <children>
         <AnchorPane maxHeight="-Infinity" prefHeight="800.0" style="-fx-background-color: whitesmoke;">
             <children>
-                <VBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="1352.0" AnchorPane.bottomAnchor="1055.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <VBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="96.0" prefWidth="1418.0" AnchorPane.bottomAnchor="1274.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
                         <ImageView fx:id="close" fitHeight="25.0" fitWidth="25.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -27,43 +27,26 @@
                         </ImageView>
                     </children>
                 </VBox>
-                <VBox alignment="CENTER" layoutY="66.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="1352.0" AnchorPane.bottomAnchor="995.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="66.0">
-                    <children>
-                        <Label fx:id="name" alignment="CENTER" prefHeight="73.0" prefWidth="963.0" text="Meno Priezvisko">
-                            <font>
-                                <Font name="System Bold" size="36.0" />
-                            </font>
-                        </Label>
-                    </children>
-                </VBox>
-                <ImageView fx:id="user_picture" fitHeight="226.0" fitWidth="218.0" layoutX="246.0" layoutY="228.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="668.4000000000001" AnchorPane.leftAnchor="246.0" AnchorPane.rightAnchor="908.8" AnchorPane.topAnchor="228.0">
+                <ImageView fx:id="user_picture" fitHeight="226.0" fitWidth="218.0" layoutX="248.0" layoutY="329.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="823.4000000000001" AnchorPane.leftAnchor="248.0" AnchorPane.rightAnchor="909.2" AnchorPane.topAnchor="329.0">
                     <image>
                         <Image url="@../../images/user1.png" />
                     </image>
                 </ImageView>
-                <StackPane alignment="CENTER_RIGHT" layoutX="596.0" layoutY="337.0" prefHeight="131.0" prefWidth="500.0" AnchorPane.bottomAnchor="646.0" AnchorPane.leftAnchor="596.0" AnchorPane.rightAnchor="256.0" AnchorPane.topAnchor="337.0">
+                <StackPane alignment="CENTER_RIGHT" layoutX="664.0" layoutY="438.0" prefHeight="121.0" prefWidth="500.0" AnchorPane.bottomAnchor="811.0" AnchorPane.leftAnchor="661.0" AnchorPane.rightAnchor="256.0" AnchorPane.topAnchor="438.0">
                     <children>
-                        <TextField fx:id="passwordVisible" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="80.0" prefWidth="500.0" style="-fx-background-color: #2b2b2b; -fx-background-radius: 100; -fx-text-inner-color: white;" visible="false">
-                            <font>
-                                <Font size="24.0" />
-                            </font>
-                            <StackPane.margin>
-                                <Insets right="50.0" />
-                            </StackPane.margin>
-                        </TextField>
-                        <PasswordField fx:id="passwordField" alignment="CENTER" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="50.0" prefWidth="500.0" style="-fx-background-color: #2b2b2b; -fx-background-radius: 100; -fx-text-inner-color: white;">
+                        <PasswordField fx:id="passwordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="500.0" style="-fx-background-color: #2b2b2b; -fx-background-radius: 100; -fx-text-inner-color: white;">
                             <font>
                                 <Font size="24.0" />
                             </font>
                         </PasswordField>
-                        <ImageView fx:id="password_edit" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#passwordEdit" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../../images/edit.png" />
-                            </image>
+                        <TextField fx:id="passwordVisible" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="51.0" prefWidth="500.0" style="-fx-background-color: #2b2b2b; -fx-background-radius: 100; -fx-text-inner-color: white;" visible="false">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
                             <StackPane.margin>
-                                <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+                                <Insets />
                             </StackPane.margin>
-                        </ImageView>
+                        </TextField>
                         <ImageView fx:id="password_save" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#passwordSave" pickOnBounds="true" preserveRatio="true" visible="false">
                             <image>
                                 <Image url="@../../images/confirm.png" />
@@ -72,17 +55,34 @@
                                 <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
                             </StackPane.margin>
                         </ImageView>
-                        <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="100.0" style="-fx-background-color: white; -fx-background-radius: 100;" text="Heslo">
+                        <ImageView fx:id="password_edit" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#passwordEdit" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../images/edit.png" />
+                            </image>
                             <StackPane.margin>
-                                <Insets bottom="60.0" right="360.0" top="5.0" />
+                                <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
                             </StackPane.margin>
+                        </ImageView>
+                  <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="100.0" style="-fx-background-color: white; -fx-background-radius: 100;" text="Heslo">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <StackPane.margin>
+                        <Insets bottom="60.0" right="370.0" />
+                     </StackPane.margin>
+                  </Label>
+                    </children>
+                </StackPane>
+                <VBox alignment="CENTER" layoutY="96.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="178.0" prefWidth="1418.0">
+                    <children>
+                        <Label fx:id="name" alignment="CENTER" prefHeight="73.0" prefWidth="963.0" text="Meno Priezvisko">
                             <font>
-                                <Font name="System Bold" size="14.0" />
+                                <Font name="System Bold" size="36.0" />
                             </font>
                         </Label>
                     </children>
-                </StackPane>
-                <StackPane alignment="CENTER_RIGHT" layoutX="596.0" layoutY="200.0" prefHeight="136.0" prefWidth="500.0" AnchorPane.bottomAnchor="778.0" AnchorPane.leftAnchor="596.0" AnchorPane.rightAnchor="256.0" AnchorPane.topAnchor="200.0">
+                </VBox>
+                <StackPane alignment="CENTER_RIGHT" layoutX="661.0" layoutY="316.0" prefHeight="122.0" prefWidth="500.0" AnchorPane.bottomAnchor="930.0" AnchorPane.leftAnchor="661.0" AnchorPane.rightAnchor="256.0" AnchorPane.topAnchor="316.0">
                     <children>
                         <TextField fx:id="email" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="500.0" style="-fx-background-color: #2b2b2b; -fx-background-radius: 100; -fx-text-inner-color: white;">
                             <font>

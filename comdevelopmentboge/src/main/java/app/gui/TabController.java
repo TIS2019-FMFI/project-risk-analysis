@@ -97,6 +97,7 @@ public class TabController {
         for (Tab tab : tabs) {
             if (tab.getId().equals("profile")) {
                 mainTabPane.getSelectionModel().select(tab);
+                tab.setContent(loadFXML("profile/profile"));
             }
         }
     }
