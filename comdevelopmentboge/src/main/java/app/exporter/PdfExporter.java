@@ -1,5 +1,6 @@
 package app.exporter;
 
+import app.App;
 import app.db.Project;
 import app.db.SAP;
 
@@ -16,6 +17,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import app.gui.MyAlert;
 import app.gui.graph.ChartRenderer;
 import app.gui.graph.Period;
 import app.gui.project.ProjectFilter;
@@ -45,7 +47,11 @@ public class PdfExporter {
 
     public static void exportPdf(List<Project> projectData, List<SAP> sapData) throws IOException, DocumentException {
 
-        String directoryName = "C:/pdf";
+        String directoryName = App.getPropertiesManager().getProperty("file.location");
+        if(directoryName == null || "".equals(directoryName)){
+            MyAlert.showWarning("Nenastavili ste priečinok na export súborov,\n súbor bol exportovaný do priečinka C:/files");
+            directoryName="C:/files";
+        }
         String fileName = new SimpleDateFormat("yyyy-MM-dd@HH-mm-ss'.pdf'").format(new Date());
 
         //if directory does not exist, create one
