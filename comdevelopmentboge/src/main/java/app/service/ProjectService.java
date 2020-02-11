@@ -95,36 +95,31 @@ public class ProjectService {
 
         String projectName = ProjectListFilter.getProjectListFilter().getProjectName();
         String projectNumber = ProjectListFilter.getProjectListFilter().getProjectNumber();
-        int customer = ProjectListFilter.getProjectListFilter().getCustomer();
+        String customer = ProjectListFilter.getProjectListFilter().getCustomer();
 
         String sql = "select p.* from projects p ";
         String criteria1 = "";
         String criteria2 = "";
         String criteria3 = "";
 
-        boolean anyCriteria = false;
-        if(projectName != null){
-            criteria1 = "projectName='"+projectName+"'";
-            anyCriteria = true;
+        //if any customer name typed, inner join with customers table
+        if(customer != null && !"".equals(customer)){
+            sql += " inner join customers on customers.name like '%" + customer+ "%'";
         }
 
-        if(projectNumber != null){
-            anyCriteria = true;
+        if(projectName != null && !"".equals(projectName)){
+            criteria1 = "projectName like '%"+projectName+"%'";
+        }
+
+        if(projectNumber != null && !"".equals(projectNumber)){
             if(!criteria1.equals("")){
-                criteria2 += "and projectNumber='" + projectNumber+"'";
+                criteria2 += "and projectNumber like '%" + projectNumber+"%'";
             } else{
-                criteria2 += "projectNumber='" + projectNumber+"'";
+                criteria2 += "projectNumber like'%" + projectNumber+"%'";
             }
         }
 
-        if(customer != 0){
-            if(anyCriteria){
-                criteria3 = "and customer_id="+customer;
-            } else{
-                criteria3 = " customer_id=" + customer;
-            }
-        }
-        sql+= ((!criteria1.equals("") || !criteria2.equals("") || !criteria3.equals("") )?" where ":"") + criteria1 + criteria2 +criteria3 + ";";
+        sql+= ((!criteria1.equals("") || !criteria2.equals("") )?" where ":"") + criteria1 + criteria2 + ";";
 
         System.out.println(sql);
         try(Statement st = DbContext.getConnection().createStatement()){
