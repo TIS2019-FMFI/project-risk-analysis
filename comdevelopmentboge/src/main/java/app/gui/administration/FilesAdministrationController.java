@@ -59,6 +59,7 @@ public class FilesAdministrationController {
                 MyAlert.showSuccess("Logy boli úspešne uložené do priečinku " + directoryName);
             }
             catch (IOException e){
+                MyAlert.showError("Logy sa nepodarilo uložiť");
                 e.printStackTrace();
                 System.exit(-1);
             }

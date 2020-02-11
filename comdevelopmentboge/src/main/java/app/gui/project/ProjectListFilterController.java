@@ -21,6 +21,9 @@ public class ProjectListFilterController {
     @FXML
     private ComboBox<Customer> customer;
 
+    /**
+     * initialize all components in filter bar, sets functions to handle events
+     */
     @FXML
     public void initialize(){
 
@@ -59,14 +62,26 @@ public class ProjectListFilterController {
         customer.setOnAction(customerChosenEvent);
     }
 
+    /**
+     * filter project list by name
+     * @param name
+     */
     private void filterByName(String name){
         ProjectListFilter.getProjectListFilter().setProjectName(name);
     }
 
+    /**
+     * filter project list by number
+     * @param number
+     */
     private void filterByNumber(String number){
         ProjectListFilter.getProjectListFilter().setProjectNumber(number);
     }
 
+    /**
+     * filter project list by customer
+     * @param customerId
+     */
     private void filterByCustomer(int customerId){
         ProjectListFilter.getProjectListFilter().setCustomer(customerId);
     }

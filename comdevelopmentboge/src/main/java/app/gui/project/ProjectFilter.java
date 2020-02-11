@@ -55,18 +55,32 @@ public class ProjectFilter {
         });
     }
 
+    /**
+     * handles pressing back button
+     * @throws IOException
+     */
     @FXML
     public void onBackPressed() throws IOException {
         ProjectListFilter.getProjectListFilter().restartValues();
         TabController.getInstance().selectProjectTab();
     }
 
+    /**
+     * filters project data according to datepickers values
+     * @throws ParseException
+     * @throws IOException
+     */
     private void filterData() throws ParseException, IOException {
         ProjectController.getProjectController().filterSapData((from!=null)?from:initialDate, (to!=null)?to:(new Date(System.currentTimeMillis())));
         ProjectController.getProjectController().createCharts();
 
     }
 
+    /**
+     * refreshes filter after pressing refresh button
+     * @throws ParseException
+     * @throws IOException
+     */
     @FXML
     public void refreshFilter() throws ParseException, IOException {
         from = null;

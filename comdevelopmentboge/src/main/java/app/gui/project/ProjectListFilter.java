@@ -14,6 +14,10 @@ public class ProjectListFilter {
         return projectNumber;
     }
 
+    /**
+     * sets filter value projectNumber and reloads project list
+     * @param projectNumber
+     */
     public void setProjectNumber(String projectNumber) {
         this.projectNumber = projectNumber;
         ProjectTabController.getInstance().reloadList();
@@ -23,6 +27,10 @@ public class ProjectListFilter {
         return projectName;
     }
 
+    /**
+     * sets filter value projectName and reloads project list
+     * @param projectName
+     */
     public void setProjectName(String projectName) {
         this.projectName = projectName;
         ProjectTabController.getInstance().reloadList();
@@ -32,11 +40,18 @@ public class ProjectListFilter {
         return customerId;
     }
 
+    /**
+     * sets filter value customer and reloads project list
+     * @param customerId
+     */
     public void setCustomer(int customerId) {
         this.customerId = customerId;
         ProjectTabController.getInstance().reloadList();
     }
 
+    /**
+     * restarts filter values to inital
+     */
     public void restartValues(){
         this.projectNumber = null;
         this.projectName = null;

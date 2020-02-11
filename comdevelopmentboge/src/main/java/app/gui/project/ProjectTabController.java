@@ -56,14 +56,27 @@ public class ProjectTabController{
         projectListView.setPrefHeight(App.getScene().getHeight() - 80);
     }
 
+    /**
+     * sets tab content to be project details
+     * @param projectDef
+     * @throws IOException
+     */
     private void showProjectDetails(String projectDef) throws IOException {
         TabController.getInstance().selectProjectDetailsTab(projectDef);
     }
 
+    /**
+     * set UI component for each project in list
+     * @param project
+     * @param projectsToBeWarned
+     * @return
+     * @throws IOException
+     */
     private Pane setProject(Project project, HashSet<String> projectsToBeWarned) throws IOException {
         FXMLLoader loader = loadFXML("project-list-item");
         Pane pane = loader.load();
         pane.setId(project.getProjectNumber());
+
         Text projectNumberTxt = (Text) pane.lookup("#projectNumber");
         projectNumberTxt.setText(project.getProjectNumber());
 
@@ -88,7 +101,9 @@ public class ProjectTabController{
         return fxmlLoader;
     }
 
-
+    /**
+     * reload project list according to filter
+     */
     public void reloadList(){
         ArrayList<Project> projects= ProjectService.getProjectService().findProjectsByCriteria();
         HashSet<String> projectsToBeWarned = getProjectsToBeWarned();
@@ -103,6 +118,10 @@ public class ProjectTabController{
         }
     }
 
+    /**
+     * get projects that need to be warned by showing warn sign in list item UI component
+     * @return
+     */
     private HashSet<String> getProjectsToBeWarned(){
         HashSet<ProjectCosts> costsList = new HashSet<>();
         try {
