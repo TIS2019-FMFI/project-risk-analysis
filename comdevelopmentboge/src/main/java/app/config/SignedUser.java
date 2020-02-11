@@ -4,13 +4,13 @@ import app.db.User;
 
 public class SignedUser {
     /**
-     * Prihlásený užívateľ
+     * Prihlaseny uzivatel
      */
     private static User user;
 
     /**
-     * Vráti inštanciu užívateľa
-     * @return
+     * Vrati instanciu uzivatela
+     * @return instancia uzivatela
      */
     public static User getUser() {
         if (user == null) {
@@ -20,8 +20,8 @@ public class SignedUser {
     }
 
     /**
-     * Nastaví prihláseného užívateľa
-     * @param user0
+     * Nastavi prihlaseneho uzivatela
+     * @param user0 prihlaseny uzivatel
      */
     public static void setUser(final User user0) {
         user = user0;

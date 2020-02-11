@@ -1,6 +1,5 @@
 package app.gui.administration;
 
-import app.db.Project;
 import app.db.User;
 import app.exception.DatabaseException;
 import app.transactions.UserTypeChangeTransaction;
@@ -18,30 +17,37 @@ import java.util.List;
 public class DialogNoProjectsConfirmDialogController {
 
     /**
-     * Getter a setter inštancie dialóg
+     * Getter a setter instancie dialog
      */
     private static DialogNoProjectsConfirmDialogController instance;
     public static DialogNoProjectsConfirmDialogController getInstance(){return instance;}
 
     /**
-     * fullName - grafický komponent, ktorý zobrazuje celé meno užívateľa
-     * userType - grafický komponent, ktorý zobrazuje rolu užívateľa
-     * projectsListView - zoznam projektov, ktorých je užívateľ adminom
+     * fullName - graficky komponent, ktory zobrazuje cele meno uzivatela
+     * userType - graficky komponent, ktory zobrazuje rolu uzivatela
+     * projectsListView - zoznam projektov, ktorych je uzivatel adminom
      */
     @FXML private Label fullName;
     @FXML private Label userType;
 
     /**
-     * user - užívateľ, ktorého rolu chceme zmeniť
-     * projectsToSave - projekty, ktoré pridelíme užívateľovi
-     * newType - nová rola, ktorú chceme užívateľovi nastaviť
-     * stages - otvorené dialógové okná
+     * user - uzivatel, ktoreho rolu chceme zmenit
+     * projectsToSave - projekty, ktore pridelime uzivatelovi
+     * newType - nova rola, ktoru chceme uzivatelovi nastavit
+     * stages - otvorene dialogove okna
      */
     private User user;
     private User.USERTYPE newType;
     private List<Stage> stages;
 
 
+    /**
+     *
+     * @param stages aktualne otvorene dialogove okna
+     * @param user pouzivatel, ktoremu menime rolu
+     * @param newType typ roly, ktoru chceme uzivatelovi pridelit
+     * @throws IOException chyba v grafickom komponente
+     */
     public void setDialogNoProjects(List<Stage> stages, User user, User.USERTYPE newType) throws IOException {
         instance = this;
         this.stages = stages;
@@ -52,25 +58,30 @@ public class DialogNoProjectsConfirmDialogController {
     }
 
     /**
-     * Zatvorenie aktuálneho dialógového okna
+     * Zatvorenie aktualneho dialogoveho okna
      * @param event
      */
     @FXML
-    private void close(MouseEvent event) {
+    void close(MouseEvent event) {
         stages.get(stages.size()-1).close();
     }
 
     /**
-     * Spustenie transakcie na zmenu roly a projektov užívateľa
+     * Spustenie transakcie na zmenu roly a projektov uzivatela
      * @param event
      * @throws SQLException
      * @throws DatabaseException
      */
     @FXML
-    private void submit(MouseEvent event) throws SQLException, DatabaseException {
+    private void submit(MouseEvent event) throws SQLException {
         submitDialog("Chcete potvrdiť zmeny používateľa " + user.getFullName() + "?");
     }
 
+    /**
+     * Zobrazenie potvrdzovacieho dialogu
+     * @param text text v dialogu
+     * @throws SQLException chyba pri ziskavani dat z databazy
+     */
     private void submitDialog(String text) throws SQLException {
         Alert alert = new Alert(Alert.AlertType.WARNING, text, ButtonType.OK);
         alert.showAndWait();

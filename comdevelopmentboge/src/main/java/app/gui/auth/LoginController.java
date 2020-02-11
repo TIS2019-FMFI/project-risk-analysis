@@ -25,22 +25,22 @@ import java.sql.SQLException;
 public class LoginController {
 
     /**
-     * passwordShown - boolovská hodnota zobrazenia hesla
+     * passwordShown - boolovska hodnota zobrazenia hesla
      */
     private boolean passwordShown;
 
     /**
-     * eyeOn - nepreškrtnutý znak oka, heslo je viditeľné
-     * eyeOff - preškrtnutý znak oka, heslo nie je viditeľné
+     * eyeOn - nepreskrtnuty znak oka, heslo je viditelne
+     * eyeOff - preskrtnuty znak oka, heslo nie je viditelne
      */
     private Image eyeOn = new Image("app/images/eyeOn.png");
     private Image eyeOff = new Image("app/images/eyeOff.png");
 
     /**
-     * email - grafický komponent, ktorý zobrazuje email užívateľa
-     * eye - grafický komponent, ktorý zobrazuje obrázok oka, teda preškrtnuté alebo nepreškrtnuté oko
-     * passwordField - grafický komponent, ktorý zobrazuje heslo vo forme bodiek
-     * passwordVisible - grafický komponent, ktorý zobrazuje viditeľné heslo
+     * email - graficky komponent, ktory zobrazuje email uzivatela
+     * eye - graficky komponent, ktory zobrazuje obrazok oka, teda preskrtnute alebo nepreskrtnute oko
+     * passwordField - graficky komponent, ktory zobrazuje heslo vo forme bodiek
+     * passwordVisible - graficky komponent, ktory zobrazuje viditelne heslo
      */
     @FXML private TextField email;
     @FXML private ImageView eye;
@@ -70,7 +70,7 @@ public class LoginController {
     }
 
     /**
-     * Nastavenie grafických komponentov pri úvodnej obrazovke
+     * Nastavenie grafickych komponentov pri uvodnej obrazovke
      */
     public void initialize() {
         passwordShown = false;
@@ -80,9 +80,9 @@ public class LoginController {
     }
 
     /**
-     * Otvorenie registrácie
+     * Otvorenie registracie
      * @param event
-     * @throws IOException
+     * @throws IOException chyba v grafickom komponente
      */
     public void openRegistration(MouseEvent event) throws  IOException {
         App.setRoot("gui/registration/registration");
@@ -90,8 +90,8 @@ public class LoginController {
 
 
     /**
-     * Získanie hesla z grafického komponentu
-     * @return
+     * Ziskanie hesla z grafickeho komponentu
+     * @return ziskane heslo
      */
     private String getPasswordText() {
         return passwordShown ? passwordVisible.getText() : passwordField.getText();
@@ -99,7 +99,7 @@ public class LoginController {
 
 
     /**
-     * Prihlásenie užívateľa a zobrazenie stránky podľa prihláseného užívateľa
+     * Prihlasenie uzivatela a zobrazenie stranky podla prihlaseneho uzivatela
      * @param event
      */
     @FXML
@@ -124,8 +124,8 @@ public class LoginController {
     }
 
     /**
-     * Otvorenie stránky, pokiaľ užívateľ po registrácii ešte nie je schválený
-     * @throws IOException
+     * Otvorenie stranky, pokial uzivatel po registracii este nie je schvaleny
+     * @throws IOException chyba v grafickom komponente
      */
     private void openWaitingPage() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(RegistrationController.class.getResource("registration-waiting.fxml"));

@@ -26,7 +26,7 @@ import java.util.List;
 public class FilesAdministrationController {
 
     /**
-     * Export logov - záznamov používania aplikácie
+     * Export logov - zaznamov pouzivania aplikacie
      */
     @FXML
     public void exportLogs(){
@@ -66,12 +66,10 @@ public class FilesAdministrationController {
         } else{
             MyAlert.showWarning("V systéme sa nenachádzajú žiadne logy.");
         }
-
-
     }
 
     /**
-     * Export logov - záznam všetkých reminderov
+     * Export logov - zaznam vsetkych reminderov
      */
     @FXML
     public void exportReport() throws SQLException {

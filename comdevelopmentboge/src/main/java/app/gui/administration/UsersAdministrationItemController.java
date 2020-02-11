@@ -3,7 +3,6 @@ package app.gui.administration;
 
 import app.config.SendMail;
 import app.db.User;
-import app.exception.DatabaseException;
 import app.gui.MyAlert;
 import app.service.UserService;
 import javafx.fxml.FXML;
@@ -23,15 +22,15 @@ import java.util.Random;
 public class UsersAdministrationItemController {
 
     /**
-     * Getter a setter inštancie položky zoznamu užívateľov
+     * Getter a setter instancie polozky zoznamu uzivatelov
      */
     private static UsersAdministrationItemController instance = new UsersAdministrationItemController();
     public static UsersAdministrationItemController getInstance(){return instance;}
 
     /**
-     * userName - grafický komponent, ktorý zobrazuje meno užívateľa
-     * email - grafický komponent, ktorý zobrazuje email užívateľa
-     * userType - grafický komponent, ktorý zobrazuje rolu používateľa
+     * userName - graficky komponent, ktory zobrazuje meno uzivatela
+     * email - graficky komponent, ktory zobrazuje email uzivatela
+     * userType - graficky komponent, ktory zobrazuje rolu pouzivatela
      */
     @FXML private Label userName;
     @FXML private Label email;
@@ -42,8 +41,8 @@ public class UsersAdministrationItemController {
     List<Stage> stages = new ArrayList<>();
 
     /**
-     * Nastavenie konkrétneho používateľa
-     * @param user
+     * Nastavenie konkretneho pouzivatela
+     * @param user pouzivatel, ktoremu menime rolu
      */
     public void setUser(User user) {
         this.user = user;
@@ -51,12 +50,12 @@ public class UsersAdministrationItemController {
     }
 
     /**
-     * Nastavenie položky pre konkrétneho užívateľa
-     * @param fullName - celé meno užívateľa
+     * Nastavenie polozky pre konkretneho uzivatela
+     * @param emailTxt - email užívateľa
      */
-    public void setInfo(String fullName) {
+    public void setInfo(String emailTxt) {
         try {
-            this.user = UserService.getInstance().findUserByFullName(fullName);
+            this.user = UserService.getInstance().findUserByEmail(emailTxt);
             userName.setText(user.getFullName());
             email.setText(user.getEmail());
             userType.setText(userTypeToSlovak(user.getUserType()));
@@ -67,10 +66,10 @@ public class UsersAdministrationItemController {
     }
 
     /**
-     * Preklad užívateľskej roly z angličtiny (uložené v databáze)
-     * do slovenčiny (zobrazené v aplikácii)
-     * @param userType - rola užívateľa
-     * @return
+     * Preklad uzivatelskej roly z anglictiny (uložene v databaze)
+     * do slovenciny (zobrazene v aplikacii)
+     * @param userType - rola uzivatela
+     * @return slovensky preklad uzivatelskej roly
      */
     public String userTypeToSlovak(String userType) {
         if(userType.equals("CENTRAL_ADMIN")) {
@@ -89,8 +88,8 @@ public class UsersAdministrationItemController {
     }
 
     /**
-     * Zmena roly užívateľa
-     * @throws IOException
+     * Zmena roly uzivatela
+     * @throws IOException chyba v grafickom komponente
      */
     @FXML
     public void editUserType() throws IOException {
@@ -100,17 +99,15 @@ public class UsersAdministrationItemController {
         Scene scene = new Scene(parent, 300, 400);
         Stage stage = new Stage();
         stages.add(stage);
-        onCloseHandler(stages.get(stages.size()-1), this.stages);
         stage.setScene(scene);
         dialogController.setSelected(stages, user);
         stage.showAndWait();
     }
 
     /**
-     * Zobrazenie projektov, ktorých je adminom užívateľ
-     * @throws IOException
-     * @throws DatabaseException
-     * @throws SQLException
+     * Zobrazenie projektov, ktorych je adminom uzivatel
+     * @throws IOException chyba v grafickom komponente
+     * @throws SQLException chyba pri ziskavani dat z databazy
      */
     @FXML
     public void showProjects() throws IOException, SQLException {
@@ -126,18 +123,17 @@ public class UsersAdministrationItemController {
     }
 
     /**
-     * Zobrazenie kontrolného dialógu pre generovanie nového hesla
+     * Zobrazenie kontrolneho dialogu pre generovanie noveho hesla
      */
     @FXML
     public void generatePassword() {
-
         if(MyAlert.showConfirmationDialog("Prajete si vygenerovať nové heslo?")) {
             generate();
         }
     }
 
     /**
-     * Vygenerovanie nového hesla
+     * Vygenerovanie noveho hesla
      */
     public void generate() {
         String recepient = MyAlert.showInputDialog("Zadaj GMAIL-ovú adresu, na ktorú sa odošle vygenerované heslo");
@@ -159,8 +155,8 @@ public class UsersAdministrationItemController {
 
 
     /**
-     * Vygenerovanie náhodného hesla
-     * @return
+     * Vygenerovanie nahodneho hesla
+     * @return nahodne vygenerovany text
      */
     private String generateString() {
         int leftLimit = 97; // letter 'a'
@@ -185,18 +181,19 @@ public class UsersAdministrationItemController {
     }
 
     /**
-     * Zatvorenie dialógov
+     * Zatvorenie dialogov
      */
     void closeAllDialogs(List<Stage> stages) {
         for(Stage stage : stages) {
+            System.out.println("closing " + stage);
             stage.close();
         }
     }
 
     /**
-     *
-     * @param stage - nastavíme, čo sa stane po zatvorení (kliknutí na X) tohto okna
-     * @param stages - všetky otvorené dialógové okná
+     * Nastavenie zatvorenia dialogov
+     * @param stage - nastavime, čo sa stane po zatvoreni (kliknuti na X) tohto okna
+     * @param stages - vsetky otvorene dialogove okna
      */
     void onCloseHandler(Stage stage, List<Stage> stages) {
         stage.setOnCloseRequest(E -> {

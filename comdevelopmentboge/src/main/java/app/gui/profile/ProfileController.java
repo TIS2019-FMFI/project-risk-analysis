@@ -9,15 +9,15 @@ import java.io.IOException;
 public class ProfileController {
 
     /**
-     * Getter a setter inštancie profilu
+     * Getter a setter instancie profilu
      */
     private static ProfileController instance = new ProfileController();
     public static ProfileController getInstance(){return instance;}
 
 
     /**
-     * Nastavenie scény
-     * @throws IOException
+     * Nastavenie sceny
+     * @throws IOException chyba v grafickom komponente
      */
     public void init() throws IOException {
         TabController.getInstance().selectProfile();

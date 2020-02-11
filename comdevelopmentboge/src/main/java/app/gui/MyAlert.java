@@ -11,8 +11,8 @@ import java.util.function.Function;
 public class MyAlert {
 
     /**
-     * Zobrazenie dialógu po zistení chyby - typ error
-     * @param text
+     * Zobrazenie dialogu po zisteni chyby - typ error
+     * @param text text v dialogu
      */
     public static void showError(String text) {
         Alert alert = new Alert(Alert.AlertType.ERROR, text, ButtonType.OK);
@@ -23,8 +23,8 @@ public class MyAlert {
     }
 
     /**
-     * Zobrazenie dialógu - typ confirmation
-     * @param text
+     * Zobrazenie dialogu - typ confirmation
+     * @param text text v dialogu
      */
     public static void showSuccess(String text) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, text, ButtonType.OK);
@@ -39,8 +39,8 @@ public class MyAlert {
     }
 
     /**
-     * Zobrazenie dialógu - typ warning
-     * @param text
+     * Zobrazenie dialogu - typ warning
+     * @param text text v dialogu
      */
     public static void showWarning(String text) {
         Alert alert = new Alert(Alert.AlertType.WARNING, text, ButtonType.OK);
@@ -53,7 +53,7 @@ public class MyAlert {
 
     /**
      * Zobrazenie dialógu - typ input, teda s textovým vstupom
-     * @param text
+     * @param text - text dialógu
      * @return
      */
     public static String showInputDialog(String text) {

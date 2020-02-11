@@ -14,9 +14,9 @@ import java.sql.SQLException;
 public class ProfileEditTransaction {
 
     /**
-     * Transakcia zmeny emailu užívateľa
-     * @param email
-     * @throws SQLException
+     * Transakcia zmeny emailu uzivatela
+     * @param email - email pouzivatela
+     * @throws SQLException chyba pri ziskavani dat z databazy
      * @throws ProfileChangeException
      */
     public static void changeEmail(String email) throws SQLException, ProfileChangeException {
@@ -45,10 +45,10 @@ public class ProfileEditTransaction {
     }
 
     /**
-     * Transakcia zmeny hesla užívateľa
-     * @param password
-     * @throws SQLException
-     * @throws ProfileChangeException
+     * Transakcia zmeny hesla uzivatela
+     * @param password zadane heslo
+     * @throws SQLException chyba pri spusteni SQL dopytu
+     * @throws ProfileChangeException vlastna vynimka, udaje nie su validne
      */
     public static void changePassword(String password) throws SQLException, ProfileChangeException {
         DbContext.getConnection().setAutoCommit(false);
@@ -74,9 +74,9 @@ public class ProfileEditTransaction {
     }
 
     /**
-     * Validácia emailu
-     * @param email
-     * @throws ProfileChangeException
+     * Validacia emailu
+     * @param email zadany email
+     * @throws ProfileChangeException vlastna vynimka, email nie je validny
      */
     private static void validateEmail(String email) throws ProfileChangeException {
         if (!isEmailFormatValid(email)) {
@@ -85,41 +85,38 @@ public class ProfileEditTransaction {
     }
 
     /**
-     * Validácia hesla
-     * @param password
-     * @throws ProfileChangeException
+     * Validacia hesla
+     * @param password zadane heslo
+     * @throws ProfileChangeException vlastna vynimka, heslo nie je validne
      */
     private static void validatePassword(String password) throws ProfileChangeException {
         if (!isPasswordFormatValid(password)) {
-            throw new ProfileChangeException("Heslo musí obsahovať aspoň jedno číslo, jedno písmeno\n a musí mať dĺžku aspoň 6 znakov");
+            throw new ProfileChangeException("Heslo musí obsahovať minimálne jedno číslo, jedno písmeno\n a musí mať dĺžku minimálne 6 znakov");
         }
     }
 
     /**
-     * Validácia formátu hesla
-     * @param password
-     * @return
+     * Validácia formatu hesla
+     * @param password zadane heslo
+     * @return true alebo false
      */
     private static boolean isPasswordFormatValid(String password) {
         return password.matches("(?=.*?[0-9])(?=.*?[A-Za-z]).+") && password.length() >= 6;
     }
 
     /**
-     * Validácia formátu emailu
-     * @param email
-     * @return
+     * Validacia formatu emailu
+     * @param email zadany email
+     * @return true alebo false
      */
     private static boolean isEmailFormatValid(String email) {
         return email.matches("[a-zA-Z0-9\\._]+@[a-zA-Z0-9\\._]+\\.[a-zA-Z]{2,5}");
     }
 
     /**
-     * Heslo v MD5 kódovaní
-     * @param password
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws UnsupportedEncodingException
-     * @throws LoginException
+     * Heslo v MD5 kodovani
+     * @param password heslo
+     * @return zahashovane heslo v MD5
      */
     private static String MD5Password(String password) {
         String md = org.apache.commons.codec.digest.DigestUtils.md5Hex(password);

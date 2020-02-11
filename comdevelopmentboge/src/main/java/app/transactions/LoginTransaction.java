@@ -13,11 +13,11 @@ import java.sql.SQLException;
 public class LoginTransaction {
 
     /**
-     * Transakcia prihlásania
-     * @param email
-     * @param password
-     * @throws SQLException
-     * @throws LoginException
+     * Transakcia prihlasenia
+     * @param email email uzivatela
+     * @param password heslo uzivatela
+     * @throws SQLException chyba pri ziskavani dat z databazy
+     * @throws LoginException vlastna vynimka, udaje zadane pri prihlaseni nie su validne
      */
     public static void login(String email, String password) throws SQLException, LoginException {
         try {
@@ -43,11 +43,11 @@ public class LoginTransaction {
 
     /**
      * Overenie hesla
-     * @param user
-     * @param password
-     * @throws NoSuchAlgorithmException
-     * @throws UnsupportedEncodingException
-     * @throws LoginException
+     * @param user pouzivatel, ktory sa prihlasuje
+     * @param password zadane heslo
+     * @throws NoSuchAlgorithmException chyba pri hashovani do MD5
+     * @throws UnsupportedEncodingException chyba pri hashovani do MD5
+     * @throws LoginException vlastna vynimka pri prihlasovani, udaje nie su validne
      */
     private static void checkPassword(User user, String password) throws NoSuchAlgorithmException, UnsupportedEncodingException, LoginException {
         String md = org.apache.commons.codec.digest.DigestUtils.md5Hex(password);
@@ -62,7 +62,7 @@ public class LoginTransaction {
     }
 
     /**
-     * Overenie, či je používateľ v systéme
+     * Overenie, ci je pouziatel v systeme
      * @param user
      * @throws LoginException
      */

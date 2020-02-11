@@ -50,7 +50,7 @@ public abstract class Crud<T> {
 
     /**
      * Vymazanie entity z tabulky.
-     * @param sql SQL dopyz
+     * @param sql SQL dopyt
      * @param id id entity, ktora sa vymaze
      * @throws SQLException
      */

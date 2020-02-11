@@ -9,16 +9,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * Obsahuje údaje o požiadavke na registráciu z databázy
+ * Obsahuje udaje o poziadavke na registraciu z databazy
  */
 public class RegistrationRequest extends Crud<RegistrationRequest>{
     /**
-     * Text, ktorý sa zobrazí na hlavnej stránke
+     * Text, ktory sa zobrazi na hlavnej stranke
      */
     private String text;
 
     /**
-     * ID úžívateľa z tabuľy USERS, ktorý žiada o registráciu
+     * ID uzivatela z tabulky USERS, ktory ziada o registraciu
      */
     private Integer user_id;
 
@@ -41,8 +41,8 @@ public class RegistrationRequest extends Crud<RegistrationRequest>{
     }
 
     /**
-     * Vloží žiadosť do tabuľky
-     * @throws SQLException
+     * Vlozi ziadost do tabulky
+     * @throws SQLException chyba pri ziskavani dat z databazy
      */
     public void insert() throws SQLException {
         String sql = "INSERT INTO registration_requests(user_id,text) VALUES(?,?) ";
@@ -51,8 +51,8 @@ public class RegistrationRequest extends Crud<RegistrationRequest>{
     }
 
     /**
-     * Vymaže žiadosť z tabuľky na základe ID používateľa
-     * @throws SQLException
+     * Vymaze ziadost z tabulky na zaklade ID pouzivatela
+     * @throws SQLException chyba pri ziskavani dat z databazy
      */
     public void delete() throws SQLException {
         String sql = "DELETE FROM registration_requests WHERE user_id = ?";
@@ -67,10 +67,10 @@ public class RegistrationRequest extends Crud<RegistrationRequest>{
     }
 
     /**
-     * Doplní údaje do SQL dopytu pre vloženie žiadosti
-     * @param s
-     * @return
-     * @throws SQLException
+     * Doplni udaje do SQL dopytu pre vlozenie ziadosti
+     * @param s - prepared statement s
+     * @return - doplneny SQL dopyt
+     * @throws SQLException vynimka pri chybe SQL dopytu
      */
     @Override
     public PreparedStatement fillInsert(PreparedStatement s) throws SQLException {
