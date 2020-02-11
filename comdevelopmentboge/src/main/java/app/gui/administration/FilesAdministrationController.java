@@ -1,5 +1,6 @@
 package app.gui.administration;
 
+import app.App;
 import app.db.Log;
 import app.db.ProjectReminder;
 import app.gui.MyAlert;
@@ -29,7 +30,11 @@ public class FilesAdministrationController {
      */
     @FXML
     public void exportLogs(){
-        String directoryName = "C:\\logs";
+        String directoryName = App.getPropertiesManager().getProperty("log.location");
+        if(directoryName == null || "".equals(directoryName)){
+            MyAlert.showWarning("Nenastavili ste priečinok na export logov,\n logy boli exportované do priečinka C:/logs");
+            directoryName="C:/logs";
+        }
         String fileName = new SimpleDateFormat("yyyy-MM-dd@HH-mm-ss'.txt'").format(new Date());
 
 
@@ -51,7 +56,7 @@ public class FilesAdministrationController {
                     bw.write(logRecord);
                 }
                 bw.close();
-                MyAlert.showSuccess("Logy boli  úspešne uložené do priečinku " + directoryName);
+                MyAlert.showSuccess("Logy boli úspešne uložené do priečinku " + directoryName);
             }
             catch (IOException e){
                 e.printStackTrace();
@@ -69,7 +74,11 @@ public class FilesAdministrationController {
      */
     @FXML
     public void exportReport() throws SQLException {
-        String directoryName = "C:\\report";
+        String directoryName = App.getPropertiesManager().getProperty("report.location");
+        if(directoryName == null || "".equals(directoryName)){
+            MyAlert.showWarning("Nenastavili ste priečinok na export reportu,\n report bol exportovaný do priečinka C:/reports");
+            directoryName="C:/report";
+        }
         String fileName = new SimpleDateFormat("yyyy-MM-dd@HH-mm-ss'.txt'").format(new Date());
 
 

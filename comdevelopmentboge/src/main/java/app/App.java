@@ -1,6 +1,7 @@
 package app;
 
 import app.config.Configuration;
+import app.config.PropertiesManager;
 import app.importer.Generate;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +20,7 @@ public class App extends Application {
     private static Scene scene;
 
     public static Scene getScene(){return scene;}
+    private static PropertiesManager propertiesManager;
 
 
     @Override
@@ -44,10 +46,15 @@ public class App extends Application {
 
     public static void main(String[] args) throws IOException {
 
+        propertiesManager = new PropertiesManager();
         Configuration.connect();
-        //Generate.createAndGenerate();
+       // Generate.createAndGenerate();
         launch();
+
 
     }
 
+    public static PropertiesManager getPropertiesManager() {
+        return propertiesManager;
+    }
 }
