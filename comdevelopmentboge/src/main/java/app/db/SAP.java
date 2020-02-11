@@ -163,6 +163,12 @@ public class SAP {
         return attributes;
     }
 
+
+    /**
+     * Funkcia, ktora vlozi data do tabulky
+     * @param sap
+     * @throws SQLException
+     */
     public void insertFromFile(ArrayList<ExcelRow> sap) throws SQLException {
         String sqlInsert = "INSERT INTO sap " +
                 "(Projektdef,PSPElement,Objektbezeichnung,Kostenart,KostenartenBez,Bezeichnung,Partnerobjekt,Periode,Jahr,Belegnr,BuchDatum,WertKWahr,KWahr,MengeErf,GME)"+

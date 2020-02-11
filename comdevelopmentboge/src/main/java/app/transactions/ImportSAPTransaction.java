@@ -14,7 +14,11 @@ import java.util.ArrayList;
 
 public class ImportSAPTransaction {
 
-
+    /**
+     * Vytvori transakciu na vlozenie dat do databazy
+     * @param sap
+     * @throws SQLException
+     */
     public static void importSAP(ArrayList<ExcelRow> sap) throws SQLException {
 
         DbContext.getConnection().setAutoCommit(false);

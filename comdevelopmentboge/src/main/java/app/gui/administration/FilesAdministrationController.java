@@ -113,14 +113,36 @@ public class FilesAdministrationController {
 
     }
 
+
     /**
-     * Import SAP dokumentu
+     * Spusti vyber suboru na import
      */
     @FXML
-    private void clickImport() throws IOException, SQLException {
+    private void clickImport() {
         FileChooser fileChooser = new FileChooser();
         File selectedFile = fileChooser.showOpenDialog(null);
-        ArrayList<ExcelRow> sap = ExcellParser.readFromFile(selectedFile);
-        ImportSAPTransaction.importSAP(sap);
+        if(selectedFile == null){
+            return;
+        }
+        ArrayList<ExcelRow> sap = null;
+        try {
+            sap = ExcellParser.readFromFile(selectedFile);
+        } catch (IOException e) {
+            MyAlert.showError("Súbor sa nepodarilo načítať.");
+            e.printStackTrace();
+            return;
+        }
+        if(sap != null){
+
+            try {
+                ImportSAPTransaction.importSAP(sap);
+            } catch (SQLException e) {
+                MyAlert.showError("Spojenie s databázou nebolo úspešné.");
+                e.printStackTrace();
+                return;
+            }
+            MyAlert.showSuccess("Súbor úspešne načítaný.");
+        }
+
     }
 }
