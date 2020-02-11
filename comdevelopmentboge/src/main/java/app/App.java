@@ -48,7 +48,7 @@ public class App extends Application {
 
         propertiesManager = new PropertiesManager();
         Configuration.connect();
-       // Generate.createAndGenerate();
+        Generate.createAndGenerate();
         launch();
 
 

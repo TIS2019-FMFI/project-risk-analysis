@@ -58,7 +58,7 @@ public class ProjectReminder extends Crud<ProjectReminder> {
      * Pri opakovanom zistení rovnakého rizika z predošlého dňa sa do tabuľky notifikácii
      * údaj nevloží na základe obmedzenia UNIQUE na tejto hodnote
      *
-     * Je to reťazec v tvare [aktuálne náklady]/[plánované náklady]
+     * Je to reťazec v tvare [cislo projektu]:[aktuálne náklady]/[plánované náklady]
      */
     private String unique_code;
 
@@ -147,11 +147,10 @@ public class ProjectReminder extends Crud<ProjectReminder> {
 
     /**
      * Vloží notifikáciu do tabuľky a nastaví jej ID
-     * V prípade porušenia unikátnosti pri hodnote unique_code sa v tabuľke nič neaktualizuje
      * @throws SQLException
      */
     public void insert() throws SQLException {
-        String sql = "INSERT INTO reminders(text,project_id,date,closed,unique_code,sent) VALUES(?,?,?,?,?,?) on duplicate key update unique_code = unique_code ;";
+        String sql = "INSERT INTO reminders(text,project_id,date,closed,unique_code,sent) VALUES(?,?,?,?,?,?)";
         id = insert(DbContext.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS),1);
 
     }

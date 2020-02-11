@@ -28,6 +28,8 @@ public class Registration {
             //zmeny sa poslu do databazy
             user.update();
 
+            DbContext.getConnection().commit();
+
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
             //throw new DatabaseException();
@@ -49,6 +51,8 @@ public class Registration {
 
             //zmeny sa poslu do databazy
             user.update();
+
+            DbContext.getConnection().commit();
 
         } catch (SQLException e) {
             DbContext.getConnection().rollback();

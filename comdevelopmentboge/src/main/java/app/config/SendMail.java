@@ -67,7 +67,7 @@ public class SendMail {
      * @throws MessagingException chyba pri odosielani emailu
      */
     private static void sendMessage(String recipient,String text, String subject) throws MessagingException {
-        System.out.println("prepare to send");
+        System.out.println("prepare to send to " + recipient);
 
         initialize();
 

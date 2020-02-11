@@ -7,6 +7,7 @@ import app.db.RegistrationRequest;
 import app.db.User;
 import app.exception.DatabaseException;
 import app.exception.GmailMessagingException;
+import app.exception.MyException;
 import app.gui.MyAlert;
 import app.service.LogService;
 import app.service.ProjectReminderService;
@@ -30,8 +31,10 @@ import javafx.scene.layout.VBox;
 import org.jfree.chart.plot.AbstractPieLabelDistributor;
 
 import java.io.IOException;
+import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -145,13 +148,11 @@ public class HomeController {
             for (ProjectReminder rem : newReminders) {
                 if (!reminderIDs.contains(rem.getId())) {
                     //ak tato notifikacia tam este nie je tak ju prida
-                    if (reminders.containsKey(rem.getProjectNumber())) {
-                        //ak tam je uz cislo projektu
-                        reminders.get(rem.getProjectNumber()).add(rem);
-                    } else {
-                        //ak taketo cislo projektu tam este nie je
-                        reminders.put(rem.getProjectNumber(), List.of(rem));
+                    if (!reminders.containsKey(rem.getProjectNumber())) {
+                        reminders.put(rem.getProjectNumber(), new ArrayList<>());
                     }
+
+                    reminders.get(rem.getProjectNumber()).add(rem);
 
                     reminderIDs.add(rem.getId());
                 }
@@ -200,11 +201,11 @@ public class HomeController {
             public void run() {
                 try {
                     ReminderTransaction.sentReminders();
-                } catch (DatabaseException | GmailMessagingException e ) {
-                    MyAlert.showError(e.getMessage());
+                } catch (MyException e ) {
+                    //MyAlert.showError(e.getMessage());
                     e.printStackTrace();
                 } catch (SQLException e) {
-                    MyAlert.showError(DatabaseException.ERROR);
+                    //MyAlert.showError(DatabaseException.ERROR);
                     e.printStackTrace();
                 }
             }
