@@ -69,7 +69,7 @@
                                 <Font size="14.0" />
                             </font>
                         </Button>
-                        <Button fx:id="storno2" mnemonicParsing="false" onMouseClicked="#close" prefHeight="30.0" prefWidth="115.0" style="-fx-background-radius: 100;" text="Storno" textAlignment="CENTER">
+                        <Button fx:id="storno" mnemonicParsing="false" onMouseClicked="#close" prefHeight="30.0" prefWidth="115.0" style="-fx-background-radius: 100;" text="Storno" textAlignment="CENTER">
                             <HBox.margin>
                                 <Insets left="20.0" right="20.0" />
                             </HBox.margin>

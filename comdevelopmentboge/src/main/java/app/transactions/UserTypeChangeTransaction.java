@@ -22,10 +22,10 @@ public class UserTypeChangeTransaction {
 
 
     /**
-     * Transakcia zmeny roly užívateľa
-     * @param user - užívateľ, ktorého rolu chceme zmeniť
-     * @param usertype - rola, ktorú chceme užívateľovi prideliť
-     * @throws SQLException
+     * Transakcia zmeny roly uzivatela
+     * @param user - uzivatel, ktoreho rolu chceme zmenit
+     * @param usertype - rola, ktoru chceme uzivatelovi pridelit
+     * @throws SQLException chyba pri ziskavani dat z databazy
      */
     public static void changeUserType(User user, USERTYPE usertype) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);
@@ -50,10 +50,12 @@ public class UserTypeChangeTransaction {
     }
 
     /**
-     * Transakcia zmeny roly a projektov užívateľa
-     * @param user - užívateľ, ktorému chceme zmeniť rolu a projekty
-     * @throws DatabaseException
-     * @throws SQLException
+     * Transakcia zmeny roly a projektov uzivatela
+     * @param user - pouzivatel ktoremu chceme zmenit rolu
+     * @param projectsToAdd - projekty, ktore chceme uzivatelovi pridelit
+     * @param projectsToDelete - projekty, ktore chceme uzivatelovi vymazat
+     * @throws DatabaseException - chyba pri spracovani v databaze
+     * @throws SQLException - chyba pri vykonavani SQL dopytu
      */
     public static void changeProjects(User user, List<String> projectsToAdd, List<String> projectsToDelete) throws DatabaseException, SQLException {
         DbContext.getConnection().setAutoCommit(false);
@@ -98,9 +100,5 @@ public class UserTypeChangeTransaction {
         }
 
     }
-
-
-
-
 
 }

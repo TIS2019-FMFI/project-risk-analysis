@@ -14,9 +14,18 @@ import java.util.List;
 
 public class AdministrationService extends Service<Administration>{
 
+    /**
+     * Getter a setter instancie triedy AdministrationService
+     */
     private static AdministrationService administrationService = new AdministrationService();
     public static AdministrationService getAdministrationService(){ return  administrationService;}
 
+    /**
+     * Nastavenie objektu AdministrationService
+     * @param r vysledok dopytu z databazy
+     * @return objekt AdministrationService
+     * @throws SQLException chyba pri vykonavani SQL dopytu
+     */
     @Override
     public Administration Objekt(ResultSet r) throws SQLException {
         Administration a = new Administration();
@@ -26,13 +35,18 @@ public class AdministrationService extends Service<Administration>{
         return a;
     }
 
-    public List<Project> findProjectsByAdmin(String fullName) throws SQLException {
-        Integer userId = UserService.getInstance().findUserByFullName(fullName).getId();
-        String sql = "select project_id from administration where user_id = ?";
+    /**
+     * Ziskanie projektov, ktorych je adminom uzivatel s danym emailom
+     * @param email email uzivatela, ktory je adminom projektov
+     * @return zoznam projektov
+     * @throws SQLException chyba pri vykovania SQL dopytu
+     */
+    public List<Project> findProjectsByAdmin(String email) throws SQLException {
+        String sql = "select a.project_id from administration as a join users as u on a.user_id = u.id where u.email = ?";
         List<Project> projects = new ArrayList<>();
 
         try (PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)) {
-            preparedStatement.setInt(1, userId);
+            preparedStatement.setString(1, email);
 
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
@@ -46,11 +60,14 @@ public class AdministrationService extends Service<Administration>{
         return projects;
     }
 
-    public Administration findAdministrationByProjectId(Integer projectId) throws DatabaseException, SQLException {
-        return super.findById(projectId,"SELECT * FROM administration WHERE project_id = ?");
-    }
 
-    public Administration findAdministrationByProjectNum(String projectNum) throws DatabaseException, SQLException {
+    /**
+     * Ziskanie zaznamu z tabulky administratiom, kde projekt ma dane cislo
+     * @param projectNum projektove cislo
+     * @return zaznam z tabulky, objekt typu Administration
+     * @throws SQLException chyba pri vykonavani SQL dopytu
+     */
+    public Administration findAdministrationByProjectNum(String projectNum) throws SQLException {
         return super.findByName(projectNum,"SELECT * FROM administration as a join projects as p on a.project_id = p.id WHERE p.projectNumber = ?");
     }
 

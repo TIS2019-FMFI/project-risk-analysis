@@ -4,14 +4,18 @@ import app.config.DbContext;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 import static app.importer.ExcellParser.readFromFile;
 
 public class Generate {
+
+    /**
+     * Create a generate script na vytvorenie databazy
+     * @throws IOException
+     */
     public static void createAndGenerate() throws IOException {
 
 
@@ -272,7 +276,28 @@ public class Generate {
     }
 
 
+    public static void main(String[] args) throws SQLException, IOException {
+        String url = "jdbc:mysql://localhost:3307/project_risk_analysis?serverTimezone=UTC";
+        String username = "test";
+        String password = "test";
 
+
+
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Cant connect");
+        }
+
+        Connection connection = DriverManager.getConnection(url,username,password);
+        DbContext.setConnection(connection);
+        System.out.println("Connection succesful");
+
+
+
+        createAndGenerate();
+    }
 }
 
 

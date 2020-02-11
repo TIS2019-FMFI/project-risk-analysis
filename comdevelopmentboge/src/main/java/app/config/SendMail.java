@@ -13,7 +13,7 @@ import java.util.Properties;
 
 public class SendMail {
     /**
-     * E-mailova adresa odosielateľa
+     * E-mailova adresa odosielatela
      */
     private static final String from = "resetheslaboge@gmail.com";
     private static final String password = "hesloboge";
@@ -39,10 +39,10 @@ public class SendMail {
     }
 
     /**
-     * Pošle e-mailovú správu s vygenerovaným heslom
-     * @param recipient e-mailova adresa príjmateľa (musí byť Gmail)
-     * @param newPassword vygenerované heslo
-     * @throws MessagingException
+     * Posle e-mailovu spravu s vygenerovanym heslom
+     * @param recipient e-mailova adresa prijmatela (musi byt Gmail)
+     * @param newPassword vygenerovane heslo
+     * @throws MessagingException chyba pri odosielani emailu
      */
     public static void sendNewPassword(String recipient, String newPassword) throws MessagingException {
         sendMessage(recipient,"Nové vygenerované heslo je: " + newPassword,"Reset hesla");
@@ -50,21 +50,21 @@ public class SendMail {
     }
 
     /**
-     * Pošle notifikáciu na e-mailovú adresu
-     * @param recipient e-mailova adresa príjmateľa (musí byť Gmail)
+     * Polle notifikaciu na e-mailovu adresu
+     * @param recipient e-mailova adresa prijimatela (musi byt Gmail)
      * @param text obsah e-mailu
-     * @throws MessagingException
+     * @throws MessagingException chyba pri odosielani emailu
      */
     public static void sendReminder(String recipient,String text) throws MessagingException {
         sendMessage(recipient,text,"Riziko prekročenia plánovaných nákladov");
     }
 
     /**
-     * Pošle e-mailovú správu na základe parametrov
-     * @param recipient e-mailova adresa príjmateľa (musí byť Gmail)
-     * @param text obsah e-mailovej správy
-     * @param subject predmet správy
-     * @throws MessagingException
+     * Posle e-mailovu spravu na zaklade parametrov
+     * @param recipient e-mailova adresa prijimatela (musi byt Gmail)
+     * @param text obsah e-mailovej spravy
+     * @param subject predmet spravy
+     * @throws MessagingException chyba pri odosielani emailu
      */
     private static void sendMessage(String recipient,String text, String subject) throws MessagingException {
         System.out.println("prepare to send");

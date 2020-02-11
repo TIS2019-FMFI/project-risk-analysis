@@ -129,7 +129,7 @@ public class Registration {
             throw new RegistrationException("Nesprávny formát e-mailovej adresy");
         }
         if (!isPasswordFormatValid(password)) {
-            throw new RegistrationException("Heslo musí obsahovať aspoň jedno číslo, \n jedno písmeno a musí mať dĺžku aspoň 6 znakov");
+            throw new RegistrationException("Heslo musí obsahovať minimálne jedno číslo, \n jedno písmeno a musí mať dĺžku minimálne 6 znakov");
         }
 
     }

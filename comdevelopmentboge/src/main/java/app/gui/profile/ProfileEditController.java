@@ -6,9 +6,7 @@ import app.gui.MyAlert;
 import app.gui.TabController;
 import app.transactions.ProfileEditTransaction;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
@@ -43,6 +41,7 @@ public class ProfileEditController {
     @FXML
     private void initialize() {
         setFields();
+
     }
 
     private void setFields() {

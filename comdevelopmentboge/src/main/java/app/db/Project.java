@@ -123,7 +123,7 @@ public class Project extends Crud<Project> {
 
     //for purpose of creating pdf tables
     //returns array of all attributes of a project in given order
-    public List<String> getAllAttributes(){
+    public List<String> getAllAttributesValues(){
         List<String>  attributes = new ArrayList<>();
         attributes.addAll(List.of((projectNumber!=null)?projectNumber:"", (customerName!=null)?customerName:"", (projectName!=null)?projectName:"",
                 (partNumber!=null)?partNumber:"", (ros!=null)?ros:"", (roce!=null)?roce:"", (volumes!=null)?String.valueOf(volumes):"",

@@ -43,8 +43,19 @@ import org.jfree.data.general.DefaultPieDataset;
 
 import javax.imageio.ImageIO;
 
+/**
+ * umožnuje vytvorenie PDF súboru o projekte pozostávajúcich z
+ * tabuľky o projekte, grafov a tabuľky so SAP údajmi
+ */
 public class PdfExporter {
 
+    /**
+     * exportovanie údajov o projekte do PDF súboru
+     * @param projectData
+     * @param sapData
+     * @throws IOException
+     * @throws DocumentException
+     */
     public static void exportPdf(List<Project> projectData, List<SAP> sapData) throws IOException, DocumentException {
 
         String directoryName = App.getPropertiesManager().getProperty("file.location");
@@ -109,7 +120,7 @@ public class PdfExporter {
         font = FontFactory.getFont(FontFactory.HELVETICA, 8);
         //projectTable content
         for(Project project : projectData){
-            List<String> attributes = project.getAllAttributes();
+            List<String> attributes = project.getAllAttributesValues();
             for(String att : attributes){
                 cell = new PdfPCell(new Phrase(att, font));
                 cell.setVerticalAlignment(Element.ALIGN_CENTER);
@@ -118,13 +129,18 @@ public class PdfExporter {
         }
         projectTable.setSpacingAfter(72f);
         document.add(projectTable);
-// adding charts
+        // adding charts
 
         //R&D costs chart
         LinkedHashMap<Period, BigDecimal> data = ChartService.getChartService().getRDCostsData(projectData.get(0).getProjectNumber(), ProjectFilter.getInstance().getFrom(), ProjectFilter.getInstance().getTo());
         BigDecimal planned = ProjectService.getProjectService().getPlanedDDCosts(projectData.get(0).getProjectNumber());
         Image RDCostsChartImage = createLineBarChartImage(data, "Project "+projectData.get(0).getProjectNumber() + " R&D Costs", planned);
         document.add(RDCostsChartImage);
+
+        //R&D time costs chart
+        data = ChartService.getChartService().getRDTimeCosts(projectData.get(0).getProjectNumber(), ProjectFilter.getInstance().getFrom(), ProjectFilter.getInstance().getTo());
+        Image RDTimeCostsChartImage = createLineBarChartImage(data, "Project "+projectData.get(0).getProjectNumber() + " R&D time Costs", BigDecimal.ZERO);
+        document.add(RDTimeCostsChartImage);
 
         //Prototype costs chart
         data = ChartService.getChartService().getPrototypeCosts(projectData.get(0).getProjectNumber(), ProjectFilter.getInstance().getFrom(), ProjectFilter.getInstance().getTo());
@@ -181,6 +197,13 @@ public class PdfExporter {
         document.close();
     }
 
+    /**
+     * vytvorí graf pozostávajúci zo sĺpcového grafu a čiarového grafu
+     * @param data všetky dáta o projekte zo SAP
+     * @param title názov grafu
+     * @param costsLimit maximálna hodnota kumulatívnych údajov v grafe
+     * @return várti graf
+     */
     public static JFreeChart getBarLineChart(LinkedHashMap<Period, BigDecimal> data, String title, BigDecimal costsLimit){
 
         DefaultCategoryDataset barDataset = new DefaultCategoryDataset();
@@ -243,6 +266,12 @@ public class PdfExporter {
         return chart;
     }
 
+    /**
+     * vytvorí koláčový graf
+     * @param data všetky dáta o projekte zo SAP
+     * @param title názov grafu
+     * @return vráti koláčový graf
+     */
     private static JFreeChart getPieChart(LinkedHashMap<String, BigDecimal> data, String title){
 
         DefaultPieDataset dataset = new DefaultPieDataset( );
@@ -261,26 +290,41 @@ public class PdfExporter {
         return chart;
     }
 
-
+    /**
+     * z grafu vytvorí obraázok, ktorý možno použiť pri vytváraní PDF
+     * @param data všetky dáta o projekte zo SAP
+     * @param title názov grafu
+     * @param planned plánovaná maximálna kumulatívna hodnota
+     * @return
+     * @throws IOException
+     * @throws BadElementException
+     */
     private static Image createLineBarChartImage(LinkedHashMap<Period, BigDecimal> data, String title, BigDecimal planned) throws IOException, BadElementException {
         JFreeChart ch = getBarLineChart(data, title, planned);
-
-        BufferedImage chartImage = ch.createBufferedImage( 800, 500, null);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(chartImage, "png", baos);
-        Image iTextImage = Image.getInstance(baos.toByteArray());
-        iTextImage.scaleAbsolute(500f, 300f);
-
-        iTextImage.setAlignment(Element.ALIGN_CENTER);
-
-        return iTextImage;
+        return getImage(ch);
     }
-
+    /**
+     * z grafu vytvorí obraázok, ktorý možno použiť pri vytváraní PDF
+     * @param data všetky dáta o projekte zo SAP
+     * @param title názov grafu
+     * @return
+     * @throws IOException
+     * @throws BadElementException
+     */
     private static Image createPieChartImage(LinkedHashMap<String, BigDecimal> data, String title) throws IOException, BadElementException {
         JFreeChart ch = getPieChart(data, title);
+        return getImage(ch);
+    }
 
-        BufferedImage chartImage = ch.createBufferedImage( 800, 500, null);
+    /**
+     * vráti itext image vytvorený z JFreeChart objektu
+     * @param ch
+     * @return
+     * @throws IOException
+     * @throws BadElementException
+     */
+    private static Image getImage(JFreeChart ch) throws IOException, BadElementException {
+        BufferedImage chartImage = ch.createBufferedImage(800, 500, null);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(chartImage, "png", baos);

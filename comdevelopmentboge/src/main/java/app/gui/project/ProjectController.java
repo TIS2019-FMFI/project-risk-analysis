@@ -2,47 +2,41 @@ package app.gui.project;
 
 import app.App;
 import app.config.SignedUser;
-import app.exception.DatabaseException;
+import app.exporter.CSVExporter;
 import app.exporter.PdfExporter;
 import app.gui.MyAlert;
 import app.gui.graph.ChartRenderer;
 import app.service.ProjectAdministrationService;
-import app.service.CustomerService;
 import app.service.ProjectService;
 import app.service.SAPService;
 import app.transactions.ProjectEditTransaction;
 import com.itextpdf.text.DocumentException;
 import javafx.beans.binding.Bindings;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.SnapshotParameters;
+import javafx.scene.chart.Chart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import app.db.*;
-import javafx.scene.paint.Color;
 import javafx.util.converter.BigDecimalStringConverter;
+import org.jfree.data.io.CSV;
 
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * controller je zodpovedný za vytvorenie scény s detailom projektu, odchytávanie eventov a zmenu dát
+ */
 public class ProjectController {
 
     private static ProjectController projectController;
@@ -66,11 +60,14 @@ public class ProjectController {
     private HBox thirdChartGroup;
 
     @FXML
+    private HBox singleChart;
+
+    @FXML
     private ImageView saveButton;
+
     @FXML
     private ImageView editButton;
-    @FXML
-    private FlowPane editPane;
+
 
     //project table columns
     private TableColumn<Project, String> projectNumber;
@@ -87,6 +84,7 @@ public class ProjectController {
     private HashMap<String, String> changes;
 
     private String projectDef;
+    private List<SAP> sapData;
 
     @FXML
     public void initialize(){
@@ -102,14 +100,20 @@ public class ProjectController {
 
     }
 
+    /**
+     * creates whole content - shows/hides components according to user role, creates tables and charts
+     * @param projectDef
+     * @throws ParseException
+     * @throws IOException
+     */
     public void displayProjectData(String projectDef) throws ParseException, IOException {
 
         //if admin or project admin are signed in, show edit images
         List<Integer> projectAdmins = ProjectAdministrationService.getInstance().getProjectAdminIds(projectDef);
         if(SignedUser.getUser().getUserType().equals("CENTRAL_ADMIN") || projectAdmins.contains(SignedUser.getUser().getId())){
-            editPane.setVisible(true);
+            editButton.setVisible(true);
         }else{
-            editPane.setVisible(false);
+            editButton.setVisible(false);
         }
         this.projectDef = projectDef;
         java.sql.Date initialDate = SAPService.getSapService().getFirstRecordsDate(projectDef);
@@ -121,6 +125,10 @@ public class ProjectController {
 
     }
 
+    /**
+     * cretes table with sap information
+     * @throws ParseException
+     */
     private void createSapTable() throws ParseException {
         TableColumn<SAP, String> ProjektDef = new TableColumn<>("ProjektDef");
         ProjektDef.setCellValueFactory(new PropertyValueFactory<SAP, String>("ProjektDef"));
@@ -167,13 +175,13 @@ public class ProjectController {
         TableColumn<SAP, String> GME = new TableColumn<>("GME");
         GME.setCellValueFactory(new PropertyValueFactory<>("GME"));
 
-        List<SAP> data = SAPService.getSapService().getSapDataInInterval(projectDef,
+        sapData = SAPService.getSapService().getSapDataInInterval(projectDef,
                 ProjectFilter.getInstance().getFrom(),
                 ProjectFilter.getInstance().getTo()
                 );
 
         sapDetailsTable.getItems().clear();
-        sapDetailsTable.getItems().addAll(data);
+        sapDetailsTable.getItems().addAll(sapData);
 
         sapDetailsTable.getColumns().clear();
         sapDetailsTable.getColumns().addAll(ProjektDef, PSPElement,Objektbezeichnung,Kostenart, KostenartenBez,Bezeichnung, Partnerojekt
@@ -186,6 +194,9 @@ public class ProjectController {
         sapDetailsTable.prefHeight(50);
     }
 
+    /**
+     * creates table with information about project
+     */
     private void createProjectTable() {
 
         projectNumber = new TableColumn<>("Project Nr.");
@@ -234,6 +245,10 @@ public class ProjectController {
         projectDetailsTable.prefWidthProperty().bind(App.getScene().widthProperty());
     }
 
+    /**
+     * creates all charts
+     * @throws IOException
+     */
     public void createCharts() throws IOException {
 
         ProjectFilter projectFilter = ProjectFilter.getInstance();
@@ -242,19 +257,28 @@ public class ProjectController {
         StackPane prototypeCostsPane = ChartRenderer.createProjectPrototypeChart(projectDef, projectFilter.getFrom(), projectFilter.getTo());
         StackPane prototypeRevenuesPane = ChartRenderer.createPrototypeRevenuesChart(projectDef, projectFilter.getFrom(), projectFilter.getTo());
         StackPane rdCostsPane = ChartRenderer.createRDCostsChart(projectDef, projectFilter.getFrom(), projectFilter.getTo());
+        StackPane rdTimeCostsPane = ChartRenderer.createRDTimeCostsChart(projectDef, projectFilter.getFrom(), projectFilter.getTo());
         StackPane projectSummaryRevenues = ChartRenderer.createSummaryProjectRevenues(projectDef, projectFilter.getFrom(), projectFilter.getTo());
         StackPane projectSummaryCosts = ChartRenderer.createSummaryProjectCosts(projectDef, projectFilter.getFrom(), projectFilter.getTo());
 
         firstChartGroup.getChildren().clear();
         projectCostsPane.setPadding(new Insets(0, 50, 0, 0));
         firstChartGroup.getChildren().addAll(projectCostsPane, prototypeCostsPane);
+
         secondChartGroup.getChildren().clear();
         prototypeRevenuesPane.setPadding(new Insets(0, 50, 0, 0));
         secondChartGroup.getChildren().addAll(prototypeRevenuesPane, rdCostsPane);
+
+        singleChart.getChildren().clear();
+        singleChart.getChildren().add(rdTimeCostsPane);
+
         thirdChartGroup.getChildren().clear();
         thirdChartGroup.getChildren().addAll(projectSummaryRevenues, projectSummaryCosts);
     }
 
+    /**
+     * handles events from editing table with project information
+     */
     @FXML
     private void setEditableMode(){
         projectDetailsTable.setEditable(true);
@@ -372,6 +396,10 @@ public class ProjectController {
                 TextFieldTableCell.forTableColumn(new BigDecimalStringConverter()));
     }
 
+    /**
+     * calls database transaction to save changes into database
+     * @param project
+     */
     @FXML
     public void saveChangesToDatabase(Project project){
         saveButton.setVisible(false);
@@ -383,14 +411,54 @@ public class ProjectController {
         }
     }
 
+    /**
+     * filters SAP data according to values from datepickers from and to
+     * @param from
+     * @param to
+     * @throws ParseException
+     */
     public void filterSapData(java.sql.Date from, java.sql.Date to) throws ParseException {
         List<SAP> sapData = SAPService.getSapService().getSapDataInInterval(projectDef, from, to);
         sapDetailsTable.getItems().clear();
         sapDetailsTable.getItems().addAll(sapData);
     }
 
+    /**
+     * exports all content into pdf
+     * @throws IOException
+     * @throws DocumentException
+     */
     @FXML
     public void exportProjectToPDf() throws IOException, DocumentException {
         PdfExporter.exportPdf(projectDetailsTable.getItems(), sapDetailsTable.getItems());
+    }
+
+    /**
+     * exports project data to csv format file
+     */
+    @FXML
+    public void exportProjectDataToCSV(){
+        Project project = ProjectService.getProjectService().findProjectByNum(projectDef);
+        List<String> values = new ArrayList<>();
+        //should not happen, but...
+        if(project!=null){
+            values = project.getAllAttributesValues();
+        }
+        CSVExporter.exportDataToCSV(List.of(values), "project");
+    }
+
+    /**
+     * exports sap data to csv format file
+     */
+    @FXML
+    public void exportSAPDataToCSV(){
+        List<List<String>> values = new ArrayList<>();
+        if(sapData != null){
+            for(SAP sap: sapData){
+                values.add(sap.getAllAttributesValues());
+            }
+        }
+
+        CSVExporter.exportDataToCSV(values, "sap");
     }
 }

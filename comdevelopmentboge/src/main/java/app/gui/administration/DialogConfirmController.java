@@ -6,6 +6,7 @@ import app.db.User;
 import app.exception.DatabaseException;
 import app.gui.MyAlert;
 import app.service.AdministrationService;
+import app.service.ProjectService;
 import app.transactions.UserTypeChangeTransaction;
 import com.jfoenix.controls.JFXListView;
 import javafx.fxml.FXML;
@@ -19,30 +20,31 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class DialogConfirmController {
 
     /**
-     * Getter a setter inštancie dialóg
+     * Getter a setter instancie dialog
      */
     private static DialogConfirmController instance;
     public static DialogConfirmController getInstance(){return instance;}
 
     /**
-     * fullName - grafický komponent, ktorý zobrazuje celé meno užívateľa
-     * userType - grafický komponent, ktorý zobrazuje rolu užívateľa
-     * projectsListView - zoznam projektov, ktorých je užívateľ adminom
+     * fullName - graficky komponent, ktory zobrazuje cele meno uzivatela
+     * userType - graficky komponent, ktory zobrazuje rolu uzivatela
+     * projectsListView - zoznam projektov, ktorych je uzivatel adminom
      */
     @FXML private Label fullName;
     @FXML private Label userType;
     @FXML private JFXListView<Pane> projectsListView;
 
     /**
-     * user - užívateľ, ktorého rolu chceme zmeniť
-     * projectsToSave - projekty, ktoré pridelíme užívateľovi
-     * newType - nová rola, ktorú chceme užívateľovi nastaviť
-     * stages - otvorené dialógové okná
+     * user - uzivatel, ktoreho rolu chceme zmenit
+     * projectsToSave - projekty, ktore pridelime uzivatelovi
+     * newType - nova rola, ktoru chceme uzivatelovi nastavit
+     * stages - otvorene dialogove okna
      */
     private User user;
     private List<Project> projects;
@@ -53,13 +55,11 @@ public class DialogConfirmController {
 
 
     /**
-     * Nastavenie dialógového okna - grafických komponentov
-     * @param stages - nastavenie aktuálneho dialógového okna
-     * @param user - používateľ, ktorého rolu chceme zmeniť
-     * @param projects - všetky projekty užívateľa
-     * @throws DatabaseException
-     * @throws SQLException
-     * @throws IOException
+     * Nastavenie dialogoveho okna - grafickych komponentov
+     * @param stages - nastavenie aktualneho dialogoveho okna
+     * @param user - pouzivatel, ktoreho rolu chceme zmenit
+     * @param projects - vsetky projekty uzivatela
+     * @throws IOException chyba s grafickym komponentom
      */
     public void setDialog(List<Stage> stages, User user, List<Project> projects, List<String> projectsToAdd, List<String> projectsToDelete) throws IOException {
         instance = this;
@@ -81,8 +81,8 @@ public class DialogConfirmController {
 
 
     /**
-     * Nastavenie položky zoznamu projektov, teda konkrétneho projektu
-     * @param projectNumber - číslo projektu
+     * Nastavenie polozky zoznamu projektov, teda konkretneho projektu
+     * @param projectNumber - cislo projektu
      * @return
      * @throws IOException
      */
@@ -95,7 +95,7 @@ public class DialogConfirmController {
     }
 
     /**
-     * Načítanie fxml súboru
+     * Načítanie fxml suboru
      * @param fxml
      * @return
      * @throws IOException
@@ -110,7 +110,7 @@ public class DialogConfirmController {
      * @param event
      */
     @FXML
-    private void close(MouseEvent event) {
+    void close(MouseEvent event) {
         stages.get(stages.size()-1).close();
     }
 
@@ -122,14 +122,30 @@ public class DialogConfirmController {
      */
     @FXML
     private void submit(MouseEvent event) throws SQLException, DatabaseException {
-        submitDialog("Chcete potvrdiť zmeny používateľa " + user.getFullName() + "?");
+        if((projectsToAdd.size() == 0 || sameToAdd()) && projectsToDelete.size() == 0) {
+            if(newType.equals(user.getUserTypeU())) {
+                submitDialogNoChanges("Neboli zistené žiadne zmeny");
+            }
+            else {
+                submitDialog("Chcete potvrdiť zmeny používateľa " + user.getFullName() + "?");
+            }
+        }
+        else {
+            submitDialog("Chcete potvrdiť zmeny používateľa " + user.getFullName() + "?");
+        }
     }
 
+    /**
+     * Zobrazenie potvrdzovacieho dialogu pri role admin
+     * @param text text v dialogu
+     * @throws DatabaseException
+     * @throws SQLException
+     */
     private void submitDialog(String text) throws DatabaseException, SQLException {
         Alert alert = new Alert(Alert.AlertType.WARNING, text, ButtonType.OK);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.OK) {
-            if(!newType.equals(user.getUserType())) {
+            if(!newType.equals(user.getUserTypeU()) || projectsToAdd.size() != 0 || projectsToDelete.size() != 0) {
                 UserTypeChangeTransaction.changeProjects(user, projectsToAdd, projectsToDelete);
             }
             UsersAdministrationItemController.getInstance().closeAllDialogs(stages);
@@ -138,6 +154,37 @@ public class DialogConfirmController {
             alert.close();
         }
 
+    }
+
+    /**
+     * Zobrazenie potvrdzovacieho dialogu pri role bezny uzivatel
+     * @param text text v dialogu
+     * @throws DatabaseException
+     * @throws SQLException
+     */
+    private void submitDialogNoChanges(String text) throws DatabaseException, SQLException {
+        Alert alert = new Alert(Alert.AlertType.WARNING, text, ButtonType.OK);
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+            UsersAdministrationItemController.getInstance().closeAllDialogs(stages);
+        }
+        else {
+            alert.close();
+        }
+
+    }
+
+    /**
+     * Zisti, ci je zoznam aktualnych projektov iny, ako ten, ktory chceme pridelit uzivatelovi
+     * @return true alebo false
+     * @throws SQLException
+     */
+    private boolean sameToAdd() throws SQLException {
+        List<Project> userProjects = AdministrationService.getAdministrationService().findProjectsByAdmin(user.getEmail());
+        List<Project> notTheSameProjects = userProjects.stream()
+                .filter(e -> !projectsToAdd.contains(e.getProjectNumber()))
+                .collect(Collectors.toList());
+        return notTheSameProjects.size() == 0;
     }
 
 
