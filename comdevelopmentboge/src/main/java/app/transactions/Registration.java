@@ -144,7 +144,7 @@ public class Registration {
         return password.matches("(?=.*?[0-9])(?=.*?[A-Za-z]).+") && password.length() >= 6;
     }
     private static boolean isEmailFormatValid(String email) {
-        return email.matches("[a-zA-Z0-9\\._]+@[a-zA-Z0-9\\._]+\\.[a-zA-Z]{2,5}");
+        return email.matches("[a-zA-Z0-9a-z\\._]+@boge-rubber-plastics.com");
     }
     private static boolean containsOnlyLetters(String value) {
         return value.matches("^[A-Za-z]+$");
