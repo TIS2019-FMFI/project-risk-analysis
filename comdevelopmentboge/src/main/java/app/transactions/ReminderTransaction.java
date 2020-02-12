@@ -56,8 +56,8 @@ public class ReminderTransaction {
 
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
-            e.printStackTrace();
-            //throw new DatabaseException();
+            //e.printStackTrace();
+            throw new DatabaseException();
 
         } finally {
             DbContext.getConnection().setAutoCommit(true);
@@ -115,8 +115,8 @@ public class ReminderTransaction {
 
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
-            e.printStackTrace();
-            //throw new DatabaseException();
+            //e.printStackTrace();
+            throw new DatabaseException();
         } catch (MessagingException e) {
             DbContext.getConnection().rollback();
             throw new GmailMessagingException();
