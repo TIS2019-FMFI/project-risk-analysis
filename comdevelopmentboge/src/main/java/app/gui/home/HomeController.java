@@ -329,10 +329,10 @@ public class HomeController {
                 try {
                     ReminderTransaction.sentReminders();
                 } catch (MyException e ) {
-                    MyAlert.showError(e.getMessage());
+                 //   MyAlert.showError(e.getMessage());
                     e.printStackTrace();
                 } catch (SQLException e) {
-                    MyAlert.showError(DatabaseException.ERROR);
+                 //   MyAlert.showError(DatabaseException.ERROR);
                     e.printStackTrace();
                 }
             }

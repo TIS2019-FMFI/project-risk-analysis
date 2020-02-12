@@ -7,10 +7,7 @@ import app.db.SAP;
 import java.awt.*;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,6 +24,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.*;
+import javafx.stage.DirectoryChooser;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -58,13 +56,24 @@ public class PdfExporter {
      */
     public static void exportPdf(List<Project> projectData, List<SAP> sapData) throws IOException, DocumentException {
 
-        String directoryName = App.getPropertiesManager().getProperty("file.location");
+        String directoryName = "";
+
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File folder = directoryChooser.showDialog(null);
+        if(folder != null){
+            directoryName = folder.getAbsolutePath();
+        } else{
+            return;
+        }
+
+       // directoryName = App.getPropertiesManager().getProperty("file.location");
         if(directoryName == null || "".equals(directoryName)){
             MyAlert.showWarning("Nenastavili ste priečinok na export súborov,\n súbor bol exportovaný do priečinka C:/files");
             directoryName="C:/files";
         }
         String fileName = new SimpleDateFormat("yyyy-MM-dd@HH-mm-ss'.pdf'").format(new Date());
 
+        System.out.println(directoryName + "/" + fileName);
         //if directory does not exist, create one
         File directory = new File(directoryName);
         if (! directory.exists()){
@@ -72,7 +81,15 @@ public class PdfExporter {
         }
 
         Document document = new Document();
-        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(directoryName+"/"+fileName));
+        try {
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(directoryName+"/"+fileName));
+        } catch (DocumentException e) {
+            MyAlert.showError("Problém pri exportovaní PDF.");
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            MyAlert.showError("Problém pri exportovaní PDF.");
+            e.printStackTrace();
+        }
         document.open();
 
         //project projectTable
@@ -195,6 +212,9 @@ public class PdfExporter {
         sapTable.setSpacingBefore(72f);
         document.add(sapTable);
         document.close();
+
+        MyAlert.showSuccess("Súbor bol exportovaný do priečinka\n"+ directoryName);
+
     }
 
     /**

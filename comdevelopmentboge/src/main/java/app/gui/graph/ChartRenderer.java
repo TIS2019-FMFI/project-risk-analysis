@@ -120,14 +120,13 @@ public class ChartRenderer {
         barChart.getData().add(series1);
         lineChart.getData().add(series2);
 
-        if(planned.compareTo(BigDecimal.ZERO) > 0){
+        if(planned != null && planned.compareTo(BigDecimal.ZERO) > 0){
             XYChart.Series<String, Number> limit = new XYChart.Series<>();
             for(Period p:data.keySet()){
                 limit.getData().add(new XYChart.Data<>(p.toString(), planned));
             }
             //either RD or Prototype costs, have its planned limit, show a line
             lineChart.getData().add(limit);
-
 
         }
 
