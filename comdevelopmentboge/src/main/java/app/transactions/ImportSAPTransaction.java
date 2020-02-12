@@ -3,6 +3,7 @@ package app.transactions;
 import app.config.DbContext;
 import app.db.SAP;
 import app.importer.ExcelRow;
+import app.service.SAPService;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -25,6 +26,10 @@ public class ImportSAPTransaction {
         DbContext.getConnection().setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 
         try {
+
+            //delete all records from table sap
+            SAPService.getSapService().deleteAllRecords();
+
             SAP temp = new SAP();
             temp.insertFromFile(sap);
             DbContext.getConnection().commit();

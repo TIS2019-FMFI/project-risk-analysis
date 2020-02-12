@@ -74,4 +74,15 @@ public class SAPService {
         }
         return date;
     }
+
+    public void deleteAllRecords() throws SQLException {
+        String sql = "delete from sap";
+        try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }
