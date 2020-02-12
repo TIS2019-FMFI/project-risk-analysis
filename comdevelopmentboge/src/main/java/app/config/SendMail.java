@@ -1,6 +1,8 @@
 package app.config;
 
 
+import app.App;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -15,20 +17,20 @@ public class SendMail {
     /**
      * E-mailova adresa odosielatela
      */
-    private static final String from = "resetheslaboge@gmail.com";
-    private static final String password = "hesloboge";
-    private static final String host = "smtp.gmail.com";
+    private static final String from = App.getPropertiesManager().getProperty("email.address");
+    private static final String password = App.getPropertiesManager().getProperty("email.password");
+    private static final String host = App.getPropertiesManager().getProperty("email.host");
 
     private static Properties props;
     private static Session session;
 
     private static void initialize() {
         props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.ssl.trust", "*");
+        props.put("mail.smtp.auth", App.getPropertiesManager().getProperty("mail.smtp.auth"));
+        props.put("mail.smtp.starttls.enable", App.getPropertiesManager().getProperty("mail.smtp.starttls.enable"));
+        props.put("mail.smtp.ssl.trust", App.getPropertiesManager().getProperty("mail.smtp.ssl.trust"));
         props.put("mail.smtp.host", host);
-        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.port", App.getPropertiesManager().getProperty("mail.smtp.port"));
 
         session = Session.getInstance(props,
                 new javax.mail.Authenticator() {

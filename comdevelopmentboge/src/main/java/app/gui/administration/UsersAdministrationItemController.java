@@ -2,6 +2,7 @@ package app.gui.administration;
 
 
 import app.config.SendMail;
+import app.config.SignedUser;
 import app.db.User;
 import app.gui.MyAlert;
 import app.service.UserService;
@@ -136,12 +137,11 @@ public class UsersAdministrationItemController {
      * Vygenerovanie noveho hesla
      */
     public void generate() {
-        String recepient = MyAlert.showInputDialog("Zadaj GMAIL-ovú adresu, na ktorú sa odošle vygenerované heslo");
 
         try {
             String generatedString = generateString();
             String md = org.apache.commons.codec.digest.DigestUtils.md5Hex(generatedString);
-            SendMail.sendNewPassword(recepient, generatedString);
+            SendMail.sendNewPassword(SignedUser.getUser().getEmail(), generatedString);
             user.setPassword(md);
             user.update();
 
