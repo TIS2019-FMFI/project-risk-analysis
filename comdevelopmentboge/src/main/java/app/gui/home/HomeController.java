@@ -43,37 +43,98 @@ import java.util.stream.Collectors;
 public class HomeController {
 
     /**
-     *
+     * Obsahuje notifikacie rozdelene do mapy podla cisla projektu
      */
     private Map<String, List<ProjectReminder>> reminders;
+
+    /**
+     * Obsahuje ID notifikacii
+     * Sluzi pre identifikaciu uz zobrazenych notifikacii, ked sa nacitavaju nove
+     */
     private List<Integer> reminderIDs = new ArrayList<>();
+
+    /**
+     * Obsahuje ziadosti o registraciu
+     */
     private List<RegistrationRequest> requests;
+
+    /**
+     * Obsahuje kody projektov, ktore su skryte v zozname
+     */
     private List<String> hidden_projects_codes = new ArrayList<>();
+
+    /**
+     * Pocet riadkov GRIDPANE, v ktorom su ulozene notifikacie a ziadosti o registraciu
+     */
     private int rows;
+
+    /**
+     * Pocet stlpcov GRIDPANE, v ktorom su ulozene notifikacie a ziadosti o registraciu
+     * Po nacitani stranky sa prepocita sirka a nastavi sa podla toho pocet stlpcov
+     */
     private int cols = 3;
 
+    /**
+     * Instancia triedy
+     */
     private static HomeController homeController = new HomeController();
 
     public static HomeController getHomeController() {
         return homeController;
     }
 
+    /**
+     * Kontainer predstavujuci GRID
+     * Obsahuje notifikacie a ziadosti zobrazene na hlavnej stranke
+     */
     @FXML
     private GridPane gridPane;
+
+    /**
+     * Kontainer ktory obsahuje gridpane
+     * Sluzi pre scrollovanie notifikaciami
+     */
     @FXML
     private ScrollPane scrollPane;
+
+    /**
+     * Obsahuje graficke prvky, s nazvom projektu ktoreho notifikacie bola minimalizovane
+     * */
     @FXML
     private JFXListView projectList;
+
+    /**
+     * Graficky prvok ktory obsahuje uvitaciu spravu
+     */
     @FXML
     private Label welcome;
+
+    /**
+     * Graficky prvok ktory obsahuje pocet skrytych notifikacii
+     */
     @FXML
     private Label project_hidden;
+
+    /**
+     * Tlacidlo ktore po kliknuti opat zobrazi vsetky skryte notifikacie
+     */
     @FXML
     private Button project_button;
+
+    /**
+     * Tlacidlo ktor po kliknuti znovu nacita udaje z databazy
+     * a prepocita notifikacie ktore zobrazi na stranke
+     */
     @FXML
     private Button refresh;
 
 
+    /**
+     * Inicializovanie podla role prihlaseneho uzivatela
+     * Nastavi hodnoty grafickym prvkom, prepocita notifikacie z databazy,
+     * posle mailove notifikacie, zobrazi notifikacie a ziadosti na stranke
+     * @throws IOException chyba v grafickom komponente
+     */
     public void initialize() throws IOException {
 
         setWelcome();
@@ -95,6 +156,11 @@ public class HomeController {
 
     }
 
+    /**
+     * Inicializovanie stranky pre rolu centralneho admina
+     * Zobrazia sa vsetky notifikacie ako aj ziadosti o registraciu
+     * @throws IOException chyba v grafickom komponente
+     */
     private void initCentralAdmin() throws IOException {
         setColsByAppSize();
         getRequests();
@@ -103,6 +169,11 @@ public class HomeController {
         setProjectListEvent();
     }
 
+    /**
+     * Inicializovanie stranky pre rolu projektoveho admina
+     * Zobrazia sa len notifikacie tykajuce sa jeho projektov
+     * @throws IOException chyba v grafickom komponente
+     */
     private void initProjectAdmin() throws IOException {
         setColsByAppSize();
         getReminders();
@@ -111,13 +182,22 @@ public class HomeController {
 
     }
 
+    /**
+     * Inicializovanie pre bezneho uzivatela
+     * Skryje kontajner pre zobrazenie notifikacii a dalsie graficke prvky
+     * suvisiace s nimi
+     */
     private void initUser() {
         project_button.setVisible(false);
         scrollPane.setVisible(false);
         projectList.setVisible(false);
+        refresh.setVisible(false);
 
     }
 
+    /**
+     * Po kliknuti na zoznam projektov znovu zobrazi notifikacie tykajuce sa daneho projektu
+     */
     private void setProjectListEvent() {
         projectList.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -139,6 +219,13 @@ public class HomeController {
             }
         });
     }
+
+    /**
+     * Znovu nacita notifikacie z databazy a prida ich do clenskych premennych a zobrazi
+     * ich na stranke
+     * @param event
+     * @throws IOException chyba v grafickom komponente
+     */
     @FXML
     private void refreshReminders(MouseEvent event) throws IOException {
         try {
@@ -165,14 +252,32 @@ public class HomeController {
 
     }
 
+    /**
+     * Nastavi pocet stlpcov podla sirky okna
+     */
     private void setColsByAppSize() {
         cols = Math.floorDiv((int) App.getScene().getWidth() - 200, 270);
     }
 
+    /**
+     * Vrati FXMLLoader podla nazvu FXML suboru
+     * @param fxml nazov FXML suboru reprezentujuci danu entitu
+     * @return
+     */
     private FXMLLoader getFXMLLoader(String fxml) {
         return new FXMLLoader(HomeController.class.getResource(fxml + ".fxml"));
     }
 
+    /**
+     * Zobrazi graficku podobu notifikacie a nastavi tuto notifikaciu
+     * ReminderControlleru
+     * @param fxml nazov FXML reprezentujuci danu notifikaciu
+     * @param reminder instancia notifikacie
+     * @param col stlpec umiestnenia notifikacie v GRIDPANE
+     * @param row riadok umiestnenia notifikacie v GRIDPANE
+     * @return graficky objekt notifikacie
+     * @throws IOException chyba v grafickom komponente
+     */
     private Parent loadFXMLreminder(String fxml, ProjectReminder reminder, int col, int row) throws IOException {
         FXMLLoader fxmlLoader = getFXMLLoader(fxml);
         Parent root = fxmlLoader.load();
@@ -181,6 +286,16 @@ public class HomeController {
         return root;
     }
 
+    /**
+     * Zobrazi graficku podobu ziadosti o registraciu a nastavi tuto notifikaciu
+     * RRequestControlleru
+     * @param fxml nazov FXML reprezentujuci danu ziadost
+     * @param request instancia ziadosti
+     * @param col stlpec umiestnenia ziadosti v GRIDPANE
+     * @param row riadok umiestnenia ziadosti v GRIDPANE
+     * @return graficky objekt ziadosti
+     * @throws IOException chyba v grafickom komponente
+     */
     private Parent loadFXMLrequest(String fxml, RegistrationRequest request, int col, int row) throws IOException {
         FXMLLoader fxmlLoader = getFXMLLoader(fxml);
         Parent root = fxmlLoader.load();
@@ -189,13 +304,25 @@ public class HomeController {
         return root;
     }
 
+    /**
+     * Nastavi meno uzivatela pre uvitaciu spravu do grafickeho komponentu
+     */
     private void setWelcome() {
         welcome.setText("Vitaj " + SignedUser.getUser().getName() + "!");
     }
 
+    /**
+     * Rozdeli a zobrazi notifikacie a ziadosti na hlavnu stranku
+     * @throws IOException chyba v grafickom komponente
+     */
     private void setNotificationScene() throws IOException {
         rearrangeGridPane();
     }
+
+    /**
+     * Vytvori nove vlakno, ktore ma za ulohu ziskat z databazy notifikacie
+     * a posle ich na prislusne maily
+     */
     private void sendReminders() {
         Runnable r = new Runnable() {
             public void run() {
@@ -212,6 +339,11 @@ public class HomeController {
         };
         new Thread(r).start();
     }
+
+    /**
+     * Prepocita udaje z projektovej a SAP tabulky a na zaklade toho
+     * vlozi notifikacie do databazy
+     */
     private void loadReminders()  {
         try {
             ReminderTransaction.loadReminders();
@@ -223,6 +355,12 @@ public class HomeController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Nacita notifikacie z databazy
+     * @return
+     * @throws SQLException chyba v grafickom komponente
+     */
     private List<ProjectReminder> getRemindersFromDB() throws SQLException {
         List<ProjectReminder> reminders0;
         if (SignedUser.getUser().getUserTypeU() == User.USERTYPE.CENTRAL_ADMIN) {
