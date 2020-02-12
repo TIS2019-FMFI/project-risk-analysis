@@ -141,7 +141,7 @@ public class UsersAdministrationItemController {
         try {
             String generatedString = generateString();
             String md = org.apache.commons.codec.digest.DigestUtils.md5Hex(generatedString);
-            SendMail.sendNewPassword(SignedUser.getUser().getEmail(), generatedString);
+            SendMail.sendNewPassword(user.getEmail(), generatedString);
             user.setPassword(md);
             user.update();
 

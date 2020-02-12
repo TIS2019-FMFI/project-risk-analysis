@@ -405,8 +405,12 @@ public class ProjectController {
         saveButton.setVisible(false);
         try {
             ProjectEditTransaction.editProject(project, changes);
+            createCharts();
         } catch (SQLException e) {
             MyAlert.showError("Údaje o projekte "+project.getProjectNumber() + " sa nepodarilo zmeniť!");
+            e.printStackTrace();
+        } catch (IOException e) {
+            MyAlert.showError("Vyskytla sa chyba pri kreslení grafov.");
             e.printStackTrace();
         }
     }
@@ -429,8 +433,13 @@ public class ProjectController {
      * @throws DocumentException
      */
     @FXML
-    public void exportProjectToPDf() throws IOException, DocumentException {
-        PdfExporter.exportPdf(projectDetailsTable.getItems(), sapDetailsTable.getItems());
+    public void exportProjectToPDf() throws IOException{
+        try {
+            PdfExporter.exportPdf(projectDetailsTable.getItems(), sapDetailsTable.getItems());
+        } catch (DocumentException e) {
+            MyAlert.showError("Problém pri exportovaní PDF.");
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -2,6 +2,7 @@ package app.exporter;
 
 import app.App;
 import app.gui.MyAlert;
+import javafx.stage.DirectoryChooser;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,7 +15,17 @@ import java.util.List;
 public class CSVExporter {
 
     public static void exportDataToCSV(List<List<String>> data, String fileIdentifier){
-        String directoryName = App.getPropertiesManager().getProperty("file.location");
+        String directoryName = "";
+
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File folder = directoryChooser.showDialog(null);
+        if(folder != null){
+            directoryName = folder.getAbsolutePath();
+        }else{
+            return;
+        }
+
+
         if(directoryName == null || "".equals(directoryName)){
             MyAlert.showWarning("Nenastavili ste priečinok na export csv suboru,\n subor bol exportovaný do priečinka C:/files");
             directoryName="C:/files";
@@ -42,7 +53,7 @@ public class CSVExporter {
                 }
             }
             bw.close();
-            MyAlert.showSuccess("Súbor bol úspešne uložený do priečinku " + directoryName);
+            MyAlert.showSuccess("Súbor bol úspešne uložený do priečinku\n" + directoryName);
 
         } catch (IOException e) {
             MyAlert.showError("Súbor sa nepodarilo uložiť");

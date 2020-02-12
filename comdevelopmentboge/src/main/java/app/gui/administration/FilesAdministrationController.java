@@ -10,6 +10,7 @@ import app.service.LogService;
 import app.service.ProjectReminderService;
 import app.transactions.ImportSAPTransaction;
 import javafx.fxml.FXML;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.BufferedWriter;
@@ -30,7 +31,17 @@ public class FilesAdministrationController {
      */
     @FXML
     public void exportLogs(){
-        String directoryName = App.getPropertiesManager().getProperty("log.location");
+        String directoryName = "";
+
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File folder = directoryChooser.showDialog(null);
+        if(folder != null){
+            directoryName = folder.getAbsolutePath();
+        } else{
+            return;
+        }
+
+
         if(directoryName == null || "".equals(directoryName)){
             MyAlert.showWarning("Nenastavili ste priečinok na export logov,\n logy boli exportované do priečinka C:/logs");
             directoryName="C:/logs";
@@ -56,7 +67,7 @@ public class FilesAdministrationController {
                     bw.write(logRecord);
                 }
                 bw.close();
-                MyAlert.showSuccess("Logy boli úspešne uložené do priečinku " + directoryName);
+                MyAlert.showSuccess("Logy boli úspešne uložené do priečinku\n" + directoryName);
             }
             catch (IOException e){
                 MyAlert.showError("Logy sa nepodarilo uložiť");
@@ -73,7 +84,17 @@ public class FilesAdministrationController {
      */
     @FXML
     public void exportReport() throws SQLException {
-        String directoryName = App.getPropertiesManager().getProperty("report.location");
+        String directoryName = "";
+
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File folder = directoryChooser.showDialog(null);
+        if(folder != null){
+            directoryName = folder.getAbsolutePath();
+        }else{
+            return;
+        }
+
+
         if(directoryName == null || "".equals(directoryName)){
             MyAlert.showWarning("Nenastavili ste priečinok na export reportu,\n report bol exportovaný do priečinka C:/reports");
             directoryName="C:/report";
@@ -94,11 +115,14 @@ public class FilesAdministrationController {
                 BufferedWriter bw = new BufferedWriter(fw);
 
                 for(ProjectReminder projectReminder: projectReminders){
-                    String reportRecord = "[" + projectReminder.getDate() + "] [" + projectReminder.getProjectNumber() + " ] - " + projectReminder.getText() + "\n" ;
+                    String actual = String.format("%.2f", Double.parseDouble(projectReminder.getUnique_code().substring(projectReminder.getUnique_code().indexOf(":")+1,projectReminder.getUnique_code().indexOf("/"))));
+                    String planned = String.format("%.2f", Double.parseDouble(projectReminder.getUnique_code().substring(projectReminder.getUnique_code().indexOf("/")+1)));
+                    String reportRecord = "[" + projectReminder.getDate() + "] [" + projectReminder.getProjectNumber() + " ] - " +
+                            projectReminder.getText() + " [Aktualne = "+ actual + "] [Planovane = "+ planned + "]\n" ;
                     bw.write(reportRecord);
                 }
                 bw.close();
-                MyAlert.showSuccess("Report bol  úspešne uložený do priečinku " + directoryName);
+                MyAlert.showSuccess("Report bol  úspešne uložený do priečinku\n" + directoryName);
             }
             catch (IOException e){
                 MyAlert.showError("Report sa nepodarilo uložiť");
