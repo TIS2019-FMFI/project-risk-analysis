@@ -47,6 +47,10 @@ public class ExcellParser {
             counter = 0;
             ArrayList<String> temp = new ArrayList();
             for (Cell cell : row) {
+                if(counter == 0){
+                    counter++;
+                    continue;
+                }
                 switch (cell.getCellType()) {
                     case STRING:
                         System.out.println(cell.getStringCellValue());
