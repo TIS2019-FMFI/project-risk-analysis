@@ -78,8 +78,12 @@ public class TabController {
     }
 
     public void selectProjectTab() throws IOException {
-        setMenuBar("bar/project-list-menu-bar.fxml");
+        if(SignedUser.getUser().getUserType().equals("CENTRAL_ADMIN")){
+            setMenuBar("bar/project-list-menu-bar.fxml");
+        } else{
+            setMenuBar("bar/project-list-menu-bar-basic.fxml");
 
+        }
         ObservableList<Tab> tabs = mainTabPane.getTabs();
         for (Tab tab : tabs) {
             if (tab.getId().equals("projectTab")) {
@@ -131,7 +135,11 @@ public class TabController {
     }
 
     public void selectProjectDetailsTab(String projectDef) throws IOException{
-        setMenuBar("bar/project-details-menu-bar.fxml");
+        if(SignedUser.getUser().getUserType().equals("CENTRAL_ADMIN")){
+            setMenuBar("bar/project-details-menu-bar.fxml");
+        } else{
+            setMenuBar("bar/project-details-menu-bar-basic.fxml");
+        }
 
         ObservableList<Tab> tabs = mainTabPane.getTabs();
         for (Tab tab : tabs) {

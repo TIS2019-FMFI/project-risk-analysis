@@ -25,7 +25,6 @@
                 </ImageView>
             </children>
         </AnchorPane>
-        <fx:include source="/app/gui/administration/users-button-view.fxml"/>
         <fx:include source="/app/gui/profile/profile-button-view.fxml"/>
     </children>
 </AnchorPane>
