@@ -1,8 +1,11 @@
 package app.transactions;
 
 import app.config.DbContext;
+import app.db.Project;
+import app.db.ProjectReminder;
 import app.db.SAP;
 import app.importer.ExcelRow;
+import app.service.ProjectService;
 import app.service.SAPService;
 
 import java.math.BigDecimal;
@@ -32,6 +35,10 @@ public class ImportSAPTransaction {
 
             SAP temp = new SAP();
             temp.insertFromFile(sap);
+
+
+            ProjectService.getProjectService().importProjects();
+
             DbContext.getConnection().commit();
         } catch (SQLException e) {
             DbContext.getConnection().rollback();

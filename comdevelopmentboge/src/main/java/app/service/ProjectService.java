@@ -287,4 +287,22 @@ public class ProjectService {
         return result;
 
     }
+
+    /**
+     * import novych projektov zo SAP tabulky
+     * @throws SQLException
+     */
+    public void importProjects() throws SQLException {
+        String sqlInsert = "INSERT IGNORE INTO projects (projectNumber) " +
+                "select distinct s.ProjektDef " +
+                "from sap s";
+
+        try(PreparedStatement s = DbContext.getConnection().prepareStatement(sqlInsert)){
+
+            s.executeUpdate();
+
+
+        }
+
+    }
 }
