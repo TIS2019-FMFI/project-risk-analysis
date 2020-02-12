@@ -29,6 +29,8 @@ public class App extends Application {
         stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();
+
+        configure();
     }
 
     public static void setRoot(String fxml) throws IOException {
@@ -44,14 +46,15 @@ public class App extends Application {
         return fxmlLoader.load();
     }
 
-    public static void main(String[] args) throws IOException {
+    private void configure() throws IOException {
 
         propertiesManager = new PropertiesManager();
         Configuration.connect();
-        Generate.createAndGenerate();
+        // Generate.createAndGenerate();
+    }
+
+    public static void main(String[] args) throws IOException {
         launch();
-
-
     }
 
     public static PropertiesManager getPropertiesManager() {
