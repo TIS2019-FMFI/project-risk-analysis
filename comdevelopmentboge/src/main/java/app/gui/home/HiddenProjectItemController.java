@@ -31,7 +31,7 @@ public class HiddenProjectItemController {
 
     /**
      * Nastavi policku kod projektu a controller hlavnej triedy
-     * @param code
+     * @param code cislo projektu
      * @param homeCon
      */
     public void set(String code, HomeController homeCon) {

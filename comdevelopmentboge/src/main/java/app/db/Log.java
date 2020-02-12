@@ -7,12 +7,29 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 
 public class Log extends Crud<Log> {
+    /**
+     * Objekt typu zaznam
+     */
+
+    /**
+     * id - id zaznamu
+     * userId - id uzivatela, ktory vykonava nejaku zmenu
+     * time - aktualny cas zmeny
+     * text - text logu
+     * userFirstName - meno uzivatela, ktory vykonava zmenu
+     * userLastName - priezvisko uzivatela, ktory vykonava zmenu
+     */
+
     private Integer id;
     private Integer userId;
     private Timestamp time;
     private String text;
     private String userFirstName;
     private String userLastName;
+
+    /**
+     * Konstruktory objektu Log
+     */
 
     public Log(){}
 
@@ -22,6 +39,11 @@ public class Log extends Crud<Log> {
         this.time = time;
         this.text = text;
     }
+
+
+    /**
+     * Nastavenie a ziskanie atributov objektu Log
+    */
 
     public Integer getUserId() {
         return userId;
@@ -73,6 +95,9 @@ public class Log extends Crud<Log> {
     }
 
 
+    /**
+     * Vlozenie logu do tabulky logs
+     */
     public void insert(){
         String sql = "insert into logs (user_id, time, text) values (?,?,?)";
         try {
@@ -82,11 +107,25 @@ public class Log extends Crud<Log> {
         }
     }
 
+
+    /**
+     * Doplni udaje do SQL dopytu pre aktualizovanie/vymazanie logu
+     * @param s - prepared statement s
+     * @return - doplneny SQL dopyt
+     * @throws SQLException vynimka pri chybe SQL dopytu
+     */
     @Override
     public PreparedStatement fill(PreparedStatement s) throws SQLException {
         return null;
     }
 
+
+    /**
+     * Doplni udaje do SQL dopytu pre vlozenie logu
+     * @param s - prepared statement s
+     * @return - doplneny SQL dopyt
+     * @throws SQLException vynimka pri chybe SQL dopytu
+     */
     @Override
     public PreparedStatement fillInsert(PreparedStatement s) throws SQLException {
         s.setInt(1,userId);

@@ -11,6 +11,14 @@ import java.io.IOException;
 
 public class RequestController {
 
+    /**
+     * homeController - objekt typu homeController, kontroler hlavnej obrazovky
+     * request - registracna ziadost
+     * col - stlpec, v ktorom je registracna ziadost
+     * row - riadok, v ktorom je registracna ziadost
+     * name - nazov ziadosti
+     * text - text ziadosti
+     */
     private HomeController homeController;
     private RegistrationRequest request;
     private int col;
@@ -19,15 +27,23 @@ public class RequestController {
     private Label name;
     @FXML private TextArea text;
 
+    /**
+     * Nastavenie objektu RequestController, kontroler registracnej ziadosti
+     */
     public RequestController() {
 
     }
 
+    /**
+     * Nastavenie registracnej ziadosti
+     * @param request - ziadost o registraciu
+     * @param col stlpec, v ktorom je ziadost
+     * @param row riadok, v ktorom je ziadost
+     * @param homeCon kontroler hlavnej obrazovky
+     */
     public void set(RegistrationRequest request, int col, int row, HomeController homeCon) {
 
-
         name.setText("Žiadosť o registráciu");
-
         text.setText(request.getText());
 
         this.col = col;
@@ -36,12 +52,21 @@ public class RequestController {
         this.homeController = homeCon;
     }
 
-
+    /**
+     * Zamietnutie registracnej ziadosti
+     * @param event
+     * @throws IOException chyba v grafickom komponente
+     */
     @FXML
     private void decline(MouseEvent event) throws IOException {
        homeController.declineRequest(request,col,row);
     }
 
+    /**
+     * Schvalenie registracnej ziadosti
+     * @param event
+     * @throws IOException chyba v grafickom komponente
+     */
     @FXML
     private void approve(MouseEvent event) throws IOException {
         homeController.approveRequest(request,col,row);

@@ -22,7 +22,14 @@ public class RegistrationRequest extends Crud<RegistrationRequest>{
      */
     private Integer user_id;
 
+    /**
+     * Konstuktor objektu typu RegistrationRequest
+     */
     public RegistrationRequest(){}
+
+    /**
+     * Nastavenie atributov objektu typu RegistrationRequest
+     */
 
     public String getText() {
         return text;

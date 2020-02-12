@@ -11,67 +11,71 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Obsahuje dáta z tabuľky notifikácii
+ * Obsahuje data z tabulky notifikacii
  */
 public class ProjectReminder extends Crud<ProjectReminder> {
 
     /**
-     * Unikátny kód projektu
+     * Unikatny kod projektu
      */
     private String projectNumber;
 
     /**
-     * ID projektu z databázy
+     * ID projektu z databazy
      */
     private Integer project_id;
 
     /**
-     * ID notifikácie
+     * ID notifikacie
      */
     private Integer id;
 
     /**
-     * Text notifikácie, ktorý sa zobrazí na hlavnej stránke
+     * Text notifikacie, ktory sa zobrazi na hlavnej stranke
      */
     private String text;
 
     /**
-     * Definuje, či je notifikácia už uzavretá
-     * Ak je uzavretá nebude sa zobrazovať na hlavnej stránke
+     * Definuje, ci je notifikacia uz uzavreta
+     * Ak je uzavreta nebude sa zobrazovat na hlavnej stranke
      */
     private Boolean closed;
 
     /**
-     * Definuje, či je notifikácia zminimalizovaná
-     * Táto hodnota je len v aplikácii, kedže pre každého užívateľa je rôzna
+     * Definuje, ci je notifikacia zminimalizovana
+     * Tato hodnota je len v aplikacii, kedze pre kazdeho uzivatela je rozna
      */
     private Boolean minimized = false;
 
     /**
-     * Dátum zistenia rizika
-     * Slúži pre účely exportovania reportov
+     * Datum zistenia rizika
+     * Sluzi pre ucely exportovania reportov
      */
     private Date date;
 
     /**
-     * Umelo vytvorený unikátny kód pre rozlíšenie, či ide o rovnaké riziko
-     * Pri opakovanom zistení rovnakého rizika z predošlého dňa sa do tabuľky notifikácii
-     * údaj nevloží na základe obmedzenia UNIQUE na tejto hodnote
+     * Umelo vytvoreny unikatny kod pre rozlisenie, ci ide o rovnake riziko
+     * Pri opakovanom zisteni rovnakeho rizika z predosleho dna sa do tabulky notifikacii
+     * udaj nevlozi na zaklade obmedzenia UNIQUE na tejto hodnote
      *
-     * Je to reťazec v tvare [cislo projektu]:[aktuálne náklady]/[plánované náklady]
+     * Je to retazec v tvare [cislo projektu]:[aktualne naklady]/[planovana naklady]
      */
     private String unique_code;
 
     /**
-     * Hodnota, ktorá určuje, či bola daná notifikácia poslaná na emailovú adresu centrálneho admina
-     * Notifikácia sa posiela len pri prvom vložení do databázy
+     * Hodnota, ktora urcuje, ci bola dana notifikacia poslana na emailovu adresu centralneho admina
+     * Notifikacia sa posiela len pri prvom vlozeni do databazy
      */
     private Boolean sent;
+
 
 
     public ProjectReminder() {
     }
 
+    /**
+     * Ziskanie a nastavenie atributov objektu typu ProjectReminder
+     */
 
     public Integer getId() {
         return id;
@@ -146,8 +150,8 @@ public class ProjectReminder extends Crud<ProjectReminder> {
     }
 
     /**
-     * Vloží notifikáciu do tabuľky a nastaví jej ID
-     * @throws SQLException
+     * Vlozi notifikaciu do tabulky a nastavi jej ID
+     * @throws SQLException chyba pri vykonavani SQL dopytu
      */
     public void insert() throws SQLException {
         String sql = "INSERT INTO reminders(text,project_id,date,closed,unique_code,sent) VALUES(?,?,?,?,?,?)";
@@ -156,8 +160,8 @@ public class ProjectReminder extends Crud<ProjectReminder> {
     }
 
     /**
-     * Aktualizuje hodnoty closed a sent notifikácie do tabuľky na základe ID
-     * @throws SQLException
+     * Aktualizuje hodnoty closed a sent notifikacie do tabulky na základe ID
+     * @throws SQLException chyba pri vykonavani SQL dopytu
      */
     public void update() throws SQLException {
         String sql = "UPDATE reminders set closed = ? , sent = ? where id = ?";
@@ -166,10 +170,10 @@ public class ProjectReminder extends Crud<ProjectReminder> {
     }
 
     /**
-     * Doplní hodnoty SQL dopytu pre aktualizovanie údajov
+     * Doplni hodnoty SQL dopytu pre aktualizovanie udajov
      * @param s SQL dopyt
      * @return
-     * @throws SQLException
+     * @throws SQLException chyba pri vykonavani SQL dopytu
      */
 
     @Override
@@ -181,10 +185,10 @@ public class ProjectReminder extends Crud<ProjectReminder> {
     }
 
     /**
-     * Doplní hodnoty SQL dopytu pre vloženie údaju
+     * Doplni hodnoty SQL dopytu pre vlozenie udaju
      * @param s SQL dopyt
      * @return
-     * @throws SQLException
+     * @throws SQLException chyba pri vykonavani SQL dopytu
      */
     @Override
     public PreparedStatement fillInsert(PreparedStatement s) throws SQLException {

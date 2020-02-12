@@ -12,6 +12,11 @@ import java.util.List;
 
 public class SAP {
 
+    /**
+     * Stlpce zo SAP tabulky
+     */
+
+
     private String ProjektDef;
     private String PSPElement;
     private String Objektbezeichnung;
@@ -27,6 +32,10 @@ public class SAP {
     private String KWahr;
     private Double MengeErf;
     private String GME;
+
+    /**
+     * Ziskanie a nastavenie parametrov objektu typu SAP
+     */
 
     public String getPSPElement() {
         return PSPElement;
@@ -149,6 +158,10 @@ public class SAP {
         ProjektDef = projektDef;
     }
 
+    /**
+     * Ziskanie stlpcov SAP
+     * @return
+     */
     //for pdf table purpose
     public List<String> getAllAttributesValues(){
         List<String> attributes = new ArrayList<>();
@@ -157,6 +170,10 @@ public class SAP {
         return attributes;
     }
 
+    /**
+     * Ziskanie stlpcov SAP - String
+     * @return
+     */
     public List<String> getAllAttributesNames(){
         List<String> attributes = new ArrayList<>();
         attributes.addAll(List.of("ProjektDef","PSPElement","Objektbezeichnung","Kostenart","KostenartenBez","Bezeichnung","Partnerobjekt","Periode","Jahr","Belegnr","BuchDatum","WertKWahr","KWahr","MengeErf","GME"));
@@ -167,7 +184,7 @@ public class SAP {
     /**
      * Funkcia, ktora vlozi data do tabulky
      * @param sap
-     * @throws SQLException
+     * @throws SQLException chyba pri vykonavani SQL dopytu
      */
     public void insertFromFile(ArrayList<ExcelRow> sap) throws SQLException {
         String sqlInsert = "INSERT INTO sap " +

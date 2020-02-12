@@ -11,6 +11,14 @@ import java.io.IOException;
 
 public class ReminderController {
 
+    /**
+     * homeController - objekt typu homeController, graficky kontroler hlavnej obrazovky
+     * reminder - konkretna notifikacia
+     * col - stlpec, v ktorom je notifikacia
+     * row - riadok, v ktorom je notifikacia
+     * name - nazov, teda projektove cislo nofifikacie
+     * text - text notifikacie
+     */
     private HomeController homeController;
     private ProjectReminder reminder;
     private int col;
@@ -18,10 +26,20 @@ public class ReminderController {
     @FXML private Label name;
     @FXML private TextArea text;
 
+    /**
+     * Nastavenie objektu ReminderController
+     */
     public ReminderController() {
 
     }
 
+    /**
+     * Nastavenie notifikacie
+     * @param reminder - objekt typu ProjectReminder
+     * @param col stlpec, v ktorom je notifikacia
+     * @param row riadok, v ktorom je notifikacia
+     * @param homeCon controller hlavnej obrazovky
+     */
     public void set(ProjectReminder reminder, int col, int row, HomeController homeCon) {
 
 
@@ -36,11 +54,21 @@ public class ReminderController {
     }
 
 
+    /**
+     * Zatvorenie notifikacie
+     * @param event
+     * @throws IOException chyba v grafickom komponente
+     */
     @FXML
     private void close(MouseEvent event) throws IOException {
         homeController.closeReminder(reminder, col, row);
     }
 
+    /**
+     * Minimalizovanie notifikacie
+     * @param event
+     * @throws IOException chyba v grafickom komponente
+     */
     @FXML
     private void minimize(MouseEvent event) throws IOException {
         homeController.minimizeReminder(reminder, col, row);

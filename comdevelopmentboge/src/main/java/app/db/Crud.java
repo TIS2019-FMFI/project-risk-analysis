@@ -16,6 +16,7 @@ public abstract class Crud<T> {
     public abstract PreparedStatement fill(PreparedStatement s) throws SQLException;
     public abstract PreparedStatement fillInsert(PreparedStatement s) throws SQLException;
 
+
     /**
      * Vlozenie entity do tabulky.
      * @param sql SQL dopyt
@@ -52,7 +53,7 @@ public abstract class Crud<T> {
      * Vymazanie entity z tabulky.
      * @param sql SQL dopyt
      * @param id id entity, ktora sa vymaze
-     * @throws SQLException
+     * @throws SQLException chyba pri vykonavani SQL dopytu
      */
     public void delete(PreparedStatement sql, Integer id) throws SQLException {
         sql.setInt(1, id);

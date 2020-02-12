@@ -373,6 +373,9 @@ public class HomeController {
         return reminders0;
     }
 
+    /**
+     * Nastavenie zoznamu vsetkych notifikacii, podla ID projektu
+     */
     private void getReminders() {
 
         try {
@@ -387,6 +390,9 @@ public class HomeController {
 
     }
 
+    /**
+     * Nastavenie zoznamu vsetkych ziadosti o registraciu
+     */
     private void getRequests() {
         try {
             requests = RegistrationRequestService.getInstance().findAll();
@@ -396,6 +402,10 @@ public class HomeController {
         }
     }
 
+    /**
+     * Schovanie vsetkych notifikacii z hlavnej obrazovky
+     * @throws IOException chyba v grafickom komponente
+     */
     @FXML
     public void showAllHiddenReminders() throws IOException {
         for (String code : hidden_projects_codes) {
@@ -408,6 +418,10 @@ public class HomeController {
 
     }
 
+    /**
+     * Zobrazenie vsetkych minimalizovanych notifikacii na hlavnej obrazovke
+     * @param reminders1
+     */
     private void showReminders(List<ProjectReminder> reminders1) {
         for (ProjectReminder reminder : reminders1) {
             if (reminder.getIsMinimized()) {
@@ -418,6 +432,11 @@ public class HomeController {
         }
     }
 
+    /**
+     * Zobrazenie notifikacii podla projektoveho cisla
+     * @param code cislo projektu
+     * @throws IOException chyba v grafickom komponente
+     */
     @FXML
     public void showRemindersByProjectNumber(String code) throws IOException {
         showReminders(reminders.get(code));
@@ -426,6 +445,13 @@ public class HomeController {
     }
 
 
+    /**
+     * Schvalenie registracnej ziadosti
+     * @param request objekt typu RegistrationReguest
+     * @param col stlpec, v ktorom je ziadost
+     * @param row riadok, v ktorom je ziadost
+     * @throws IOException chbyba v grafickom komponente
+     */
     public void approveRequest(RegistrationRequest request, int col, int row) throws IOException {
         deleteReminder(col, row);
         requests.remove(request);
@@ -445,6 +471,13 @@ public class HomeController {
 
     }
 
+    /**
+     * Zamietnutie registracnej ziadosti
+     * @param request objekt typu RegistrationRequest
+     * @param col stlpec, v ktorom je ziadost
+     * @param row riadok, v ktorom je ziadost
+     * @throws IOException chyba v grafickom komponente
+     */
     public void declineRequest(RegistrationRequest request, int col, int row) throws IOException {
         if(MyAlert.showConfirmationDialog("Naozaj chcete zrušiť túto žiadosť o registráciu ? \n Táto akcia je nevratná")) {
             deleteReminder(col, row);
@@ -465,6 +498,13 @@ public class HomeController {
 
     }
 
+    /**
+     * Minimalizovanie notifikacie
+     * @param reminder objekt typu ProjectReminder
+     * @param col stlpec, v ktorom je notifikacia
+     * @param row riadok, v ktorom je notifikacia
+     * @throws IOException chyba v grafickom komponente
+     */
     public void minimizeReminder(ProjectReminder reminder, int col, int row) throws IOException {
 
 
@@ -481,6 +521,12 @@ public class HomeController {
         rearrangeGridPane();
     }
 
+    /**
+     * Vytvorenie obdlznika s cislom projektu po minimalizovani notifikacie k projektu
+     * @param projectNumber projektove cislo
+     * @return graficky komponent box
+     * @throws IOException chyba v grafickom komponente
+     */
     private VBox createProjectItem(String projectNumber) throws IOException {
         FXMLLoader loader = getFXMLLoader("project_item");
         VBox box = loader.load();
@@ -490,6 +536,13 @@ public class HomeController {
     }
 
 
+    /**
+     * Zatvorenie/vymazanie notifikacie k projektu z hlavnej obrazovky
+     * @param reminder objekt typu ProjectReminder
+     * @param col stlpec, v ktorom je notifikacia
+     * @param row riadok, v ktorom je notifikacia
+     * @throws IOException
+     */
     public void closeReminder(ProjectReminder reminder, int col, int row) throws IOException {
         if(MyAlert.showConfirmationDialog("Naozaj chcete zrušiť túto notifikáciu ? \n Táto akcia je nevratná")) {
             deleteReminder(col, row);
@@ -508,6 +561,11 @@ public class HomeController {
 
     }
 
+    /**
+     * Vymazanie reminderu z hlavnej obrazovky (z tabulky notifikacii)
+     * @param col stlpec, v ktorom je reminder
+     * @param row riadok, v ktorom je reminder
+     */
     private void deleteReminder(int col, int row) {
         Node node = getNodeFromGridPane(col, row);
         if (node != null) {
@@ -515,6 +573,12 @@ public class HomeController {
         }
     }
 
+    /**
+     * Ziskanie grafickeho komponentu - notifikacie z tabulky
+     * @param col stlpec, v ktorom je graficky komponent notifikacie
+     * @param row riadok, v ktorom je graficky komponent notifikacie
+     * @return graficky komponent node
+     */
     private Node getNodeFromGridPane(int col, int row) {
         for (Node node : gridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
@@ -524,6 +588,10 @@ public class HomeController {
         return null;
     }
 
+    /**
+     * Opatovne nacitanie grafickeho komponentu tabulka
+     * @throws IOException chyba v grafickom komponente
+     */
     private void rearrangeGridPane() throws IOException {
         gridPane.getChildren().clear();
         int row = 0;
