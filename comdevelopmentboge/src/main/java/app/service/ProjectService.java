@@ -102,16 +102,20 @@ public class ProjectService {
         String criteria2 = "";
         String criteria3 = "";
 
+        boolean anyCriteria = false;
+
         //if any customer name typed, inner join with customers table
         if(customer != null && !"".equals(customer)){
-            sql += " inner join customers on customers.name like '%" + customer+ "%'";
+            sql += " inner join customers on p.customer_id=customers.id ";
         }
 
         if(projectName != null && !"".equals(projectName)){
+            anyCriteria = true;
             criteria1 = "projectName like '%"+projectName+"%'";
         }
 
         if(projectNumber != null && !"".equals(projectNumber)){
+            anyCriteria = true;
             if(!criteria1.equals("")){
                 criteria2 += "and projectNumber like '%" + projectNumber+"%'";
             } else{
@@ -119,7 +123,15 @@ public class ProjectService {
             }
         }
 
-        sql+= ((!criteria1.equals("") || !criteria2.equals("") )?" where ":"") + criteria1 + criteria2 + ";";
+        if(customer != null && !"".equals(customer)){
+            if (anyCriteria){
+                criteria3 += " and customers.name like '%" + customer + "%'";
+            } else{
+                criteria3 += " customers.name like '%" + customer + "%'";
+            }
+        }
+
+        sql+= ((!"".equals(criteria1) || !"".equals(criteria2) || !"".equals(criteria3) )?" where ":"") + criteria1 + criteria2 + criteria3 + ";";
 
         System.out.println(sql);
         try(Statement st = DbContext.getConnection().createStatement()){

@@ -26,18 +26,10 @@ public class SendMail {
 
     private static void initialize() {
         props = new Properties();
-        props.put("mail.smtp.auth", App.getPropertiesManager().getProperty("mail.smtp.auth"));
-        props.put("mail.smtp.starttls.enable", App.getPropertiesManager().getProperty("mail.smtp.starttls.enable"));
-        props.put("mail.smtp.ssl.trust", App.getPropertiesManager().getProperty("mail.smtp.ssl.trust"));
-        props.put("mail.smtp.host", host);
-        props.put("mail.smtp.port", App.getPropertiesManager().getProperty("mail.smtp.port"));
 
-        session = Session.getInstance(props,
-                new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(from, password);
-                    }
-                });
+        props.put("mail.smtp.host", host);
+
+        session = Session.getInstance(props, null);
     }
 
     /**

@@ -147,9 +147,11 @@ public class UsersAdministrationItemController {
 
             MyAlert.showSuccess("Heslo bolo úspešne vygenerované");
         } catch (MessagingException e) {
-            MyAlert.showSuccess("Heslo sa nepodarilo vygenerovať");
+            MyAlert.showSuccess("Heslo sa nepodarilo odoslať");
+            e.printStackTrace();
         } catch (SQLException e) {
             MyAlert.showSuccess("Heslo sa nepodarilo vygenerovať");
+            e.printStackTrace();
         }
     }
 

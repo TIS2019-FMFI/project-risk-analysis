@@ -110,7 +110,7 @@ public class ProfileEditTransaction {
      * @return true alebo false
      */
     private static boolean isEmailFormatValid(String email) {
-        return email.matches("[a-zA-Z0-9\\._]+@[a-zA-Z0-9\\._]+\\.[a-zA-Z]{2,5}");
+        return email.matches("[a-zA-Z0-9\\._]+@boge-rubber-plastics.com");
     }
 
     /**

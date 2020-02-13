@@ -15,7 +15,7 @@ public class PropertiesManager {
         properties = new java.util.Properties();
         FileInputStream ip= null;
         try {
-            ip = new FileInputStream("C:/project-risk-analysis/config.properties");
+            ip = new FileInputStream("\\\\csrboge.corp\\skt\\TEAM\\CC9742710\\Individual\\BSTX-Internal\\2_Team\\PRA\\config.properties");
         } catch (FileNotFoundException e) {
             MyAlert.showError("Systém nenašiel súbor config.properties.\n" +
                     "Aplikácia bez neho nedokáže pokračovat a bude zatvorená.");

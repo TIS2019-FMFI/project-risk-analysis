@@ -40,16 +40,21 @@ public class ExcellParser {
 
         Sheet sheet = workbook.getSheetAt(0);
         ArrayList<ExcelRow> list = new ArrayList();
-        int counter = 0;
+        int colCounter = 0;
+        int rowCounter = 0;
         java.util.Date date = new Date(0);
         for (Row row : sheet) {
             ExcelRow excelRow = new ExcelRow();
-            counter = 0;
+            colCounter=0;
+            if(rowCounter == 0){
+                rowCounter++;
+                continue;
+            }
             ArrayList<String> temp = new ArrayList();
             for (Cell cell : row) {
-                if(counter == 0){
-                    counter++;
-                    continue;
+
+                if(colCounter>15){
+                    break;
                 }
                 switch (cell.getCellType()) {
                     case STRING:
@@ -66,14 +71,14 @@ public class ExcellParser {
                         break;
 
                     case NUMERIC:
-                        if (counter == 10) {
+                        if (colCounter == 10) {
                             date = cell.getDateCellValue();
                         }
 
                         temp.add(String.valueOf(cell.getNumericCellValue()));
                         break;
                 }
-                counter++;
+                colCounter++;
             }
 
             excelRow.setData(temp);

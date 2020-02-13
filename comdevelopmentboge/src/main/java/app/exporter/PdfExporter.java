@@ -188,6 +188,7 @@ public class PdfExporter {
         PdfPTable sapTable = new PdfPTable(15);
         sapTable.setWidthPercentage(100);
         font = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 4);
+        sapTable.setSpacingBefore(300f);
 
 
         //we want to display header even if there is no data
@@ -235,7 +236,9 @@ public class PdfExporter {
         for(Period p : data.keySet()){
             barDataset.addValue(data.get(p).doubleValue(), "monthly costs", p.toString());
             lineDataset.addValue(cumulativeData.get(p).doubleValue(), "cumulative costs", p.toString());
-            limit.addValue(costsLimit.doubleValue(), "planned costs", p.toString());
+            if(costsLimit != null){
+                limit.addValue(costsLimit.doubleValue(), "planned costs", p.toString());
+            }
         }
 
         final CategoryItemRenderer barRenderer = new BarRenderer();
@@ -269,7 +272,7 @@ public class PdfExporter {
 
         plot.mapDatasetToRangeAxis(0, 0);
         plot.mapDatasetToRangeAxis(1, 1);
-        if(costsLimit.compareTo(BigDecimal.ZERO) > 0){
+        if(costsLimit!=null && costsLimit.compareTo(BigDecimal.ZERO) > 0){
             plot.setDataset(2, limit);
             plot.setRenderer(2,limitLineRenderer);
             plot.mapDatasetToRangeAxis(2, 1);

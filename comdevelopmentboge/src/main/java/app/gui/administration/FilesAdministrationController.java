@@ -63,7 +63,7 @@ public class FilesAdministrationController {
                 BufferedWriter bw = new BufferedWriter(fw);
 
                 for(Log log: logs){
-                    String logRecord = "[" + log.getTime() + "] [" + log.getUserFirstName() + " " + log.getUserLastName() + "] - " + log.getText() + "\n" ;
+                    String logRecord = "[" + log.getTime() + "] [" + log.getUserFirstName() + " " + log.getUserLastName() + "] - " + log.getText() + "\n";
                     bw.write(logRecord);
                 }
                 bw.close();
