@@ -6,54 +6,42 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane prefHeight="114.0" prefWidth="1000.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/11.0.1"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.gui.administration.UsersAdministrationItemController">
+<Pane prefHeight="114.0" prefWidth="1059.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.gui.administration.UsersAdministrationItemController">
     <children>
-        <Label fx:id="userName"  styleClass="username" layoutX="21.0" layoutY="14.0" prefHeight="42.0" prefWidth="715.0" textFill="black">
+        <Label fx:id="userName" layoutX="21.0" layoutY="14.0" prefHeight="42.0" prefWidth="715.0" styleClass="username" textFill="black">
             <font>
-                <Font size="20.0"/>
+                <Font size="20.0" />
             </font>
         </Label>
-        <Label fx:id="userType" alignment="CENTER" contentDisplay="CENTER" layoutX="273.0" layoutY="57.0"
-               prefHeight="42.0" prefWidth="210.0" style="-fx-background-color: red; -fx-background-radius: 100;"
-               textAlignment="CENTER" textFill="white">
+        <Label fx:id="userType" alignment="CENTER" contentDisplay="CENTER" layoutX="402.0" layoutY="57.0" prefHeight="42.0" prefWidth="210.0" style="-fx-background-color: red; -fx-background-radius: 100;" textAlignment="CENTER" textFill="white">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </Label>
-        <Label fx:id="generatePassword" alignment="CENTER" contentDisplay="CENTER" layoutX="725.0" layoutY="57.0"
-               onMouseClicked="#generatePassword" prefHeight="42.0" prefWidth="210.0"
-               style="-fx-background-color: #636363; -fx-background-radius: 100;" text="Generovať heslo"
-               textAlignment="CENTER" textFill="WHITE">
+        <Label fx:id="generatePassword" alignment="CENTER" contentDisplay="CENTER" layoutX="835.0" layoutY="57.0" onMouseClicked="#generatePassword" prefHeight="42.0" prefWidth="210.0" style="-fx-background-color: #636363; -fx-background-radius: 100;" text="Generovať heslo" textAlignment="CENTER" textFill="WHITE">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </Label>
-        <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="455.0" layoutY="68.0" onMouseClicked="#editUserType"
-                   pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@/app/images/edit.png"/>
-            </image>
-        </ImageView>
-        <Label fx:id="email" alignment="CENTER" contentDisplay="CENTER" layoutX="40.0" layoutY="57.0" prefHeight="42.0"
-               prefWidth="210.0" style="-fx-background-color: white; -fx-background-radius: 100;"
-               textAlignment="CENTER">
+        <Label fx:id="showProjects" alignment="CENTER" contentDisplay="CENTER" layoutX="619.0" layoutY="57.0" prefHeight="42.0" prefWidth="210.0" style="-fx-background-color: red; -fx-background-radius: 100;" text="Zobraziť projekty" textAlignment="CENTER" textFill="WHITE">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </Label>
-        <Label fx:id="showProjects" alignment="CENTER" contentDisplay="CENTER" layoutX="500.0" layoutY="57.0"
-               prefHeight="42.0" prefWidth="210.0" style="-fx-background-color: red; -fx-background-radius: 100;"
-               text="Zobraziť projekty" textAlignment="CENTER" textFill="WHITE">
-            <font>
-                <Font size="18.0"/>
-            </font>
-        </Label>
-        <ImageView fx:id="showProjectsBtn" fitHeight="20.0" fitWidth="20.0" layoutX="682.0" layoutY="68.0"
-                   onMouseClicked="#showProjects" pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@/app/images/menu.png"/>
-            </image>
-        </ImageView>
+      <Label fx:id="email" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="57.0" prefHeight="42.0" prefWidth="378.0" style="-fx-background-color: white; -fx-background-radius: 100;" textAlignment="CENTER">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="582.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../images/edit.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="801.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../images/menu.png" />
+         </image>
+      </ImageView>
     </children>
 </Pane>

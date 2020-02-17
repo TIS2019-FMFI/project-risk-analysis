@@ -32,9 +32,9 @@
                         <Image url="@../../images/user1.png" />
                     </image>
                 </ImageView>
-                <StackPane alignment="CENTER_RIGHT" layoutX="664.0" layoutY="438.0" prefHeight="121.0" prefWidth="500.0" AnchorPane.bottomAnchor="811.0" AnchorPane.leftAnchor="661.0" AnchorPane.rightAnchor="256.0" AnchorPane.topAnchor="438.0">
+                <StackPane alignment="CENTER_RIGHT" layoutX="664.0" layoutY="438.0" prefHeight="121.0" prefWidth="656.0" AnchorPane.bottomAnchor="811.0" AnchorPane.leftAnchor="661.0" AnchorPane.rightAnchor="133.0" AnchorPane.topAnchor="438.0">
                     <children>
-                        <PasswordField fx:id="passwordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="500.0" style="-fx-background-color: #2b2b2b; -fx-background-radius: 100; -fx-text-inner-color: white;">
+                        <PasswordField fx:id="passwordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="51.0" prefWidth="659.0" style="-fx-background-color: #2b2b2b; -fx-background-radius: 100; -fx-text-inner-color: white;">
                             <font>
                                 <Font size="24.0" />
                             </font>
@@ -68,7 +68,7 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                      <StackPane.margin>
-                        <Insets bottom="60.0" right="370.0" />
+                        <Insets bottom="60.0" right="500.0" />
                      </StackPane.margin>
                   </Label>
                     </children>
@@ -82,11 +82,11 @@
                         </Label>
                     </children>
                 </VBox>
-                <StackPane alignment="CENTER_RIGHT" layoutX="661.0" layoutY="316.0" prefHeight="122.0" prefWidth="500.0" AnchorPane.bottomAnchor="930.0" AnchorPane.leftAnchor="661.0" AnchorPane.rightAnchor="256.0" AnchorPane.topAnchor="316.0">
+                <StackPane alignment="CENTER_RIGHT" layoutX="661.0" layoutY="316.0" prefHeight="124.0" prefWidth="648.0" AnchorPane.bottomAnchor="930.0" AnchorPane.leftAnchor="661.0" AnchorPane.rightAnchor="133.0" AnchorPane.topAnchor="316.0">
                     <children>
-                        <TextField fx:id="email" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="500.0" style="-fx-background-color: #2b2b2b; -fx-background-radius: 100; -fx-text-inner-color: white;">
+                        <TextField fx:id="email" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="51.0" prefWidth="667.0" style="-fx-background-color: #2b2b2b; -fx-background-radius: 100; -fx-text-inner-color: white;">
                             <font>
-                                <Font size="24.0" />
+                                <Font size="18.0" />
                             </font>
                         </TextField>
                         <ImageView fx:id="email_edit" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#emailEdit" pickOnBounds="true" preserveRatio="true">
@@ -110,7 +110,7 @@
                                 <Font name="System Bold" size="14.0" />
                             </font>
                             <StackPane.margin>
-                                <Insets bottom="60.0" right="370.0" top="5.0" />
+                                <Insets bottom="60.0" right="500.0" top="5.0" />
                             </StackPane.margin>
                         </Label>
                     </children>
