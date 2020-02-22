@@ -6,13 +6,23 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<TabPane  prefHeight="800.0" prefWidth="1000.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE"  xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<TabPane prefHeight="800.0" prefWidth="1000.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE"
+         xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+         stylesheets="../css/style.css">
     <tabs>
-        <Tab text="Hlavná stránka" fx:id="mainPageTab" >
+        <Tab text="Hlavná stránka" fx:id="mainPageTab">
             <fx:include source="home/main-page.fxml"/>
-        </Tab >
+        </Tab>
         <Tab fx:id="projectTab" text="Prehľad projektov">
             <fx:include fx:id="projectTabBoard" source="project/project-board.fxml"/>
+        </Tab>
+        <Tab text="" fx:id="administration"
+             style="-fx-background-color: lightgray; -fx-text-fill: lightgray; -fx-pref-height: 0" >
+            <fx:include source="administration/users-administration-board.fxml"/>
+        </Tab>
+        <Tab text="" fx:id="profile"
+             style="-fx-background-color: lightgray; -fx-text-fill: lightgray; -fx-pref-height: 0">
+            <fx:include source="profile/profile.fxml"/>
         </Tab>
     </tabs>
 </TabPane>

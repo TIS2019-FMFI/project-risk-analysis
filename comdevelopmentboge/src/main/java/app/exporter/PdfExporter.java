@@ -1,21 +1,20 @@
 package app.exporter;
 
+import app.App;
 import app.db.Project;
 import app.db.SAP;
 
 import java.awt.*;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import app.gui.MyAlert;
 import app.gui.graph.ChartRenderer;
 import app.gui.graph.Period;
 import app.gui.project.ProjectFilter;
@@ -25,6 +24,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.*;
+import javafx.stage.DirectoryChooser;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -41,13 +41,39 @@ import org.jfree.data.general.DefaultPieDataset;
 
 import javax.imageio.ImageIO;
 
+/**
+ * umožnuje vytvorenie PDF súboru o projekte pozostávajúcich z
+ * tabuľky o projekte, grafov a tabuľky so SAP údajmi
+ */
 public class PdfExporter {
 
+    /**
+     * exportovanie údajov o projekte do PDF súboru
+     * @param projectData
+     * @param sapData
+     * @throws IOException
+     * @throws DocumentException
+     */
     public static void exportPdf(List<Project> projectData, List<SAP> sapData) throws IOException, DocumentException {
 
-        String directoryName = "C:/pdf";
+        String directoryName = "";
+
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File folder = directoryChooser.showDialog(null);
+        if(folder != null){
+            directoryName = folder.getAbsolutePath();
+        } else{
+            return;
+        }
+
+       // directoryName = App.getPropertiesManager().getProperty("file.location");
+        if(directoryName == null || "".equals(directoryName)){
+            MyAlert.showWarning("Nenastavili ste priečinok na export súborov,\n súbor bol exportovaný do priečinka C:/files");
+            directoryName="C:/files";
+        }
         String fileName = new SimpleDateFormat("yyyy-MM-dd@HH-mm-ss'.pdf'").format(new Date());
 
+        System.out.println(directoryName + "/" + fileName);
         //if directory does not exist, create one
         File directory = new File(directoryName);
         if (! directory.exists()){
@@ -55,7 +81,15 @@ public class PdfExporter {
         }
 
         Document document = new Document();
-        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(directoryName+"/"+fileName));
+        try {
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(directoryName+"/"+fileName));
+        } catch (DocumentException e) {
+            MyAlert.showError("Problém pri exportovaní PDF.");
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            MyAlert.showError("Problém pri exportovaní PDF.");
+            e.printStackTrace();
+        }
         document.open();
 
         //project projectTable
@@ -103,7 +137,7 @@ public class PdfExporter {
         font = FontFactory.getFont(FontFactory.HELVETICA, 8);
         //projectTable content
         for(Project project : projectData){
-            List<String> attributes = project.getAllAttributes();
+            List<String> attributes = project.getAllAttributesValues();
             for(String att : attributes){
                 cell = new PdfPCell(new Phrase(att, font));
                 cell.setVerticalAlignment(Element.ALIGN_CENTER);
@@ -112,13 +146,18 @@ public class PdfExporter {
         }
         projectTable.setSpacingAfter(72f);
         document.add(projectTable);
-// adding charts
+        // adding charts
 
         //R&D costs chart
         LinkedHashMap<Period, BigDecimal> data = ChartService.getChartService().getRDCostsData(projectData.get(0).getProjectNumber(), ProjectFilter.getInstance().getFrom(), ProjectFilter.getInstance().getTo());
         BigDecimal planned = ProjectService.getProjectService().getPlanedDDCosts(projectData.get(0).getProjectNumber());
         Image RDCostsChartImage = createLineBarChartImage(data, "Project "+projectData.get(0).getProjectNumber() + " R&D Costs", planned);
         document.add(RDCostsChartImage);
+
+        //R&D time costs chart
+        data = ChartService.getChartService().getRDTimeCosts(projectData.get(0).getProjectNumber(), ProjectFilter.getInstance().getFrom(), ProjectFilter.getInstance().getTo());
+        Image RDTimeCostsChartImage = createLineBarChartImage(data, "Project "+projectData.get(0).getProjectNumber() + " R&D time Costs", BigDecimal.ZERO);
+        document.add(RDTimeCostsChartImage);
 
         //Prototype costs chart
         data = ChartService.getChartService().getPrototypeCosts(projectData.get(0).getProjectNumber(), ProjectFilter.getInstance().getFrom(), ProjectFilter.getInstance().getTo());
@@ -149,6 +188,7 @@ public class PdfExporter {
         PdfPTable sapTable = new PdfPTable(15);
         sapTable.setWidthPercentage(100);
         font = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 4);
+        sapTable.setSpacingBefore(300f);
 
 
         //we want to display header even if there is no data
@@ -173,8 +213,18 @@ public class PdfExporter {
         sapTable.setSpacingBefore(72f);
         document.add(sapTable);
         document.close();
+
+        MyAlert.showSuccess("Súbor bol exportovaný do priečinka\n"+ directoryName);
+
     }
 
+    /**
+     * vytvorí graf pozostávajúci zo sĺpcového grafu a čiarového grafu
+     * @param data všetky dáta o projekte zo SAP
+     * @param title názov grafu
+     * @param costsLimit maximálna hodnota kumulatívnych údajov v grafe
+     * @return várti graf
+     */
     public static JFreeChart getBarLineChart(LinkedHashMap<Period, BigDecimal> data, String title, BigDecimal costsLimit){
 
         DefaultCategoryDataset barDataset = new DefaultCategoryDataset();
@@ -186,7 +236,9 @@ public class PdfExporter {
         for(Period p : data.keySet()){
             barDataset.addValue(data.get(p).doubleValue(), "monthly costs", p.toString());
             lineDataset.addValue(cumulativeData.get(p).doubleValue(), "cumulative costs", p.toString());
-            limit.addValue(costsLimit.doubleValue(), "planned costs", p.toString());
+            if(costsLimit != null){
+                limit.addValue(costsLimit.doubleValue(), "planned costs", p.toString());
+            }
         }
 
         final CategoryItemRenderer barRenderer = new BarRenderer();
@@ -220,7 +272,7 @@ public class PdfExporter {
 
         plot.mapDatasetToRangeAxis(0, 0);
         plot.mapDatasetToRangeAxis(1, 1);
-        if(costsLimit.compareTo(BigDecimal.ZERO) > 0){
+        if(costsLimit!=null && costsLimit.compareTo(BigDecimal.ZERO) > 0){
             plot.setDataset(2, limit);
             plot.setRenderer(2,limitLineRenderer);
             plot.mapDatasetToRangeAxis(2, 1);
@@ -237,6 +289,12 @@ public class PdfExporter {
         return chart;
     }
 
+    /**
+     * vytvorí koláčový graf
+     * @param data všetky dáta o projekte zo SAP
+     * @param title názov grafu
+     * @return vráti koláčový graf
+     */
     private static JFreeChart getPieChart(LinkedHashMap<String, BigDecimal> data, String title){
 
         DefaultPieDataset dataset = new DefaultPieDataset( );
@@ -255,26 +313,41 @@ public class PdfExporter {
         return chart;
     }
 
-
+    /**
+     * z grafu vytvorí obraázok, ktorý možno použiť pri vytváraní PDF
+     * @param data všetky dáta o projekte zo SAP
+     * @param title názov grafu
+     * @param planned plánovaná maximálna kumulatívna hodnota
+     * @return
+     * @throws IOException
+     * @throws BadElementException
+     */
     private static Image createLineBarChartImage(LinkedHashMap<Period, BigDecimal> data, String title, BigDecimal planned) throws IOException, BadElementException {
         JFreeChart ch = getBarLineChart(data, title, planned);
-
-        BufferedImage chartImage = ch.createBufferedImage( 800, 500, null);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(chartImage, "png", baos);
-        Image iTextImage = Image.getInstance(baos.toByteArray());
-        iTextImage.scaleAbsolute(500f, 300f);
-
-        iTextImage.setAlignment(Element.ALIGN_CENTER);
-
-        return iTextImage;
+        return getImage(ch);
     }
-
+    /**
+     * z grafu vytvorí obraázok, ktorý možno použiť pri vytváraní PDF
+     * @param data všetky dáta o projekte zo SAP
+     * @param title názov grafu
+     * @return
+     * @throws IOException
+     * @throws BadElementException
+     */
     private static Image createPieChartImage(LinkedHashMap<String, BigDecimal> data, String title) throws IOException, BadElementException {
         JFreeChart ch = getPieChart(data, title);
+        return getImage(ch);
+    }
 
-        BufferedImage chartImage = ch.createBufferedImage( 800, 500, null);
+    /**
+     * vráti itext image vytvorený z JFreeChart objektu
+     * @param ch
+     * @return
+     * @throws IOException
+     * @throws BadElementException
+     */
+    private static Image getImage(JFreeChart ch) throws IOException, BadElementException {
+        BufferedImage chartImage = ch.createBufferedImage(800, 500, null);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(chartImage, "png", baos);

@@ -3,6 +3,10 @@ package app.db;
 import java.util.Date;
 
 public class FEM {
+    /**
+     * Objekt typu FEM - NIE JE IMPLEMENTOVANE!
+     */
+
     private Integer id;
     private String partNumber;
     private String status;

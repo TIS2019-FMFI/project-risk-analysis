@@ -3,8 +3,13 @@ package app.importer;
 import java.util.ArrayList;
 
 public class ExcelRow {
-
+    /**
+     * Textove data jedneho riadku
+     */
     ArrayList<String> data;
+    /**
+     * Datum ulozeny v riadku
+     */
     java.util.Date date;
 
     public ArrayList<String> getData() {

@@ -8,7 +8,6 @@ import javafx.scene.Group;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Slider;
 import javafx.scene.layout.StackPane;
 import javafx.scene.chart.XYChart;
 
@@ -48,6 +47,12 @@ public class ChartRenderer {
         LinkedHashMap<Period, BigDecimal> monthlyRevenuesData = ChartService.getChartService().getPrototypeRevenues(projektDef, from, to);
 
         return createBarChart(monthlyRevenuesData, "Project "+projektDef+" prototype revenues", BigDecimal.ZERO);
+    }
+
+    public static StackPane createRDTimeCostsChart(String projektDef, java.sql.Date from, java.sql.Date to) throws IOException {
+        LinkedHashMap<Period, BigDecimal> monthlyCostsData = ChartService.getChartService().getRDTimeCosts(projektDef, from, to);
+
+        return createBarChart(monthlyCostsData, "Project "+projektDef+" R&D time costs", BigDecimal.ZERO);
     }
 
     public static StackPane createSummaryProjectRevenues(String projektDef, java.sql.Date from, java.sql.Date to){
@@ -115,14 +120,13 @@ public class ChartRenderer {
         barChart.getData().add(series1);
         lineChart.getData().add(series2);
 
-        if(planned.compareTo(BigDecimal.ZERO) > 0){
+        if(planned != null && planned.compareTo(BigDecimal.ZERO) > 0){
             XYChart.Series<String, Number> limit = new XYChart.Series<>();
             for(Period p:data.keySet()){
                 limit.getData().add(new XYChart.Data<>(p.toString(), planned));
             }
             //either RD or Prototype costs, have its planned limit, show a line
             lineChart.getData().add(limit);
-
 
         }
 

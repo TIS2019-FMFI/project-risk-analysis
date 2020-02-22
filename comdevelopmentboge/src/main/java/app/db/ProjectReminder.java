@@ -10,22 +10,72 @@ import java.sql.Statement;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Obsahuje data z tabulky notifikacii
+ */
 public class ProjectReminder extends Crud<ProjectReminder> {
 
+    /**
+     * Unikatny kod projektu
+     */
     private String projectNumber;
+
+    /**
+     * ID projektu z databazy
+     */
     private Integer project_id;
+
+    /**
+     * ID notifikacie
+     */
     private Integer id;
+
+    /**
+     * Text notifikacie, ktory sa zobrazi na hlavnej stranke
+     */
     private String text;
+
+    /**
+     * Definuje, ci je notifikacia uz uzavreta
+     * Ak je uzavreta nebude sa zobrazovat na hlavnej stranke
+     */
     private Boolean closed;
+
+    /**
+     * Definuje, ci je notifikacia zminimalizovana
+     * Tato hodnota je len v aplikacii, kedze pre kazdeho uzivatela je rozna
+     */
     private Boolean minimized = false;
+
+    /**
+     * Datum zistenia rizika
+     * Sluzi pre ucely exportovania reportov
+     */
     private Date date;
+
+    /**
+     * Umelo vytvoreny unikatny kod pre rozlisenie, ci ide o rovnake riziko
+     * Pri opakovanom zisteni rovnakeho rizika z predosleho dna sa do tabulky notifikacii
+     * udaj nevlozi na zaklade obmedzenia UNIQUE na tejto hodnote
+     *
+     * Je to retazec v tvare [cislo projektu]:[aktualne naklady]/[planovana naklady]
+     */
     private String unique_code;
+
+    /**
+     * Hodnota, ktora urcuje, ci bola dana notifikacia poslana na emailovu adresu centralneho admina
+     * Notifikacia sa posiela len pri prvom vlozeni do databazy
+     */
     private Boolean sent;
+
 
 
     public ProjectReminder() {
     }
 
+    /**
+     * Ziskanie a nastavenie atributov objektu typu ProjectReminder
+     */
 
     public Integer getId() {
         return id;
@@ -99,18 +149,32 @@ public class ProjectReminder extends Crud<ProjectReminder> {
         this.sent = sent;
     }
 
-
+    /**
+     * Vlozi notifikaciu do tabulky a nastavi jej ID
+     * @throws SQLException chyba pri vykonavani SQL dopytu
+     */
     public void insert() throws SQLException {
-        String sql = "INSERT INTO reminders(text,project_id,date,closed,unique_code,sent) VALUES(?,?,?,?,?,?) on duplicate key update unique_code = unique_code ;";
+        String sql = "INSERT INTO reminders(text,project_id,date,closed,unique_code,sent) VALUES(?,?,?,?,?,?)";
         id = insert(DbContext.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS),1);
 
     }
 
+    /**
+     * Aktualizuje hodnoty closed a sent notifikacie do tabulky na základe ID
+     * @throws SQLException chyba pri vykonavani SQL dopytu
+     */
     public void update() throws SQLException {
         String sql = "UPDATE reminders set closed = ? , sent = ? where id = ?";
         update(DbContext.getConnection().prepareStatement(sql));
 
     }
+
+    /**
+     * Doplni hodnoty SQL dopytu pre aktualizovanie udajov
+     * @param s SQL dopyt
+     * @return
+     * @throws SQLException chyba pri vykonavani SQL dopytu
+     */
 
     @Override
     public PreparedStatement fill(PreparedStatement s) throws SQLException {
@@ -120,6 +184,12 @@ public class ProjectReminder extends Crud<ProjectReminder> {
         return s;
     }
 
+    /**
+     * Doplni hodnoty SQL dopytu pre vlozenie udaju
+     * @param s SQL dopyt
+     * @return
+     * @throws SQLException chyba pri vykonavani SQL dopytu
+     */
     @Override
     public PreparedStatement fillInsert(PreparedStatement s) throws SQLException {
         s.setString(1, text);

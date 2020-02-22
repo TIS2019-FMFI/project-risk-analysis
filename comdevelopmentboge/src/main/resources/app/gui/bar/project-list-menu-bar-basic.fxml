@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TextField?>
+<AnchorPane fx:id="projectListMenuBar" prefHeight="50.0" fx:controller="app.gui.project.ProjectListFilterController" style="-fx-background-color: #ff0000;" AnchorPane.bottomAnchor="750" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+
+        <AnchorPane layoutX="14.0" layoutY="4.0" prefHeight="43.0" prefWidth="596.0">
+            <children>
+                <TextField fx:id="projectName" layoutX="161.0" layoutY="9.0" prefWidth="150.0" promptText="Názov projektu" style="-fx-background-color: #ffffff; -fx-background-radius: 10;" />
+                <TextField fx:id="projectNumber" layoutX="-6.0" layoutY="9.0" prefWidth="150.0" promptText="Číslo projektu" style="-fx-background-color: #ffffff; -fx-background-radius: 10;" />
+                <TextField fx:id="customer" layoutX="331.0" layoutY="9.0" prefWidth="150.0" promptText="Zákazník" style="-fx-background-color: #ffffff; -fx-background-radius: 10;" />
+
+
+                <ImageView fx:id="refresh" onMouseClicked="#refreshFilter" fitHeight="20.0" fitWidth="25.0" layoutX="500.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@/app/images/refresh.png" />
+                    </image>
+                </ImageView>
+            </children>
+        </AnchorPane>
+        <fx:include source="/app/gui/profile/profile-button-view.fxml"/>
+    </children>
+</AnchorPane>

@@ -3,16 +3,13 @@ package app.gui.administration;
 import app.App;
 import app.db.User;
 import app.gui.TabController;
-import app.service.ProjectService;
 import app.service.UserService;
 import com.jfoenix.controls.JFXListView;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -22,28 +19,26 @@ public class UsersAdministrationBoardController {
 
 
     /**
-     * Getter a setter inštancie tabuľka užívateľov
+     * Getter a setter instancie tabulka uzivatelov
      */
     private static UsersAdministrationBoardController instance;
     public static UsersAdministrationBoardController getInstance(){return instance;}
 
     /**
-     * userListView - grafický komponent, ktorý zobrazuje zoznam užívateľov
+     * userListView - graficky komponent, ktory zobrazuje zoznam uzivatelov
      */
     @FXML
     private JFXListView<Pane> userListView;
 
 
     /**
-     * Nastavenie zoznamu užívateľov
-     * @throws IOException
-     * @throws SQLException
+     * Nastavenie zoznamu uzivatelov
+     * @throws IOException chyba v grafickom komponente
+     * @throws SQLException chyba pri ziskavani dat z databazy
      */
     @FXML
     public void initialize() throws IOException, SQLException {
         instance = this;
-        System.out.println(TabController.getInstance());
-
         List<User> users = UserService.getInstance().findAllUsers();
         for(User user : users) {
             userListView.getItems().add(setUser(user));
@@ -71,28 +66,28 @@ public class UsersAdministrationBoardController {
     }
 
     /**
-     * Nastavenie položky zoznamu užívateľov - nerozkliknutá položka
-     * @param user - konkrétny užívateľ
+     * Nastavenie polozky zoznamu uzivatelov - nerozkliknuta polozka
+     * @param user - konkretny uzivatel
      * @return
      * @throws IOException
      */
     private Pane setUser(User user) throws IOException {
         FXMLLoader loader = loadFXML("users-administration-item");
         Pane pane = loader.load();
-        pane.setId(user.getFullName());
+        pane.setId(user.getEmail());
         loader.<UsersAdministrationItemController>getController().setUser(user);
         return pane;
     }
 
     /**
-     * Nastavenie položky zoznamu užívateľov - rozkliknutá položka
-     * @param fullName - celé meno používateľa
-     * @return
-     * @throws IOException
-     * @throws SQLException
+     * Nastavenie polozky zoznamu uzivatelov - rozkliknuta polozka
+     * @param email - email pouzivatela
+     * @return pane s celym menom uzivatela
+     * @throws IOException chyba v grafickom komponente
+     * @throws SQLException chyba pri ziskavani dat z databazy
      */
-    private Pane setUserDetail(String fullName) throws IOException, SQLException {
-        User user = UserService.getInstance().findUserByFullName(fullName);
+    private Pane setUserDetail(String email) throws IOException, SQLException {
+        User user = UserService.getInstance().findUserByEmail(email);
         FXMLLoader loader;
         if(user.getUserType().equals("PROJECT_ADMIN")) {
             loader = loadFXML("users-administration-item-click-PA");
@@ -101,16 +96,16 @@ public class UsersAdministrationBoardController {
             loader = loadFXML("users-administration-item-click");
         }
         Pane pane = loader.load();
-        loader.<UsersAdministrationItemController>getController().setInfo(fullName);
+        loader.<UsersAdministrationItemController>getController().setInfo(email);
         return pane;
     }
 
 
     /**
-     * Načítanie fxml súboru
-     * @param fxml
-     * @return
-     * @throws IOException
+     * Nacitanie fxml suboru
+     * @param fxml subor
+     * @return nacitany subor
+     * @throws IOException chyba v grafickom komponente
      */
     private FXMLLoader loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(UsersAdministrationBoardController.class.getResource(fxml + ".fxml"));
@@ -119,34 +114,32 @@ public class UsersAdministrationBoardController {
 
 
     /**
-     * Zatvorenie aktuálneho dialógového okna
+     * Zatvorenie aktualneho dialogoveho okna
      * @param event
      */
     @FXML
-    private void close(MouseEvent event) throws IOException {
+    void close(MouseEvent event) throws IOException {
         TabController.getInstance().closeUsersAdministration();
     }
 
     /**
      *
-     * Zobrazenie detailu užívateľa - po kliknutí
-     * @param fullname - celé meno užívateľa
-     * @throws SQLException
-     * @throws IOException
+     * Zobrazenie detailu uzivatela - po kliknuti
+     * @param email - cele meno uzivatela
+     * @throws SQLException chyba pri ziskavani dat z databazy
+     * @throws IOException chyba v grafickom komponente
      */
-    public void showDetail(String fullname) throws SQLException, IOException {
+    public void showDetail(String email) throws SQLException, IOException {
         List<User> users = UserService.getInstance().findAllUsers();
         userListView.getItems().clear();
         for(User user : users) {
-            if(user.getFullName().equals(fullname)) {
-                userListView.getItems().add(setUserDetail(user.getFullName()));
+            if(user.getEmail().equals(email)) {
+                userListView.getItems().add(setUserDetail(user.getEmail()));
             }
             else {
                 userListView.getItems().add(setUser(user));
             }
         }
     }
-
-
 
 }

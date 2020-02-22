@@ -1,5 +1,6 @@
 package app.service;
 
+import app.App;
 import app.config.DbContext;
 import app.db.ProjectCosts;
 
@@ -22,9 +23,14 @@ public class ProjectCostsService extends Service<ProjectCosts> {
                 "Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and " +
                 "KostenartenBez='Entwicklungskosten' " +
                 "group by Projektdef " +
-                "having actual >= p.DDCost*0.9 and p.DDCost > 0";
-
-        List<ProjectCosts> list = findAll(sql);
+                "having actual >= p.DDCost*? and p.DDCost > 0";
+        PreparedStatement statement = DbContext.getConnection().prepareStatement(sql);
+        String risk = App.getPropertiesManager().getProperty("rd.costs.risk");
+        if (null == risk) {
+            risk = "0.9";
+        }
+        statement.setDouble(1, Double.parseDouble(risk));
+        List<ProjectCosts> list = findAll(statement);
         for (ProjectCosts p : list) {
             p.setType(ProjectCosts.projectCostsType.DD);
         }
@@ -40,9 +46,15 @@ public class ProjectCostsService extends Service<ProjectCosts> {
                 "and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%'  \n" +
                 "and WertKWahr>0  \n" +
                 "group by Projektdef \n" +
-                "having actual >= p.prototypeCosts*0.9 and p.prototypeCosts > 0 ";
+                "having actual >= p.prototypeCosts*? and p.prototypeCosts > 0 ";
+        PreparedStatement statement = DbContext.getConnection().prepareStatement(sql);
+        String risk = App.getPropertiesManager().getProperty("prototype.costs.risk");
+        if (null == risk) {
+            risk = "0.9";
+        }
+        statement.setDouble(1, Double.parseDouble(risk));
 
-        List<ProjectCosts> list = findAll(sql);
+        List<ProjectCosts> list = findAll(statement);
         for (ProjectCosts p : list) {
             p.setType(ProjectCosts.projectCostsType.PROTOTYPE);
         }

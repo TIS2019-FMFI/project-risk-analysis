@@ -28,9 +28,13 @@ public class Registration {
             //zmeny sa poslu do databazy
             user.update();
 
+            DbContext.getConnection().commit();
+
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
+            //e.printStackTrace();
             throw new DatabaseException();
+
         } finally {
             DbContext.getConnection().setAutoCommit(true);
         }
@@ -49,9 +53,13 @@ public class Registration {
             //zmeny sa poslu do databazy
             user.update();
 
+            DbContext.getConnection().commit();
+
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
+            //e.printStackTrace();
             throw new DatabaseException();
+
         } finally {
             DbContext.getConnection().setAutoCommit(true);
         }
@@ -93,7 +101,9 @@ public class Registration {
             SignedUser.setUser(user);
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
+            //e.printStackTrace();
             throw new DatabaseException();
+
         } finally {
             DbContext.getConnection().setAutoCommit(true);
         }
@@ -126,7 +136,7 @@ public class Registration {
             throw new RegistrationException("Nesprávny formát e-mailovej adresy");
         }
         if (!isPasswordFormatValid(password)) {
-            throw new RegistrationException("Heslo musí obsahovať aspoň jedno číslo, \n jedno písmeno a musí mať dĺžku aspoň 6 znakov");
+            throw new RegistrationException("Heslo musí obsahovať minimálne jedno číslo, \n jedno písmeno a musí mať dĺžku minimálne 6 znakov");
         }
 
     }
@@ -134,7 +144,7 @@ public class Registration {
         return password.matches("(?=.*?[0-9])(?=.*?[A-Za-z]).+") && password.length() >= 6;
     }
     private static boolean isEmailFormatValid(String email) {
-        return email.matches("[a-zA-Z0-9\\._]+@[a-zA-Z0-9\\._]+\\.[a-zA-Z]{2,5}");
+        return email.matches("[a-zA-Z0-9a-z\\._]+@boge-rubber-plastics.com");
     }
     private static boolean containsOnlyLetters(String value) {
         return value.matches("^[A-Za-z]+$");

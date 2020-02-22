@@ -6,13 +6,13 @@ import app.gui.MyAlert;
 import app.transactions.UserTypeChangeTransaction;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.RadioButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -21,33 +21,33 @@ import java.util.List;
 public class ChangeUserTypeController {
 
     /**
-     * Getter a setter inštancie dialóg
+     * Getter a setter instancie dialog
      */
     private static ChangeUserTypeController instance;
     public static ChangeUserTypeController getInstance(){return instance;}
 
     /**
-     * adminButton - radiobutton, ktorý označuje výber roly admina
-     * femButton - radiobutton, ktorý označuje výber roly fem-kára
-     * userButton - radiobutton, ktorý označuje výber roly bežného užívateľa
+     * adminButton - radiobutton, ktory oznacuje vyber roly admina
+     * femButton - radiobutton, ktory oznacuje vyber roly fem-kara
+     * userButton - radiobutton, ktory oznacuje vyber roly bezneho uzivatela
      */
     @FXML private RadioButton adminButton;
-    @FXML private RadioButton femButton;
     @FXML private RadioButton userButton;
 
+
     /**
-     * thisStage - aktuálne otvorené dialógové okno
+     * stages - otvorene dialogove okna
      */
     List<Stage> stages;
     /**
-     * user - používateľ, ktorého rolu chceme zmeniť
+     * user - pouzivatel, ktoreho rolu chceme zmenit
      */
     private User user;
 
     /**
-     * Funkcia nastaví radiobutton ako aktívny, podľa aktuálnej roly užívateľa
-     * @param stages - nastavenie aktuálneho dialógového okna
-     * @param user - nastavenie používateľa, ktorého rolu chceme zmeniť
+     * Funkcia nastavi radiobutton ako aktivny, podla aktualnej roly uzivatela
+     * @param stages - nastavenie aktualneho dialogoveho okna
+     * @param user - nastavenie pouzivatela, ktoreho rolu chceme zmenit
      *
      */
     public void setSelected(List<Stage> stages, User user) {
@@ -59,42 +59,34 @@ public class ChangeUserTypeController {
         if (userType.equals(User.USERTYPE.PROJECT_ADMIN) || userType.equals(User.USERTYPE.CENTRAL_ADMIN)) {
             adminButton.setSelected(true);
         }
-        else if (userType.equals(User.USERTYPE.FEM)) {
-            femButton.setSelected(true);
-        }
         else if (userType.equals(User.USERTYPE.USER)) {
             userButton.setSelected(true);
         }
     }
 
     /**
-     * Zatvorenie aktuálneho dialógového okna
+     * Zatvorenie aktualneho dialogoveho okna
      * @param event
      */
     @FXML
-    private void close(MouseEvent event) {
-        stages.get(0).close();
+    void close(MouseEvent event) {
+        Node source = (Node) event.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
     }
-
     /**
-     * Potvrdenie označenej roly užívateľa
+     * Potvrdenie oznacenej roly uzivatela
      * @param event
-     * @throws SQLException Pokiaľ sa nepodarí zmeniť rolu používateľa v databáze
      * @throws IOException
      * @throws DatabaseException
      */
     @FXML
-    private void submit(MouseEvent event) throws SQLException, IOException {
+    private void submit(MouseEvent event) throws IOException {
         if(adminButton.isSelected()) {
             chooseAdminType();
         }
-        else if (femButton.isSelected()) {
-            changeUserType(User.USERTYPE.FEM);
-            UsersAdministrationItemController.getInstance().closeAllDialogs(this.stages);
-        }
         else if (userButton.isSelected()) {
-            changeUserType(User.USERTYPE.USER);
-            UsersAdministrationItemController.getInstance().closeAllDialogs(this.stages);
+            showConfirmDialog(User.USERTYPE.USER);
         }
         else {
             MyAlert.showWarning("Zvoľ typ užívateľa");
@@ -102,19 +94,28 @@ public class ChangeUserTypeController {
     }
 
     /**
-     * Spustí sa transakcia na zmenu roly používateľa - FEM-kár alebo bežný užívateľ
-     * @param userType - rola, ktorú chceme nastaviť užívateľovi
-     * @throws SQLException
+     * Zobrazenie potvrdzujuceho dialogu pre zmenu roly - bezny uzivatel
+     * @param usertype typ uzivatela
+     * @throws IOException
      */
-    private void changeUserType(User.USERTYPE userType) throws SQLException {
-        if(!userType.equals(user.getUserType())) {
-            UserTypeChangeTransaction.changeUserType(user, userType);
-            user.setUserType(userType);
-        }
+    private void showConfirmDialog(User.USERTYPE usertype) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("administration-no-projects-confirm-dialog.fxml"));
+        Parent parent = fxmlLoader.load();
+        DialogNoProjectsConfirmDialogController dialogController = fxmlLoader.getController();
+
+        Scene scene = new Scene(parent, 300, 200);
+        Stage stage = new Stage();
+        System.out.println("stage " + stage);
+        stages.add(stage);
+        UsersAdministrationItemController.getInstance().onCloseHandler(stages.get(stages.size()-1), this.stages);
+        dialogController.setDialogNoProjects(stages, user, usertype);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 
     /**
-     * Zobrazenie dialógového okna na zmenu roly admin
+     * Zobrazenie dialogoveho okna na zmenu roly admin
      * @throws IOException
      */
     private void chooseAdminType() throws IOException {

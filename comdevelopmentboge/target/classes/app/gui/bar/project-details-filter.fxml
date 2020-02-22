@@ -8,10 +8,12 @@
 
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<AnchorPane  layoutX="14.0" layoutY="4.0" prefHeight="43.0" prefWidth="571.0"
+<?import javafx.geometry.Insets?>
+<AnchorPane layoutX="14.0" layoutY="4.0" prefHeight="43.0" prefWidth="571.0"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-fx:controller="app.gui.project.ProjectFilter">
+            fx:controller="app.gui.project.ProjectFilter">
+
     <children>
         <ImageView fx:id="backButton" onMouseClicked="#onBackPressed"  fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" >
             <image>

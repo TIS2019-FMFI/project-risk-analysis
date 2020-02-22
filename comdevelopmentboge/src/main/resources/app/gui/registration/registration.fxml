@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.PasswordField?>
@@ -20,11 +13,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.gui.registration.RegistrationController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.gui.registration.RegistrationController">
     <children>
         <HBox alignment="CENTER" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #f9f9f9;">
             <children>
-                <ImageView fitHeight="133.0" fitWidth="329.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="86.0" fitWidth="299.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../../images/boge.jpg" />
                     </image>
@@ -37,7 +30,7 @@
                         <Insets left="40.0" right="70.0" />
                     </HBox.margin>
                 </Line>
-                <VBox alignment="CENTER_LEFT" prefHeight="640.0" prefWidth="350.0" style="-fx-background-color: #f9f9f9;">
+                <VBox alignment="CENTER_LEFT" prefHeight="800.0" prefWidth="465.0" style="-fx-background-color: #f9f9f9;">
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Meno">
                             <font>
@@ -49,7 +42,7 @@
                                 <Insets bottom="20.0" />
                             </VBox.margin>
                             <font>
-                                <Font size="24.0" />
+                                <Font size="18.0" />
                             </font>
                         </TextField>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Priezvisko">
@@ -59,7 +52,7 @@
                   </Text>
                   <TextField fx:id="surname" style="-fx-background-color: #f9f9f9; -fx-border-color: #f9f9f9  #f9f9f9 black  #f9f9f9;">
                      <font>
-                        <Font size="24.0" />
+                        <Font size="18.0" />
                      </font>
                      <VBox.margin>
                         <Insets bottom="20.0" />
@@ -72,7 +65,7 @@
                   </Text>
                   <TextField fx:id="email" style="-fx-background-color: #f9f9f9; -fx-border-color: #f9f9f9  #f9f9f9 black  #f9f9f9;">
                      <font>
-                        <Font size="24.0" />
+                        <Font size="18.0" />
                      </font>
                      <VBox.margin>
                         <Insets bottom="20.0" />
@@ -83,22 +76,22 @@
                                 <Font name="System Italic" size="30.0" />
                             </font>
                         </Text>
-                        <StackPane>
+                        <StackPane prefHeight="70.0" prefWidth="466.0">
                             <children>
-                        <TextField fx:id="passwordVisible" visible="false" alignment="CENTER_LEFT" style="-fx-background-color: #f9f9f9  #f9f9f9 black  #f9f9f9; -fx-border-color: #f9f9f9  #f9f9f9 black  #f9f9f9;" >
+                        <TextField fx:id="passwordVisible" alignment="CENTER_LEFT" style="-fx-background-color: #f9f9f9  #f9f9f9 black  #f9f9f9; -fx-border-color: #f9f9f9  #f9f9f9 black  #f9f9f9;" visible="false">
                                 <font>
                                     <Font size="24.0" />
                                 </font>
                         </TextField>
-                                <PasswordField fx:id="passwordField" visible="true" alignment="CENTER_LEFT" style="-fx-background-color: #f9f9f9  #f9f9f9 black  #f9f9f9; -fx-border-color: #f9f9f9  #f9f9f9 black  #f9f9f9;">
+                                <PasswordField fx:id="passwordField" alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="466.0" style="-fx-background-color: #f9f9f9  #f9f9f9 black  #f9f9f9; -fx-border-color: #f9f9f9  #f9f9f9 black  #f9f9f9;" visible="true">
                                     <font>
-                                        <Font size="24.0" />
+                                        <Font size="18.0" />
                                     </font>
                            <StackPane.margin>
                               <Insets bottom="20.0" />
                            </StackPane.margin>
                                 </PasswordField>
-                                <ImageView fx:id="eye" fitHeight="52.0" fitWidth="207.0" onMouseClicked="#showPassword" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT">
+                                <ImageView fx:id="eye" fitHeight="41.0" fitWidth="42.0" onMouseClicked="#showPassword" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT">
                                     <image>
                                         <Image url="@../../images/eyeOff.png" />
                                     </image>
@@ -113,7 +106,7 @@
                                 <Insets top="10.0" />
                             </VBox.margin>
                         </Button>
-                  <Button fx:id="cancel" mnemonicParsing="false" onMouseClicked="#cancelRegistration"  prefHeight="50.0" prefWidth="350.0" style="-fx-background-radius: 100; -fx-background-color: lightgrey;" text="Zrušiť">
+                  <Button fx:id="cancel" mnemonicParsing="false" onMouseClicked="#cancelRegistration" prefHeight="50.0" prefWidth="350.0" style="-fx-background-radius: 100; -fx-background-color: lightgrey;" text="Zrušiť">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>

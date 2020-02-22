@@ -2,8 +2,8 @@ package app.exception;
 
 public class ProfileChangeException extends MyException {
     /**
-     * Výnimka pri administrácii profilu
-     * @param message - text výnimky
+     * Vlastna vynimka pri administracii profilu
+     * @param message - text vynimky
      */
     public ProfileChangeException(String message) {
         super(message);

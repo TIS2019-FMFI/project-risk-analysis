@@ -8,14 +8,32 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 
+/**
+ * Trieda reprezentujuca policko skrytej notifikacie projektu
+ */
 public class HiddenProjectItemController {
+    /**
+     * Controller hlavnej stranky
+     */
     private HomeController homeController;
+
+    /**
+     * Unikatny kod projektu
+     */
     private String code;
+    /**
+     * Graficky prvok zobrazujuci meno projektu
+     */
     @FXML
     private Label project_name;
 
     public HiddenProjectItemController(){}
 
+    /**
+     * Nastavi policku kod projektu a controller hlavnej triedy
+     * @param code cislo projektu
+     * @param homeCon
+     */
     public void set(String code, HomeController homeCon) {
 
         this.code = code;

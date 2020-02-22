@@ -7,9 +7,9 @@
 <AnchorPane fx:id="mainPageMenuBar" prefHeight="50.0" fx:controller="app.gui.administration.FilesAdministrationController" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #ff0000;" AnchorPane.bottomAnchor="750" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
     <children>
-        <Button fx:id="dataImportButton"  layoutX="11.0" layoutY="12.0" maxHeight="40.0" mnemonicParsing="false" style="-fx-background-color: #ffffff; -fx-background-radius: 20;" text="Importovať dáta" textFill="RED" />
+        <Button fx:id="dataImportButton"  onMouseClicked="#clickImport" layoutX="11.0" layoutY="12.0" maxHeight="40.0" mnemonicParsing="false" style="-fx-background-color: #ffffff; -fx-background-radius: 20;" text="Importovať dáta" textFill="RED" />
         <Button fx:id="logExportButton" onMouseClicked="#exportLogs" layoutX="123.0" layoutY="12.0" mnemonicParsing="false" style="-fx-background-color: #ffffff; -fx-background-radius: 20;" text="Exportovať logy" textFill="RED" />
-        <Button fx:id="reportExportButton" layoutX="233.0" layoutY="12.0" mnemonicParsing="false" style="-fx-background-color: #ffffff; -fx-background-radius: 20;" text="Exportovať report" textFill="RED" />
+        <Button fx:id="reportExportButton"  onMouseClicked="#exportReport" layoutX="233.0" layoutY="12.0" mnemonicParsing="false" style="-fx-background-color: #ffffff; -fx-background-radius: 20;" text="Exportovať report" textFill="RED" />
         <fx:include source="/app/gui/administration/users-button-view.fxml" />
         <fx:include source="/app/gui/profile/profile-button-view.fxml"/>
 

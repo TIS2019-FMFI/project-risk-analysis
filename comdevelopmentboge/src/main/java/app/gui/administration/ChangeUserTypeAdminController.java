@@ -12,7 +12,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -21,33 +20,33 @@ import java.util.List;
 public class ChangeUserTypeAdminController {
 
     /**
-     * Getter a setter inštancie dialóg
+     * Getter a setter instancie dialog
      */
     private static ChangeUserTypeAdminController instance;
     public static ChangeUserTypeAdminController getInstance(){return instance;}
 
     /**
-     * projectAdminBtn - radiobutton, ktorý označuje výber roly projektového admina
-     * centralAdminBtn - radiobutton, ktorý označuje výber roly centrálneho admina
+     * projectAdminBtn - radiobutton, ktory oznacuje vyber roly projektoveho admina
+     * centralAdminBtn - radiobutton, ktorý oznacuje vyber roly centralneho admina
      */
     @FXML private RadioButton projectAdminBtn;
     @FXML private RadioButton centralAdminBtn;
 
 
     /**
-     * thisStage - aktuálne otvorené dialógové okno
+     * stages - otvorene dialogove okna
      */
      List<Stage> stages;
 
     /**
-     * user - používateľ, ktorého rolu chceme zmeniť
+     * user - pouzivatel, ktoreho rolu chceme zmenit
      */
     private User user;
 
     /**
-     * Funkcia nastaví radiobutton ako aktívny, podľa aktuálnej roly užívateľa
-     * @param stages - nastavenie aktuálneho dialógového okna
-     * @param user - nastavenie používateľa, ktorého rolu chceme zmeniť
+     * Funkcia nastaví radiobutton ako aktivny, podla aktualnej roly uzívatela
+     * @param stages - nastavenie aktualneho dialogoveho okna
+     * @param user - nastavenie pouzivatela, ktoreho rolu chceme zmenit
      *
      */
     public void setSelected(List<Stage> stages, User user) {
@@ -66,18 +65,18 @@ public class ChangeUserTypeAdminController {
 
 
     /**
-     * Zatvorenie aktuálneho dialógového okna
+     * Zatvorenie aktualneho dialogoveho okna
      * @param event
      */
     @FXML
     private void close(MouseEvent event) {
-        stages.get(0).close();
+        stages.get(stages.size()-1).close();
     }
 
     /**
-     * Potvrdenie označenej roly užívateľa
+     * Potvrdenie oznacenej roly uzivatela
      * @param event
-     * @throws SQLException Pokiaľ sa nepodarí zmeniť rolu používateľa v databáze
+     * @throws SQLException Pokial sa nepodari zmenit rolu pouzivatela v databaze
      * @throws IOException
      * @throws DatabaseException
      */
@@ -99,7 +98,7 @@ public class ChangeUserTypeAdminController {
 
     /**
      * Spustí sa transakcia na zmenu roly admina
-     * @param userType - rola, ktorú chceme nastaviť užívateľovi
+     * @param userType - rola, ktoru chceme nastavit uzivatelovi
      * @throws SQLException
      */
     private void changeUserType(User.USERTYPE userType) throws SQLException {
@@ -110,13 +109,13 @@ public class ChangeUserTypeAdminController {
     }
 
     /**
-     * Zobrazenie dialógového okna s projektami, ktorých adminom je užívateľ,
-     * ktorého rolu chceme zmeniť
+     * Zobrazenie dialogoveho okna s projektami, ktorych adminom je uzivatel,
+     * ktoreho rolu chceme zmenit
      * @throws IOException
      * @throws DatabaseException
      * @throws SQLException
      */
-    private void showProjectAdminDialog() throws IOException, DatabaseException, SQLException {
+    private void showProjectAdminDialog() throws IOException, SQLException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("projects-administration-dialog.fxml"));
         Parent parent = fxmlLoader.load();
         DialogProjectsController dialogController = fxmlLoader.getController();

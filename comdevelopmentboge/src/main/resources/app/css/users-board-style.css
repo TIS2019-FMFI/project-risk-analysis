@@ -1,0 +1,36 @@
+.users-board-list {
+    -fx-background-insets: 0.0;
+    -jfx-cell-horizontal-margin: 0.0;
+    -jfx-cell-vertical-margin: 0.0;
+    -fx-padding: 0.0;
+    -fx-background-color: TRANSPARENT;
+    -fx-text-fill: black;
+}
+.users-board-list:selected, .users-board:selected:focused {
+    -fx-text-fill: black;
+    -fx-background-color: transparent;
+}
+
+.users-board-list .jfx-list-cell {
+    -fx-padding: 1.0 0.0 1.0 0.0;
+    -fx-background-color: TRANSPARENT;
+
+}
+
+.users-board-list .label {
+    -fx-text-fill: white;
+}
+.users-board-list .username {
+    -fx-text-fill: black;
+}
+.users-board-list .jfx-list-cell .jfx-rippler {
+    -jfx-rippler-fill: WHITESMOKE;
+}
+
+.users-board-list .jfx-list-cell #email {
+    -fx-text-fill: black;
+}
+
+.users-board-list #email {
+    -fx-text-fill: black;
+}

@@ -16,7 +16,7 @@ public class ProjectReminderService  extends Service<ProjectReminder> {
 
     public List<ProjectReminder> getAllReminders() throws SQLException {
 
-        String sql = "select r.id,text, project_id,closed,date,p.projectNumber,sent " +
+        String sql = "select r.*, p.projectNumber " +
                 "from reminders r left join projects p " +
                 "on r.project_id = p.id";
         return findAll(sql);
@@ -24,7 +24,7 @@ public class ProjectReminderService  extends Service<ProjectReminder> {
     }
     public List<ProjectReminder> getActiveReminders() throws SQLException {
 
-        String sql = "select r.id,text, project_id,closed,date,p.projectNumber,sent " +
+        String sql = "select r.*, p.projectNumber " +
                 "from reminders r left join projects p " +
                 "on r.project_id = p.id " +
                 "where closed = false";
@@ -32,14 +32,14 @@ public class ProjectReminderService  extends Service<ProjectReminder> {
 
     }
     public List<ProjectReminder> getAllNotSentReminders() throws SQLException {
-        String sql = "select r.id,text, project_id,closed,date,p.projectNumber,sent " +
+        String sql = "select r.*, p.projectNumber " +
                 "from reminders r left join projects p " +
                 "on r.project_id = p.id " +
                 "where closed = false and sent = false";
         return findAll(sql);
     }
     public List<ProjectReminder> getAllNotSentRemindersByUser(Integer user_id) throws SQLException {
-        String sql = "select r.id,text, r.project_id,closed,date,p.projectNumber,sent " +
+        String sql = "select r.*, p.projectNumber " +
                 "from reminders r left join projects p " +
                 "on r.project_id = p.id left join administration a " +
                 " on p.id = a.project_id "+
@@ -51,7 +51,7 @@ public class ProjectReminderService  extends Service<ProjectReminder> {
     }
     public List<ProjectReminder> getActiveRemindersByUser(Integer user_id) throws SQLException {
 
-        String sql = "select r.id,text, r.project_id,closed,date,p.projectNumber,sent " +
+        String sql = "select r.*, p.projectNumber " +
                 "from reminders r left join projects p " +
                 "on r.project_id = p.id left join administration a " +
                 " on p.id = a.project_id "+
@@ -75,6 +75,7 @@ public class ProjectReminderService  extends Service<ProjectReminder> {
         p.setDate(r.getDate("date"));
         p.setProjectNumber(r.getString("projectNumber"));
         p.setSent(r.getBoolean("sent"));
+        p.setUnique_code(r.getString("unique_code"));
         return p;
     }
 }

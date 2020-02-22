@@ -12,6 +12,10 @@ import java.util.Date;
 import java.util.List;
 
 public class Project extends Crud<Project> {
+    /**
+     * Objekt typu projekt
+     */
+
     private Integer id;
     private String projectNumber;
     private String projectName;
@@ -24,6 +28,11 @@ public class Project extends Crud<Project> {
     private BigDecimal ddCost;
     private BigDecimal prototypeCost;
     private Date lastUpdated;
+
+    /**
+     * Ziskanie a nastavenie parametrov objektu typu Project
+     */
+
 
     public Integer getId() {
         return id;
@@ -121,14 +130,23 @@ public class Project extends Crud<Project> {
         this.customerName = customerName;
     }
 
+    /**
+     * Ziskanie atributov objektu typu Project
+     * @return
+     */
     //for purpose of creating pdf tables
     //returns array of all attributes of a project in given order
-    public List<String> getAllAttributes(){
+    public List<String> getAllAttributesValues(){
         List<String>  attributes = new ArrayList<>();
-        attributes.addAll(List.of(projectNumber, customerName, projectName, partNumber, ros, roce, String.valueOf(volumes), String.valueOf(ddCost), String.valueOf(prototypeCost)));
+        attributes.addAll(List.of((projectNumber!=null)?projectNumber:"", (customerName!=null)?customerName:"", (projectName!=null)?projectName:"",
+                (partNumber!=null)?partNumber:"", (ros!=null)?ros:"", (roce!=null)?roce:"", (volumes!=null)?String.valueOf(volumes):"",
+                (ddCost!=null)?String.valueOf(ddCost):"", (ddCost!=null)?String.valueOf(prototypeCost):""));
         return attributes;
     }
 
+    /**
+     * Vymaze projekt z tabulky
+     */
     public void update()  {
         try {
             String sql = "update projects set projectName=?, projectNumber=?, partNumber=?, ROS=?, ROCE=?, volumes=?, DDCost=?, prototypeCosts=?, " +
@@ -141,6 +159,12 @@ public class Project extends Crud<Project> {
 
     }
 
+    /**
+     * Doplni udaje do SQL dopytu pre vymazanie/aktualizovanie projektu
+     * @param s SQL dopyt
+     * @return
+     * @throws SQLException chyba pri vykonavani SQL dopytu
+     */
     @Override
     public PreparedStatement fill(PreparedStatement s) throws SQLException {
         s.setString(1, projectName);
@@ -161,6 +185,12 @@ public class Project extends Crud<Project> {
         return s;
     }
 
+    /**
+     * Doplni udaje do SQL dopytu pre vlozenie projektu
+     * @param s - prepared statement s
+     * @return - doplneny SQL dopyt
+     * @throws SQLException vynimka pri chybe SQL dopytu
+     */
     @Override
     public PreparedStatement fillInsert(PreparedStatement s) throws SQLException {
         return null;

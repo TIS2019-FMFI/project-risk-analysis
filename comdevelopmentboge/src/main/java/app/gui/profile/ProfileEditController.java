@@ -6,9 +6,7 @@ import app.gui.MyAlert;
 import app.gui.TabController;
 import app.transactions.ProfileEditTransaction;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
@@ -16,20 +14,20 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class ProfileEditController {
+
+    /**
+     * emailPrevious - email, ktorý bol nastavený pred jeho zmenou
+     * passwordPrevious - heslo, ktorý bol nastavené pred jeho zmenou
+     * passwordShown - boolovská hodnota zobrazeného hesla
+     */
     private String emailPrevious;
     private String passwordPrevious;
-    private boolean passwordShown = false;
 
-    private Image eyeOn = new Image("app/images/eyeOn.png");
-    private Image eyeOff = new Image("app/images/eyeOff.png");
-    private Image edit = new Image("app/images/edit.png");
-    private Image confirm = new Image("app/images/confirm.png");
 
     @FXML
     private TextField email;
     @FXML private TextField passwordVisible;
     @FXML private PasswordField passwordField;
-    @FXML private ImageView eye;
     @FXML private ImageView email_edit;
     @FXML private ImageView password_edit;
     @FXML private ImageView email_save;
@@ -43,6 +41,7 @@ public class ProfileEditController {
     @FXML
     private void initialize() {
         setFields();
+
     }
 
     private void setFields() {
@@ -56,57 +55,30 @@ public class ProfileEditController {
 
         emailPrevious = SignedUser.getUser().getEmail();
 
-        //TODO prekonvertovat z MD5 na heslo. da sa to vobec ? - NEDA SA
         passwordField.setText("0000");
         passwordPrevious = SignedUser.getUser().getPassword();
     }
 
-    @FXML
-    private void showPassword(MouseEvent event) {
-        passwordShown = !passwordShown;
-        if(passwordShown) {
-            eye.setImage(eyeOn);
-            passwordVisible.setText(passwordField.getText());
-            passwordVisible.setVisible(true);
-            passwordField.setVisible(false);
-        }
-        else {
-            eye.setImage(eyeOff);
-            passwordField.setText(passwordVisible.getText());
-            passwordField.setVisible(true);
-            passwordVisible.setVisible(false);
-        }
 
-    }
-
-    private String getPasswordText() {
-        return passwordShown ? passwordVisible.getText() : passwordField.getText();
-    }
 
     @FXML
     private void emailEdit(MouseEvent event) {
-        emailPrevious = email.getText();
         email_edit.setVisible(false);
         email_save.setVisible(true);
         email.setEditable(true);
     }
 
     @FXML
-    private void emailSave(MouseEvent event) {
+    private void emailSave(MouseEvent event) throws SQLException, ProfileChangeException {
 
         email.setEditable(false);
         email_edit.setVisible(true);
         email_save.setVisible(false);
 
-        if(!emailPrevious.equals(email)) {
-            try {
-                ProfileEditTransaction.changeEmail(email.getText());
-                MyAlert.showSuccess("Email bol úspešne zmenený");
-            } catch (ProfileChangeException e) {
-                MyAlert.showError(e.getMessage());
-            } catch (SQLException e) {
-                MyAlert.showError("Nepodarilo sa spojenie s databázou. Vyskúšajte ešte raz");
-            }
+        System.out.println("prev " + emailPrevious);
+        System.out.println("now " + email.getText());
+        if(!emailPrevious.equals(email.getText())) {
+            ProfileEditTransaction.changeEmail(email.getText());
             email.setText(SignedUser.getUser().getEmail());
         }
     }
@@ -117,35 +89,31 @@ public class ProfileEditController {
         passwordVisible.setVisible(true);
         password_edit.setVisible(false);
         passwordField.setVisible(false);
-        //eye.setVisible(true);
         password_save.setVisible(true);
+        passwordVisible.requestFocus();
+        passwordVisible.positionCaret(0);
     }
 
     @FXML
-    private void passwordSave(MouseEvent event) {
+    private void passwordSave(MouseEvent event) throws SQLException, ProfileChangeException {
         passwordVisible.setEditable(false);
         passwordField.setVisible(true);
         passwordVisible.setVisible(false);
         password_edit.setVisible(true);
         password_save.setVisible(false);
 
-        if(!passwordPrevious.equals(passwordVisible)) {
-            try {
-                ProfileEditTransaction.changePassword(passwordVisible.getText());
-                MyAlert.showSuccess("Heslo bolo úspešne zmenené");
-            } catch (ProfileChangeException e) {
-                MyAlert.showError(e.getMessage());
-            } catch (SQLException e) {
-                MyAlert.showError("Nepodarilo sa spojenie s databázou. Vyskúšajte ešte raz");
-            }
+        String password = org.apache.commons.codec.digest.DigestUtils.md5Hex(passwordVisible.getText());
+        if(!passwordPrevious.equals(password)) {
+            ProfileEditTransaction.changePassword(passwordVisible.getText());
             passwordField.setText("0000");
+        }
+        else {
+            MyAlert.showWarning("Heslo je identické s aktuálnym heslom");
         }
     }
 
-
-
     @FXML
-    private void close(MouseEvent event) {
+    private void close(MouseEvent event) throws IOException {
         TabController.getInstance().closeProfile();
     }
 

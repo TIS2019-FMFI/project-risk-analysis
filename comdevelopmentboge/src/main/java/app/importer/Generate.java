@@ -4,14 +4,18 @@ import app.config.DbContext;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 import static app.importer.ExcellParser.readFromFile;
 
 public class Generate {
+
+    /**
+     * Create a generate script na vytvorenie databazy
+     * @throws IOException
+     */
     public static void createAndGenerate() throws IOException {
 
 
@@ -54,7 +58,7 @@ public class Generate {
             e.printStackTrace();
         }
 
-        ArrayList<ExcelRow> list = readFromFile();
+        ArrayList<ExcelRow> list = readFromFile(null);
         Set<List> projects = new HashSet<>();
 
 
@@ -161,7 +165,7 @@ public class Generate {
         users.add(Arrays.asList("Adam","Mrkvicka","adam@boge.com","nenavidimMrkvu","CENTRAL_ADMIN",true,false));
         users.add(Arrays.asList("Peter","Zahradka","peter@boge.com","pestujemTravicku","USER",true,false));
         users.add(Arrays.asList("Jozef","Strom","jozef@boge.com","stromySuLaska","PROJECT_ADMIN",true,false));
-        users.add(Arrays.asList("Anna","Bobrova","anna@boge.com","boborIbaVMene","FEM",true,false));
+        users.add(Arrays.asList("Anna","Bobrova","anna@boge.com","boborIbaVMene","USER",true,false));
         users.add(Arrays.asList("Lojzo","Hipster","lojzo@boge.com","rawVeganForLife","USER",false,false));
 
         sqlCreate = "CREATE TABLE users (" +
@@ -206,6 +210,7 @@ public class Generate {
 
 //ADMINISTRATION
         sqlCreate = "CREATE TABLE administration(" +
+                "id int primary key auto_increment, " +
                 "user_id int references users(id),"+
                 "project_id int references projects(id)"+
                 ")";
@@ -237,7 +242,8 @@ public class Generate {
 
 //REGISTRATION REQUESTS
 
-        sqlCreate = "CREATE TABLE registration_requests (" +
+        sqlCreate = "CREATE TABLE registration_requests ( " +
+                "id int primary key auto_increment," +
                 "user_id int references users(id),"+
                 "text varchar(150) NOT NULL)";
 
@@ -270,7 +276,28 @@ public class Generate {
     }
 
 
+    public static void main(String[] args) throws SQLException, IOException {
+        String url = "jdbc:mysql://localhost:3307/project_risk_analysis?serverTimezone=UTC";
+        String username = "test";
+        String password = "test";
 
+
+
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Cant connect");
+        }
+
+        Connection connection = DriverManager.getConnection(url,username,password);
+        DbContext.setConnection(connection);
+        System.out.println("Connection succesful");
+
+
+
+        createAndGenerate();
+    }
 }
 
 

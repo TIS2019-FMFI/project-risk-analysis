@@ -78,8 +78,12 @@ public class TabController {
     }
 
     public void selectProjectTab() throws IOException {
-        setMenuBar("bar/project-list-menu-bar.fxml");
+        if(SignedUser.getUser().getUserType().equals("CENTRAL_ADMIN")){
+            setMenuBar("bar/project-list-menu-bar.fxml");
+        } else{
+            setMenuBar("bar/project-list-menu-bar-basic.fxml");
 
+        }
         ObservableList<Tab> tabs = mainTabPane.getTabs();
         for (Tab tab : tabs) {
             if (tab.getId().equals("projectTab")) {
@@ -91,15 +95,17 @@ public class TabController {
             }
         }
     }
-    public void selectProfile() {
+    public void selectProfile() throws IOException {
+        selectMainPageTab();
         ObservableList<Tab> tabs = mainTabPane.getTabs();
         for (Tab tab : tabs) {
             if (tab.getId().equals("profile")) {
                 mainTabPane.getSelectionModel().select(tab);
+                tab.setContent(loadFXML("profile/profile"));
             }
         }
     }
-    public void closeProfile() {
+    public void closeProfile() throws IOException {
         ObservableList<Tab> tabs = mainTabPane.getTabs();
         for (Tab tab : tabs) {
             if (tab.getId().equals("mainPageTab")) {
@@ -108,7 +114,8 @@ public class TabController {
         }
     }
 
-    public void selectUsersAdministration()  {
+    public void selectUsersAdministration() throws IOException {
+        selectMainPageTab();
         ObservableList<Tab> tabs = mainTabPane.getTabs();
         for (Tab tab : tabs) {
             if (tab.getId().equals("administration")) {
@@ -117,7 +124,7 @@ public class TabController {
         }
     }
 
-    public void closeUsersAdministration() {
+    public void closeUsersAdministration() throws IOException {
         ObservableList<Tab> tabs = mainTabPane.getTabs();
         for (Tab tab : tabs) {
             if (tab.getId().equals("mainPageTab")) {
@@ -128,7 +135,11 @@ public class TabController {
     }
 
     public void selectProjectDetailsTab(String projectDef) throws IOException{
-        setMenuBar("bar/project-details-menu-bar.fxml");
+        if(SignedUser.getUser().getUserType().equals("CENTRAL_ADMIN")){
+            setMenuBar("bar/project-details-menu-bar.fxml");
+        } else{
+            setMenuBar("bar/project-details-menu-bar-basic.fxml");
+        }
 
         ObservableList<Tab> tabs = mainTabPane.getTabs();
         for (Tab tab : tabs) {
