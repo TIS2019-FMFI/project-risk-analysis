@@ -15,17 +15,21 @@ public class ChartService {
     public static ChartService getChartService(){ return  chartService;}
 
     public LinkedHashMap<Period, BigDecimal> getRDCostsData(String projectCode, java.sql.Date fromDate, java.sql.Date toDate) {
-        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and BuchDatum between ? and ? and Objektbezeichnung='Research & Development Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and KostenartenBez='Entwicklungskosten' group by Periode, Jahr order by BuchDatum";
+        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and BuchDatum between ? and ? and Objektbezeichnung='Research & Development Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' " +
+                "and KostenartenBez='Entwicklungskosten' group by Periode, Jahr order by BuchDatum";
         return getCosts(projectCode, fromDate, toDate, sql);
     }
 
     public LinkedHashMap<Period, BigDecimal> getCostsData(String projectCode, java.sql.Date fromDate, java.sql.Date toDate) {
-        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and BuchDatum between ? and ? and Objektbezeichnung='Research & Development Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and KostenartenBez not like '%Entwicklungskosten%' group by Periode, Jahr order by BuchDatum";
+        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and BuchDatum between ? and ? and" +
+                " (Objektbezeichnung='Research & Development Trnava' or ((Objektbezeichnung='Samples + Revenues Trnava' or Objektbezeichnung='Molds and Tool costs + Revenues Trnava') and WertKWahr>0)) " +
+                " and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' group by Periode, Jahr order by BuchDatum";
         return getCosts(projectCode, fromDate, toDate, sql);
     }
 
     public LinkedHashMap<Period, BigDecimal> getPrototypeCosts(String projectCode, java.sql.Date fromDate, java.sql.Date toDate)  {
-        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and BuchDatum between ? and ? and Objektbezeichnung='Samples + Revenues Trnava' and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and WertKWahr>0 group by Periode, Jahr order by BuchDatum";
+        String sql = "select Periode as month, Jahr as year, sum(WertKWahr) from sap where Projektdef=? and BuchDatum between ? and ? and (Objektbezeichnung='Samples + Revenues Trnava' or Objektbezeichnung='Molds and Tool costs + Revenues Trnava')" +
+                " and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and WertKWahr>0 group by Periode, Jahr order by BuchDatum";
         return getCosts(projectCode, fromDate, toDate, sql);
     }
 
@@ -83,7 +87,10 @@ public class ChartService {
     public LinkedHashMap<String, BigDecimal> getRevenuesPerForm(String projektDef, java.sql.Date fromDate, java.sql.Date toDate){
         LinkedHashMap<String, BigDecimal> revenues = new LinkedHashMap<>();
 
-        String sql = "select Objektbezeichnung, sum(WertKWahr) from sap where Projektdef=? and BuchDatum between ? and ? and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and WertKWahr<=0 group by Objektbezeichnung";
+        String sql = "select Objektbezeichnung, sum(WertKWahr) from sap where Projektdef=? and" +
+                " (Objektbezeichnung='R&D revenues Trnava' or Objektbezeichnung='Samples + Revenues Trnava' or Objektbezeichnung='Molds and Tool costs + Revenues Trnava')" +
+                "and BuchDatum between ? and ? and Partnerobjekt  NOT LIKE '%Ergebnisrechnung%'" +
+                " and WertKWahr<=0 group by Objektbezeichnung";
         try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
 
             preparedStatement.setString(1, projektDef);
@@ -108,7 +115,10 @@ public class ChartService {
     public LinkedHashMap<String, BigDecimal> getCostsPerForm(String projektDef, java.sql.Date fromDate, java.sql.Date toDate){
         LinkedHashMap<String, BigDecimal> costs = new LinkedHashMap<>();
 
-        String sql = "select Objektbezeichnung, sum(WertKWahr) from sap where Projektdef=? and BuchDatum between ? and ? and  Partnerobjekt  NOT LIKE '%Ergebnisrechnung%' and WertKWahr>0 group by Objektbezeichnung";
+        String sql = "select Objektbezeichnung, sum(WertKWahr) from sap where Projektdef=? and " +
+                "(Objektbezeichnung='Research & Development Trnava' or ((Objektbezeichnung='Samples + Revenues Trnava' or Objektbezeichnung='Molds and Tool costs + Revenues Trnava') and WertKWahr>0)) " +
+                "and BuchDatum between ? and ? and  Partnerobjekt  NOT LIKE '%Ergebnisrechnung%'" +
+                " and WertKWahr>0 group by Objektbezeichnung";
         try(PreparedStatement preparedStatement = DbContext.getConnection().prepareStatement(sql)){
 
             preparedStatement.setString(1, projektDef);
