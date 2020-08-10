@@ -68,7 +68,7 @@ public class AdministrationService extends Service<Administration>{
      * @throws SQLException chyba pri vykonavani SQL dopytu
      */
     public Administration findAdministrationByProjectNum(String projectNum) throws SQLException {
-        return super.findByName(projectNum,"SELECT * FROM administration as a join projects as p on a.project_id = p.id WHERE p.projectNumber = ?");
+        return super.findByName(projectNum,"SELECT * FROM administration as a join projects as p on a.project_id = p.id WHERE p.projectNumber = ? order by p.projectNumber ASC");
     }
 
 }

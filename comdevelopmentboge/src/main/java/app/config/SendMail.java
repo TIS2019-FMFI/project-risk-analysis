@@ -28,7 +28,8 @@ public class SendMail {
         props = new Properties();
 
         props.put("mail.smtp.host", host);
-
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
         session = Session.getInstance(props, null);
     }
 
@@ -54,6 +55,26 @@ public class SendMail {
     }
 
     /**
+     * Polle zmenu roly pouzivatela na e-mailovu adresu
+     * @param recipient e-mailova adresa prijimatela (musi byt Gmail)
+     * @param text obsah e-mailu
+     * @throws MessagingException chyba pri odosielani emailu
+     */
+    public static void sendRoleChange(String recipient,String text) throws MessagingException {
+        sendMessage(recipient,text,"Zmena roly");
+    }
+
+    /**
+     * Polle zmenu roly a projektov pouzivatela na e-mailovu adresu
+     * @param recipient e-mailova adresa prijimatela (musi byt Gmail)
+     * @param text obsah e-mailu
+     * @throws MessagingException chyba pri odosielani emailu
+     */
+    public static void sendRoleProjectsChange(String recipient,String text) throws MessagingException {
+        sendMessage(recipient,text,"Zmena projektov");
+    }
+
+    /**
      * Posle e-mailovu spravu na zaklade parametrov
      * @param recipient e-mailova adresa prijimatela (musi byt Gmail)
      * @param text obsah e-mailovej spravy
@@ -67,11 +88,20 @@ public class SendMail {
 
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(from));
-
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
         message.setSubject(subject);
-        message.setText(text);
-        Transport.send(message);
+        String sb = "<head>" +
+                "<style type=\"text/css\">" +
+                "  .red { color: #f00; }" +
+                "</style>" +
+                "</head>" +
+                "<h2 class=\"red\">" + message.getSubject() + "</h2>" +
+                "<p>" + text +
+                "</p>";
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
+
+        message.setContent(sb, "text/html; charset=utf-8");
+        message.saveChanges();
+        Transport.send(message, from, password);
         System.out.println("Sent message successfully....");
     }
 }

@@ -178,6 +178,24 @@ public class User extends Crud<User>{
     }
 
     /**
+     * Ziskanie typu uzivatela v slovenčine - String
+     * @return typ uzivatela
+     */
+    public String getUserTypeSlovak() {
+        if (userType.equals(USERTYPE.USER)) {
+            return "POUŽÍVATEĽ";
+        }
+        if (userType.equals(USERTYPE.CENTRAL_ADMIN)) {
+            return "CENTRÁLNY ADMIN";
+        }
+        if (userType.equals(USERTYPE.PROJECT_ADMIN)) {
+            return "PROJEKTOVÝ ADMIN";
+        }
+        return "";
+    }
+
+
+    /**
      * Ziskanie typu uzivatela - USERTYPE
      * @return typ uzivatela
      */

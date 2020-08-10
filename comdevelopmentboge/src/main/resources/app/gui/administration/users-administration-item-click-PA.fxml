@@ -33,12 +33,12 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="582.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="582.0" layoutY="68.0" onMouseClicked="#editUserType" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../images/edit.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="801.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="801.0" layoutY="68.0" onMouseClicked="#showProjects" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../images/menu.png" />
          </image>

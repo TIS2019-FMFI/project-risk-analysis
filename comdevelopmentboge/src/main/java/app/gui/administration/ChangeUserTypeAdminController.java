@@ -8,10 +8,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.RadioButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -81,7 +85,7 @@ public class ChangeUserTypeAdminController {
      * @throws DatabaseException
      */
     @FXML
-    private void submit(MouseEvent event) throws SQLException, IOException, DatabaseException {
+    private void submit(MouseEvent event) throws SQLException, IOException, DatabaseException, MessagingException {
         if(projectAdminBtn.isSelected()) {
             showProjectAdminDialog();
         }
@@ -101,11 +105,30 @@ public class ChangeUserTypeAdminController {
      * @param userType - rola, ktoru chceme nastavit uzivatelovi
      * @throws SQLException
      */
-    private void changeUserType(User.USERTYPE userType) throws SQLException {
+    private void changeUserType(User.USERTYPE userType) throws SQLException, MessagingException, DatabaseException {
         if(!userType.equals(user.getUserType())) {
+            submitDialog("Chcete potvrdiť zmenu roly používateľa " + user.getFullName() + "?", userType);
+        }
+    }
+
+    /**
+     * Zobrazenie potvrdzovacieho dialogu pri zmene roly
+     * @param text text v dialogu
+     * @throws DatabaseException
+     * @throws SQLException
+     */
+    private void submitDialog(String text, User.USERTYPE userType) throws DatabaseException, SQLException, MessagingException {
+        Alert alert = new Alert(Alert.AlertType.WARNING, text, ButtonType.OK);
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
             UserTypeChangeTransaction.changeUserType(user, userType);
             user.setUserType(userType);
+            UsersAdministrationItemController.getInstance().closeAllDialogs(stages);
         }
+        else {
+            alert.close();
+        }
+
     }
 
     /**
