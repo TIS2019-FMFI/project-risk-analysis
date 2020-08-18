@@ -82,7 +82,7 @@ public class DialogNoProjectsConfirmDialogController {
      * @param text text v dialogu
      * @throws SQLException chyba pri ziskavani dat z databazy
      */
-    private void submitDialog(String text) throws SQLException {
+    private void submitDialog(String text) throws SQLException, MessagingException {
         Alert alert = new Alert(Alert.AlertType.WARNING, text, ButtonType.OK);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.OK) {
