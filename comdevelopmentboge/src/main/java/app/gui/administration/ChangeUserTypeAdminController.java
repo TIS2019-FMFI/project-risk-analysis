@@ -106,7 +106,7 @@ public class ChangeUserTypeAdminController {
      * @throws SQLException
      */
     private void changeUserType(User.USERTYPE userType) throws SQLException, MessagingException, DatabaseException {
-        if(!userType.equals(user.getUserType())) {
+        if(!userType.equals(user.getUserTypeU())) {
             submitDialog("Chcete potvrdiť zmenu roly používateľa " + user.getFullName() + "?", userType);
         }
     }

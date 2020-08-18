@@ -246,6 +246,7 @@ public class DialogProjectsController {
         projectsBox.getItems().clear();
         projectsBox.getItems().addAll(FXCollections.observableArrayList(freeProjects));
         projectsBox.getItems().add(0,null);
+        AutoCompleteComboBox.autoCompleteComboBoxPlus(projectsBox, (typedText, itemToCompare) -> itemToCompare.toString().toLowerCase().contains(typedText.toLowerCase()));
     }
 
     private void reloadDeleteProjectsListView() throws IOException {
