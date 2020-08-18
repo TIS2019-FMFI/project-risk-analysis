@@ -19,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,13 +67,13 @@ public class DialogConfirmController {
         this.stages = stages;
         this.user = user;
         this.projects = projects;
+        this.projects.sort(Comparator.comparing(Project::getProjectNumber));
         this.projectsToAdd = projectsToAdd;
         this.projectsToDelete = projectsToDelete;
         this.newType = User.USERTYPE.PROJECT_ADMIN;
         fullName.setText(user.getFullName());
         userType.setText("Projektový admin");
-
-        for(Project project : projects) {
+        for(Project project : this.projects) {
             projectsListView.getItems().add(setPane(project.getProjectNumber()));
         }
         projectsListView.setPrefWidth(App.getScene().getWidth());

@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,7 +77,8 @@ public class DialogProjectsController {
         projectsUser.setText("Projekty používateľa " + user.getFullName());
 
         this.projects = AdministrationService.getAdministrationService().findProjectsByAdmin(user.getEmail());
-        for(Project project : projects) {
+        this.projects.sort(Comparator.comparing(Project::getProjectNumber));
+        for(Project project : this.projects) {
             projectsListView.getItems().add(setPane(project.getProjectNumber()));
         }
         projectsListView.setPrefWidth(App.getScene().getWidth());
@@ -251,6 +253,7 @@ public class DialogProjectsController {
 
     private void reloadDeleteProjectsListView() throws IOException {
         deleteProjectsListView.getItems().clear();
+        projects.sort(Comparator.comparing(Project::getProjectNumber));
         for(Project project : projects) {
             deleteProjectsListView.getItems().add(setProjectAdminPane(project.getProjectNumber()));
         }
