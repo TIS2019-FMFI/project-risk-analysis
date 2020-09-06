@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -73,7 +74,7 @@ public class DialogNoProjectsConfirmDialogController {
      * @throws DatabaseException
      */
     @FXML
-    private void submit(MouseEvent event) throws SQLException {
+    private void submit(MouseEvent event) throws SQLException, MessagingException {
         submitDialog("Chcete potvrdiť zmeny používateľa " + user.getFullName() + "?");
     }
 

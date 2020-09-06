@@ -17,6 +17,8 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Comparator;
@@ -122,7 +124,7 @@ public class DialogConfirmController {
      * @throws DatabaseException
      */
     @FXML
-    private void submit(MouseEvent event) throws SQLException, DatabaseException {
+    private void submit(MouseEvent event) throws SQLException, DatabaseException, MessagingException {
         if((projectsToAdd.size() == 0 || sameToAdd()) && projectsToDelete.size() == 0) {
             if(newType.equals(user.getUserTypeU())) {
                 submitDialogNoChanges("Neboli zistené žiadne zmeny");
@@ -142,7 +144,7 @@ public class DialogConfirmController {
      * @throws DatabaseException
      * @throws SQLException
      */
-    private void submitDialog(String text) throws DatabaseException, SQLException {
+    private void submitDialog(String text) throws DatabaseException, SQLException, MessagingException {
         Alert alert = new Alert(Alert.AlertType.WARNING, text, ButtonType.OK);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.OK) {
